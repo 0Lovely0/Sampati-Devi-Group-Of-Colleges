@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const galleryItems = [
   { id: 1, title: "Campus Library", src: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80" },
   { id: 2, title: "Science Lab", src: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80" },
@@ -41,9 +41,9 @@ const GallerySection: React.FC = () => {
 
         {/* View More Button */}
         <div className="text-center mt-12">
-          <button className="bg-white border-2 border-slate-900 text-slate-900 px-10 py-4 rounded-full font-bold hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-xl">
+          <Link to ="/gallerypage" className="bg-white border-2 border-slate-900 text-slate-900 px-10 py-4 rounded-full font-bold hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-xl">
             View All Photos
-          </button>
+          </Link>
         </div>
       </div>
     </section>

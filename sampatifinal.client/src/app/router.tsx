@@ -8,6 +8,14 @@ import Home from "../pages/main/Home";
 import About from "../pages/main/About";
 import EventsPage from "../pages/main/EventsPage";
 import ContactPage from "../pages/main/ContactPage";
+import { NoticeBoardPage } from "../pages/main/NoticeBoardPage";
+import { AdoptionPage } from "../pages/main/AdoptionPage";
+import { ApplyNowPage } from "../pages/main/ApplyNowPage";
+import { ToppersGalleryPage } from "../pages/main/ToppersGalleryPage";
+import { ExploreProgramsPage } from "../pages/main/ExploreProgramsPage";
+import { GalleryPage } from "../pages/main/GalleryPage";
+import { VideoGalleryPage } from "../pages/main/VideoGalleryPage";
+import { NewsPage } from "../pages/main/NewsPage";
 import Login from "../pages/auth/Login";
 import DeptHome from "../pages/dept/Nursing/Home";
 import NursingAbout from "../pages/dept/Nursing/About";
@@ -32,6 +40,7 @@ import ManageGallery from "../pages/admin/ManageGallery";
 import ManageVideo from "../pages/admin/ManageVideo";
 
 
+
 export const router = createBrowserRouter([
   // 1. Public Routes (Website)
   {
@@ -42,6 +51,14 @@ export const router = createBrowserRouter([
       { path: "about", element: <About /> },
       { path: "events", element: <EventsPage /> },
       { path: "contact", element: <ContactPage /> },
+      { path: "adoption", element: <AdoptionPage/> },
+      { path: "applynow", element: <ApplyNowPage/> },
+      { path: "gallerypage", element: <GalleryPage/> },
+      { path: "videogallerypage", element: <VideoGalleryPage/> },
+      { path: "noticeboardpage", element: <NoticeBoardPage/> },
+      { path: "exploreprogram", element: <ExploreProgramsPage/> },
+      { path: "newspage", element: <NewsPage/> },
+      { path: "topperpage", element: <ToppersGalleryPage/> },
     ],
   },
 

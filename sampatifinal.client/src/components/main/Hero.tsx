@@ -1,6 +1,6 @@
 import React from 'react';
 import collegeImage from '../../assets/college.png';
-
+import { Link } from 'react-router-dom';
 const Hero: React.FC = () => {
   return (
     <section className=" py-16 px-6 bg-slate-50 rounded-2xl border-b-1 border-gray-400">
@@ -18,12 +18,16 @@ const Hero: React.FC = () => {
             industry-aligned programs designed for your success.
           </p>
           <div className="flex gap-4">
+            <Link to = "exploreprogram">
             <button className="bg-indigo-700 text-white px-8 py-3 rounded-full font-bold hover:bg-indigo-800 transition shadow-lg">
               Explore Programs
             </button>
+            </Link>
+            <Link to= "/gallerypage">
             <button className="border-2 border-slate-300 text-slate-700 px-8 py-3 rounded-full font-bold hover:border-indigo-600 transition">
               View Gallery
             </button>
+            </Link>
           </div>
         </div>
 

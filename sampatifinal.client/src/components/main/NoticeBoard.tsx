@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const notices = [
   { id: 1, date: "May 25", title: "Semester Exam Form Filling Deadline" },
   { id: 2, date: "May 22", title: "Campus Recruitment Drive - 2026 Batch" },
@@ -23,10 +23,11 @@ const NoticeBoard: React.FC = () => {
           </div>
         ))}
       </div>
-
+      <Link to = "noticeboardpage">
       <button className="w-full mt-6 py-3 border-2 border-slate-900 text-slate-900 rounded-xl font-bold hover:bg-slate-900 hover:text-white transition">
         View All Notices
       </button>
+      </Link>
     </div>
   );
 };

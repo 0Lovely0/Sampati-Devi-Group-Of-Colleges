@@ -1,4 +1,5 @@
 // src/pages/main/Home.tsx
+import { DirectorsSection } from '../../components/main/DirectorsSection';
 import EventsSection from '../../components/main/EventsSection';
 import GallerySection from '../../components/main/GallerySection';
 import Hero from '../../components/main/Hero';
@@ -19,6 +20,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto w-full px-6">
         <Principal />
       </section>
+      <DirectorsSection/>
 
       <ToppersSection/>
 

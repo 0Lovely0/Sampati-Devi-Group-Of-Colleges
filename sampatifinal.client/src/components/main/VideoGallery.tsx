@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const videoItems = [
   { id: 1, title: "College Campus Tour 2026", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" },
   { id: 2, title: "Annual Fest Highlights", thumbnail: "https://img.youtube.com/vi/jNQXAC9IVRw/maxresdefault.jpg" },
@@ -49,9 +49,9 @@ const VideoGallery: React.FC = () => {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <button className="bg-slate-900 text-white px-10 py-4 rounded-full font-bold hover:bg-indigo-600 transition-all duration-300 shadow-xl">
+          <Link to ="videogallerypage" className="bg-slate-900 text-white px-10 py-4 rounded-full font-bold hover:bg-indigo-600 transition-all duration-300 shadow-xl">
             Watch More Videos
-          </button>
+          </Link>
         </div>
       </div>
     </section>
