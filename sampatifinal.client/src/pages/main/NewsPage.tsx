@@ -1,4 +1,4 @@
-//Static Code
+// // Static Code
 // import React, { useState } from "react";
 
 // interface News {

@@ -33,3 +33,11 @@ wwwroot\uploads\facilities\9b77390b-6e57-48f9-b675-36fc18fbe632.jpg
 wwwroot\uploads\facilities\2f08af08-e4d5-4cbf-b1ff-180151d7e347.jpg
 wwwroot\uploads\gallery\93f4c47c-8ae0-4b7d-a516-85d489d98245.webp
 wwwroot\uploads\gallery\384d99ca-c84e-4299-9001-dc8d7694cf7b.webp
+wwwroot\uploads\notifications\54a12f88-c4f7-4b15-ba85-d27e616af2f1.jpg
+wwwroot\uploads\notifications\66330ded-035b-4bd5-8e1a-56793ce9515c.jpg
+wwwroot\uploads\notifications\b96dec19-a77e-4b52-88ea-d2bd9b07cec7.jpg
+wwwroot\uploads\notifications\dd9d9752-54cc-4d36-95cb-48173141dc1b.jpg
+wwwroot\uploads\notifications\3c8d8f4c-74f1-49a7-9396-189fff3a9ff0.jpg
+wwwroot\uploads\notifications\8ae17b31-7ac3-4462-8951-a83955a2519f.jpg
+wwwroot\uploads\notifications\c9ac9ec4-685e-4b9e-aec6-36a52979cc17.jpg
+wwwroot\uploads\notifications\1e6eeae3-9686-4bf9-8fa7-921b0e3c23cf.jpg
