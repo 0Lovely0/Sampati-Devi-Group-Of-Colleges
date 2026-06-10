@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="sampatifinal.client/sampatifinal.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="sampatiFinal.Server/sampatiFinal.Server.csproj" />
+</Solution>
