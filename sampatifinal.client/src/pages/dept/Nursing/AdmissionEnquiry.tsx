@@ -1,7 +1,5 @@
-import React from "react";
-import Mail from "lucide-react/dist/esm/icons/mail";
-import Phone from "lucide-react/dist/esm/icons/phone";
-import MapPin from "lucide-react/dist/esm/icons/map-pin";
+
+import { Mail, Phone, MapPin } from "lucide-react";
 
 const AdmissionEnquiry = () => {
   return (

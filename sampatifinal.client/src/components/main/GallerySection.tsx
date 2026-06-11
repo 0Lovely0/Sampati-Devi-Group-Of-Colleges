@@ -130,6 +130,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllGalleries, type Gallery } from "../../services/galleryService";
+import Loader from "../common/Loader";
 
 const GallerySection: React.FC = () => {
   const [galleryItems, setGalleryItems] = useState<Gallery[]>([]);
@@ -163,15 +164,14 @@ const GallerySection: React.FC = () => {
   // ✅ ONLY MAIN department filter
   const filteredItems = galleryItems.filter((item) =>
     item.departments?.some(
-      (dept) => dept.departmentName.trim().toLowerCase() === "main"
-    )
+      (dept) => dept.departmentName.trim().toLowerCase() === "main",
+    ),
   );
 
   return (
     <>
       <section className="bg-indigo-950 py-10 px-4">
         <div className="w-full mx-auto">
-
           {/* Heading */}
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-black text-white">
@@ -185,29 +185,30 @@ const GallerySection: React.FC = () => {
 
           {/* Loading */}
           {loading ? (
-            <p className="text-center text-white">Loading gallery...</p>
-          ) : filteredItems.length === 0 ? (
-            <p className="text-center text-white">No images found</p>
+            <div className="h-[220px] flex items-center justify-center text-white">
+              <Loader text="Loading images..." />
+            </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            // Grid section
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
               {filteredItems.map((item) => (
                 <div
                   key={item.imgId}
                   onClick={() => setSelectedImage(item)}
-                  className="group relative h-44 md:h-52 overflow-hidden border border-white/10 shadow-sm cursor-pointer"
+                  className="group relative h-28 md:h-32 overflow-hidden border border-white/10 shadow-sm cursor-pointer"
                 >
                   <img
                     src={getImageUrl(item.imgPic)}
                     alt={item.imgDes}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-3">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-2">
                     <div>
-                      <h3 className="text-white text-sm font-semibold">
+                      <h3 className="text-white text-xs font-medium line-clamp-1">
                         {item.imgDes}
                       </h3>
-                      <p className="text-xs text-slate-300">
+                      <p className="text-[10px] text-slate-300">
                         Click to View
                       </p>
                     </div>

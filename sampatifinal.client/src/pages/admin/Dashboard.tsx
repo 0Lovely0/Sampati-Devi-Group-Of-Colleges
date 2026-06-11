@@ -1,11 +1,5 @@
 import React from 'react';
-import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
-import FileText from 'lucide-react/dist/esm/icons/file-text';
-import ImageIcon from 'lucide-react/dist/esm/icons/image';
-import Video from 'lucide-react/dist/esm/icons/video';
-import Bell from 'lucide-react/dist/esm/icons/bell';
-import Users from 'lucide-react/dist/esm/icons/users';
-import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import { LayoutDashboard, FileText, Image as ImageIcon, Video, Users, UserPlus } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   return (

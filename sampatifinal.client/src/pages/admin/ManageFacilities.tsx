@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, X, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import Loader from "../../components/common/Loader";
 import {
   getAllFacilities,

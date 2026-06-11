@@ -6,10 +6,10 @@ import {
   Trash2,
   Filter ,
   ChevronDown ,
-  Eye,
-  CheckCircle2,
-  AlertCircle,
-  ImageIcon,
+  // Eye,
+  // CheckCircle2,
+  // AlertCircle,
+  // ImageIcon,
 } from "lucide-react";
 import Loader from "../../components/common/Loader";
 import {

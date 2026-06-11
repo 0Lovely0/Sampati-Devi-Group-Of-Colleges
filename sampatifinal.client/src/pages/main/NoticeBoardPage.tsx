@@ -161,6 +161,7 @@ import {
   getAllNotifications,
   type Notification,
 } from "../../services/notificationService";
+import Loader from "../../components/common/Loader";
 import { X } from "lucide-react";
 
 export const NoticeBoardPage: React.FC = () => {
@@ -225,8 +226,8 @@ export const NoticeBoardPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-600">
-        Loading notices...
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader text="Loading notices..." />
       </div>
     );
   }

@@ -87,7 +87,7 @@
 
 // export default ImageCarousel;
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";

@@ -137,8 +137,6 @@
 
 // export default NoticeBoard;
 
-
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, Sparkles, ArrowRight } from "lucide-react";
@@ -146,6 +144,7 @@ import {
   getAllNotifications,
   type Notification,
 } from "../../services/notificationService";
+import Loader from "../../components/common/Loader";
 
 const NoticeBoard: React.FC = () => {
   const [notices, setNotices] = useState<Notification[]>([]);
@@ -165,7 +164,7 @@ const NoticeBoard: React.FC = () => {
         active.sort(
           (a, b) =>
             new Date(b.notification_date).getTime() -
-            new Date(a.notification_date).getTime()
+            new Date(a.notification_date).getTime(),
         );
 
         setNotices(active);
@@ -197,11 +196,9 @@ const NoticeBoard: React.FC = () => {
     <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 py-10">
       <div className="mx-auto w-full px-8">
         <div className="grid lg:grid-cols-12 gap-6">
-
           {/* LEFT CARD */}
           <div className="lg:col-span-4">
             <div className="relative overflow-hidden bg-indigo-950 border border-slate-200 p-6 shadow-lg">
-
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-200 blur-3xl opacity-40 rounded-full" />
 
               <div className="flex items-center gap-3">
@@ -213,9 +210,7 @@ const NoticeBoard: React.FC = () => {
                   <h2 className="text-lg font-black text-white">
                     Notice Board
                   </h2>
-                  <p className="text-xs text-white">
-                    Live Notification System
-                  </p>
+                  <p className="text-xs text-white">Live Notification System</p>
                 </div>
               </div>
 
@@ -248,7 +243,6 @@ const NoticeBoard: React.FC = () => {
           {/* RIGHT SCROLL BOARD */}
           <div className="lg:col-span-8">
             <div className="border border-slate-200 bg-white p-5">
-
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-slate-900">
                   Latest Notices
@@ -261,12 +255,11 @@ const NoticeBoard: React.FC = () => {
 
               {/* LOADING */}
               {loading ? (
-                <div className="h-[320px] flex items-center justify-center text-slate-500">
-                  Loading notices...
+                <div className="h-[320px] flex items-center justify-center">
+                  <Loader text="Loading notices..." />
                 </div>
               ) : (
                 <div className="relative h-[320px] overflow-hidden">
-
                   <div className="animate-[scrollTop_18s_linear_infinite] space-y-3">
                     {scrollingNotices.map((notice, index) => (
                       <div
@@ -298,7 +291,6 @@ const NoticeBoard: React.FC = () => {
               </Link>
             </div>
           </div>
-
         </div>
       </div>
 

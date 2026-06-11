@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { collegeInfo, footerLinks, departments } from "../../data/content";
-import { GraduationCap, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 
 // Social Icons
 const FacebookIcon = () => (

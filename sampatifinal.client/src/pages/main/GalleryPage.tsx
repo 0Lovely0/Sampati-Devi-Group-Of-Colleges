@@ -157,9 +157,10 @@
 
 import React, { useEffect, useState } from "react";
 import { getAllGalleries, type Gallery } from "../../services/galleryService";
+import Loader from "../../components/common/Loader"
 
 export const GalleryPage: React.FC = () => {
-  const [filter, setFilter] = useState("All");
+  // const [filter, setFilter] = useState("All");
   const [galleryItems, setGalleryItems] = useState<Gallery[]>([]);
   const [selectedImg, setSelectedImg] = useState<Gallery | null>(null);
   const [loading, setLoading] = useState(true);
@@ -211,11 +212,9 @@ export const GalleryPage: React.FC = () => {
 
         {/* Loading */}
         {loading ? (
-          <p className="text-center text-slate-600">Loading gallery...</p>
-        ) : mainOnlyItems.length === 0 ? (
-          <p className="text-center text-slate-600">
-            No Main department images found
-          </p>
+          <div className="h-64 flex items-center justify-center">
+            <Loader text="Loading videos..." />
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 

@@ -41,9 +41,7 @@ const ContactPage: React.FC = () => {
                   Phone
                 </h3>
 
-                <p className="text-sm text-slate-600">
-                  +91 XXXXXXXXXX
-                </p>
+                <p className="text-sm text-slate-600">+91 XXXXXXXXXX</p>
               </div>
 
               <div>
@@ -113,12 +111,16 @@ const ContactPage: React.FC = () => {
 
         {/* Map Section */}
         <div className="mt-4 bg-white border border-slate-200 p-5 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">
-            Find Us
-          </h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">Find Us</h2>
 
-          <div className="h-80 border border-slate-200 flex items-center justify-center text-sm text-slate-500">
-            Google Map Embed Here
+          <div className="h-80 w-full overflow-hidden border border-slate-200">
+            <iframe
+              className="w-full h-full"
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3392.8986764643178!2d76.94156071055657!3d31.74596653585484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3904e36578e937a1%3A0xa1a440992b133616!2sSampati%20Devi%20Memorial%20Pharmacy%20College!5e0!3m2!1sen!2sin!4v1781161950390!5m2!1sen!2sin"
+            ></iframe>
           </div>
         </div>
       </div>

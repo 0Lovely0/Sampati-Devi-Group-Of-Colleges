@@ -27,7 +27,7 @@ const ManageBanners: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [ setLightbox] = useState<string | null>(null);
   const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
 
   const [submitting, setSubmitting] = useState(false);
