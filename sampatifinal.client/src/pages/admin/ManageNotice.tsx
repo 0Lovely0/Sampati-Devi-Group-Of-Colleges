@@ -3,7 +3,7 @@ import {
   Plus,
   Pencil,
   Trash2,
-  Eye,
+  // Eye,
   CheckCircle2,
   AlertCircle,
   FileText,
@@ -21,7 +21,10 @@ import {
 } from "../../services/notificationService";
 import { getDepartments, type Department } from "../../services/bannerService";
 
-const BASE_URL = "https://localhost:7197/";
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
 
 const ManageNotice: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -29,7 +32,7 @@ const ManageNotice: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCompact, setIsCompact] = useState(false); // Added for size toggle
+  const [isCompact] = useState(false); // Added for size toggle
   const [previewFile, setPreviewFile] = useState<string | null>(null); // Added for lightbox
   const [editingNotice, setEditingNotice] = useState<Notification | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -95,57 +98,57 @@ const ManageNotice: React.FC = () => {
     }
   };
 
- const handleSave = async () => {
-  if (!formData.notification_sub.trim())
-    return showToast("Title required", "error");
+  const handleSave = async () => {
+    if (!formData.notification_sub.trim())
+      return showToast("Title required", "error");
 
-  if (formData.file && formData.file.size > 2 * 1024 * 1024) {
-    return showToast("File size must be 2 MB or less", "error");
-  }
+    if (formData.file && formData.file.size > 2 * 1024 * 1024) {
+      return showToast("File size must be 2 MB or less", "error");
+    }
 
-  const data = new FormData();
-  data.append("notification_sub", formData.notification_sub);
-  data.append("notification_des", formData.notification_des);
-  data.append("notification_cat", formData.notification_cat);
+    const data = new FormData();
+    data.append("notification_sub", formData.notification_sub);
+    data.append("notification_des", formData.notification_des);
+    data.append("notification_cat", formData.notification_cat);
 
-  formData.departmentIds.forEach((id) =>
-    data.append("DepartmentIds", String(id))
-  );
+    formData.departmentIds.forEach((id) =>
+      data.append("DepartmentIds", String(id)),
+    );
 
-  if (formData.file) {
-    data.append("file", formData.file);
-  }
+    if (formData.file) {
+      data.append("file", formData.file);
+    }
 
-  try {
-    setSubmitting(true);
+    try {
+      setSubmitting(true);
 
-    editingNotice
-      ? await updateNotification(editingNotice.notification_id, data)
-      : await createNotification(data);
+      editingNotice
+        ? await updateNotification(editingNotice.notification_id, data)
+        : await createNotification(data);
 
-    showToast("Saved successfully", "success");
+      showToast("Saved successfully", "success");
 
-    setIsModalOpen(false);
+      setIsModalOpen(false);
 
-    setFormData({
-      notification_sub: "",
-      notification_des: "",
-      notification_cat: "",
-      file: null,
-      departmentIds: [],
-    });
+      setFormData({
+        notification_sub: "",
+        notification_des: "",
+        notification_cat: "",
+        file: null,
+        departmentIds: [],
+      });
 
-    fetchData();
-  } catch {
-    showToast("Operation failed", "error");
-  } finally {
-    setSubmitting(false);
-  }
-};
+      fetchData();
+    } catch {
+      showToast("Operation failed", "error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
   if (loading) return <Loader text="Loading Notices..." />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-1">
       {toast && (
         <div
           className={`fixed top-6 right-6 z-[200] px-5 py-3 rounded-xl flex items-center gap-2 text-white ${toast.type === "success" ? "bg-emerald-500" : "bg-red-500"}`}
@@ -158,7 +161,7 @@ const ManageNotice: React.FC = () => {
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Notice Management
           </h1>
 
@@ -171,9 +174,12 @@ const ManageNotice: React.FC = () => {
             setEditingNotice(null);
             setIsModalOpen(true);
           }}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-xl flex items-center gap-2 font-semibold"
+          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
-          <Plus size={18} /> Add Notice
+          <span className="flex items-center gap-2">
+            <Plus size={16} />
+            Add Notice
+          </span>
         </button>
       </div>
 
@@ -247,17 +253,17 @@ const ManageNotice: React.FC = () => {
           )
           .map((n) => {
             const fileUrl = n.notification_file
-              ? `${BASE_URL}${n.notification_file}`
+              ? `${API_BASE_URL}/${n.notification_file}`
               : null;
 
             return (
               <div
                 key={n.notification_id}
-                className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
-                {/* Preview */}
+                {/* PREVIEW */}
                 <div
-                  className={`overflow-hidden bg-slate-100 cursor-pointer ${
+                  className={`relative cursor-pointer overflow-hidden bg-slate-100 ${
                     isCompact ? "h-24" : "h-32"
                   }`}
                   onClick={() => fileUrl && setPreviewFile(fileUrl)}
@@ -275,52 +281,54 @@ const ManageNotice: React.FC = () => {
                   )}
                 </div>
 
-                <div className="p-2.5">
-                  {/* Category */}
+                {/* CONTENT */}
+                <div className="p-3">
+                  {/* CATEGORY */}
                   {n.notification_cat && (
                     <span className="mb-2 inline-block rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-700">
                       {n.notification_cat}
                     </span>
                   )}
 
-                  {/* Title */}
+                  {/* TITLE */}
                   <h3 className="line-clamp-2 text-xs font-semibold text-slate-900">
                     {n.notification_sub}
                   </h3>
 
-                  {/* Description */}
+                  {/* DESCRIPTION */}
                   {!isCompact && (
                     <p className="mt-1 line-clamp-2 text-[11px] text-slate-500">
                       {n.notification_des}
                     </p>
                   )}
 
-                  {/* Departments */}
+                  {/* DEPARTMENTS */}
                   <div className="mt-2 flex flex-wrap gap-1">
                     {n.departments?.slice(0, 2).map((dept) => (
                       <span
                         key={dept.departmentId}
-                        className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px] font-medium text-slate-600"
+                        className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-medium text-slate-600"
                       >
                         {dept.departmentName}
                       </span>
                     ))}
 
                     {(n.departments?.length || 0) > 2 && (
-                      <span className="rounded-full bg-slate-200 px-1.5 py-0.5 text-[9px] font-medium text-slate-600">
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-medium text-slate-600">
                         +{n.departments.length - 2}
                       </span>
                     )}
                   </div>
 
-                  {/* Actions */}
-                  <div className="mt-3 flex gap-1">
-                    <button
+                  {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
+                  <div className="mt-3 flex gap-2">
+                    {/* <button
                       onClick={() => fileUrl && setPreviewFile(fileUrl)}
-                      className="rounded-lg bg-slate-100 p-1.5 hover:bg-slate-200"
+                      className="flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-200 transition"
                     >
                       <Eye size={13} />
-                    </button>
+                      View
+                    </button> */}
 
                     <button
                       onClick={() => {
@@ -336,16 +344,18 @@ const ManageNotice: React.FC = () => {
                         });
                         setIsModalOpen(true);
                       }}
-                      className="rounded-lg bg-indigo-100 p-1.5 text-indigo-700 hover:bg-indigo-200"
+                      className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
                     >
                       <Pencil size={13} />
+                      Edit
                     </button>
 
                     <button
                       onClick={() => handleDelete(n.notification_id)}
-                      className="rounded-lg bg-red-100 p-1.5 text-red-700 hover:bg-red-200"
+                      className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
                     >
                       <Trash2 size={13} />
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -370,169 +380,167 @@ const ManageNotice: React.FC = () => {
         </div>
       )}
 
-     {isModalOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-    <div className="w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 px-5 py-4 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-bold">
+                    {editingNotice ? "Edit Notice" : "Create Notice"}
+                  </h2>
+                  <p className="text-xs text-indigo-100">
+                    Manage notice details and department assignments
+                  </p>
+                </div>
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 px-5 py-4 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-bold">
-              {editingNotice ? "Edit Notice" : "Create Notice"}
-            </h2>
-            <p className="text-xs text-indigo-100">
-              Manage notice details and department assignments
-            </p>
-          </div>
+                <button
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setEditingNotice(null);
+                  }}
+                  className="rounded-lg bg-white/10 p-2 transition hover:bg-white/20"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
 
-          <button
-            onClick={() => {
-              setIsModalOpen(false);
-              setEditingNotice(null);
-            }}
-            className="rounded-lg bg-white/10 p-2 transition hover:bg-white/20"
-          >
-            <X size={16} />
-          </button>
-        </div>
-      </div>
+            {/* Body */}
+            <div className="max-h-[75vh] overflow-y-auto p-5">
+              <div className="grid gap-4 md:grid-cols-2">
+                {/* Title */}
+                <div className="md:col-span-2">
+                  <label className="mb-1 block text-xs font-semibold text-slate-600">
+                    Notice Title
+                  </label>
 
-      {/* Body */}
-      <div className="max-h-[75vh] overflow-y-auto p-5">
-        <div className="grid gap-4 md:grid-cols-2">
+                  <input
+                    value={formData.notification_sub}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        notification_sub: e.target.value,
+                      })
+                    }
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                    placeholder="Enter notice title"
+                  />
+                </div>
 
-          {/* Title */}
-          <div className="md:col-span-2">
-            <label className="mb-1 block text-xs font-semibold text-slate-600">
-              Notice Title
-            </label>
+                {/* Category */}
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-600">
+                    Category
+                  </label>
 
-            <input
-              value={formData.notification_sub}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  notification_sub: e.target.value,
-                })
-              }
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
-              placeholder="Enter notice title"
-            />
-          </div>
+                  <input
+                    value={formData.notification_cat}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        notification_cat: e.target.value,
+                      })
+                    }
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                    placeholder="Category"
+                  />
+                </div>
 
-          {/* Category */}
-          <div>
-            <label className="mb-1 block text-xs font-semibold text-slate-600">
-              Category
-            </label>
+                {/* File */}
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-600">
+                    Attachment
+                  </label>
 
-            <input
-              value={formData.notification_cat}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  notification_cat: e.target.value,
-                })
-              }
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
-              placeholder="Category"
-            />
-          </div>
+                  <input
+                    type="file"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        file: e.target.files?.[0] || null,
+                      })
+                    }
+                    className="w-full rounded-xl border border-slate-200 p-2 text-xs"
+                  />
+                </div>
 
-          {/* File */}
-          <div>
-            <label className="mb-1 block text-xs font-semibold text-slate-600">
-              Attachment
-            </label>
+                {/* Description */}
+                <div className="md:col-span-2">
+                  <label className="mb-1 block text-xs font-semibold text-slate-600">
+                    Description
+                  </label>
 
-            <input
-              type="file"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  file: e.target.files?.[0] || null,
-                })
-              }
-              className="w-full rounded-xl border border-slate-200 p-2 text-xs"
-            />
-          </div>
+                  <textarea
+                    rows={4}
+                    value={formData.notification_des}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        notification_des: e.target.value,
+                      })
+                    }
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                    placeholder="Notice description"
+                  />
+                </div>
 
-          {/* Description */}
-          <div className="md:col-span-2">
-            <label className="mb-1 block text-xs font-semibold text-slate-600">
-              Description
-            </label>
+                {/* Departments */}
+                <div className="md:col-span-2">
+                  <label className="mb-2 block text-xs font-semibold text-slate-600">
+                    Select Departments
+                  </label>
 
-            <textarea
-              rows={4}
-              value={formData.notification_des}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  notification_des: e.target.value,
-                })
-              }
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
-              placeholder="Notice description"
-            />
-          </div>
+                  <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+                    {departments.map((d) => {
+                      const selected = formData.departmentIds.includes(
+                        d.departmentId,
+                      );
 
-          {/* Departments */}
-          <div className="md:col-span-2">
-            <label className="mb-2 block text-xs font-semibold text-slate-600">
-              Select Departments
-            </label>
+                      return (
+                        <button
+                          key={d.departmentId}
+                          type="button"
+                          onClick={() => toggleDepartment(d.departmentId)}
+                          className={`rounded-xl border p-2 text-xs font-medium transition ${
+                            selected
+                              ? "border-indigo-600 bg-indigo-600 text-white"
+                              : "border-slate-200 bg-white text-slate-700 hover:border-indigo-300"
+                          }`}
+                        >
+                          {d.departmentName}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
-              {departments.map((d) => {
-                const selected = formData.departmentIds.includes(
-                  d.departmentId
-                );
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-3 border-t border-slate-200 px-5 py-4">
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setEditingNotice(null);
+                }}
+                className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
+              >
+                Cancel
+              </button>
 
-                return (
-                  <button
-                    key={d.departmentId}
-                    type="button"
-                    onClick={() => toggleDepartment(d.departmentId)}
-                    className={`rounded-xl border p-2 text-xs font-medium transition ${
-                      selected
-                        ? "border-indigo-600 bg-indigo-600 text-white"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-indigo-300"
-                    }`}
-                  >
-                    {d.departmentName}
-                  </button>
-                );
-              })}
+              <button
+                onClick={handleSave}
+                disabled={submitting}
+                className="rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
+              >
+                {submitting ? "Saving..." : "Save Notice"}
+              </button>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-end gap-3 border-t border-slate-200 px-5 py-4">
-        <button
-          onClick={() => {
-            setIsModalOpen(false);
-            setEditingNotice(null);
-          }}
-          className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
-        >
-          Cancel
-        </button>
-
-        <button
-          onClick={handleSave}
-          disabled={submitting}
-          className="rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60"
-        >
-          {submitting ? "Saving..." : "Save Notice"}
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };

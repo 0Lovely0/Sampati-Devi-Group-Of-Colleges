@@ -9,7 +9,10 @@ import {
   type Facility,
 } from "../../services/facilitiesService";
 
-const BASE_URL = "https://localhost:7197";
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
 
 export const ManageFacilities: React.FC = () => {
   const [facilities, setFacilities] = useState<Facility[]>([]);
@@ -120,11 +123,11 @@ export const ManageFacilities: React.FC = () => {
 
     setIsModalOpen(true);
   };
-  
+
   if (loading) return <Loader text="Loading..." />;
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <div className="min-h-screen bg-slate-50 p-1">
       {/* TOAST */}
       {toast && (
         <div
@@ -137,14 +140,13 @@ export const ManageFacilities: React.FC = () => {
       )}
 
       {/* HEADER BAR */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        {/* TITLE SECTION */}
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Manage Facilities
           </h1>
 
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="mt-1 text-sm text-slate-500">
             Create, update and manage facility information
           </p>
         </div>
@@ -156,71 +158,78 @@ export const ManageFacilities: React.FC = () => {
             setFormData(initialForm);
             setIsModalOpen(true);
           }}
-          className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow-sm"
+          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
-          <Plus size={18} />
-          Add Facility
+          <span className="flex items-center gap-2">
+            <Plus size={16} />
+            Add Facility
+          </span>
         </button>
       </div>
 
       {/* OPTIONAL: STATS STRIP (HIGH IMPACT UI UPGRADE) */}
-      <div className="mb-6 flex items-center gap-3">
-        <div className="bg-white px-4 py-2 rounded-xl border text-xs text-slate-600 shadow-sm">
+      <div className="mb-6 flex items-center justify-end gap-3">
+        <div className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg">
           Total Facilities:{" "}
           <span className="font-semibold">{facilities.length}</span>
         </div>
       </div>
 
       {/* Grid section */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-        {facilities.map((f) => (
-          <div
-            key={f.facilityId}
-            className="group bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-          >
-            {/* IMAGE SECTION */}
-            <div className="relative overflow-hidden">
-              <img
-                src={
-                  f.imageUrl?.startsWith("http")
-                    ? f.imageUrl
-                    : `${BASE_URL}/${f.imageUrl || ""}`
-                }
-                alt="Facility"
-                className="w-full h-32 object-cover transition duration-500 group-hover:scale-105"
-              />
-
-              {/* HOVER OVERLAY ACTIONS */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                <button
-                  onClick={() => openEdit(f)}
-                  className="bg-white p-2 rounded-lg text-indigo-600 hover:scale-105 transition"
-                >
-                  <Pencil size={14} />
-                </button>
-
-                <button
-                  onClick={() => handleDelete(f.facilityId)}
-                  className="bg-white p-2 rounded-lg text-red-600 hover:scale-105 transition"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            </div>
-
-            {/* CONTENT */}
-            <div className="p-3">
-              <h3 className="font-semibold text-slate-800 text-sm line-clamp-1">
-                {f.descriptionHeading}
-              </h3>
-
-              <p className="text-xs text-slate-500 line-clamp-2 mt-1">
-                {f.description}
-              </p>
-            </div>
-          </div>
-        ))}
+     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+  {facilities.map((f) => (
+    <div
+      key={f.facilityId}
+      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+    >
+      {/* IMAGE */}
+      <div className="relative overflow-hidden">
+        <img
+          src={
+            f.imageUrl?.startsWith("http")
+              ? f.imageUrl
+              : `${API_BASE_URL}/${f.imageUrl || ""}`
+          }
+          alt="Facility"
+          className="h-32 w-full object-cover transition duration-500 group-hover:scale-105"
+          onError={(e) => {
+            e.currentTarget.src = "/placeholder.jpg";
+          }}
+        />
       </div>
+
+      {/* CONTENT */}
+      <div className="p-3">
+        <h3 className="line-clamp-1 text-sm font-semibold text-slate-800">
+          {f.descriptionHeading}
+        </h3>
+
+        <p className="mt-1 line-clamp-2 text-xs text-slate-500">
+          {f.description}
+        </p>
+
+        {/* ALWAYS VISIBLE ACTIONS (LIKE BANNER STYLE) */}
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={() => openEdit(f)}
+            className="flex items-center justify-center gap-1 rounded-lg bg-indigo-100 px-3 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+          >
+            <Pencil size={13} />
+            Edit
+          </button>
+
+          <button
+            onClick={() => handleDelete(f.facilityId)}
+            className="flex items-center justify-center gap-1 rounded-lg bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+          >
+            <Trash2 size={13} />
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[100] backdrop-blur-sm">

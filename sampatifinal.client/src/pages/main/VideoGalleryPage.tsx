@@ -160,7 +160,7 @@ export const VideoGalleryPage: React.FC = () => {
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="w-full mx-auto px-2 py-2">
 
         {/* LOADER */}
         {loading ? (
@@ -168,13 +168,13 @@ export const VideoGalleryPage: React.FC = () => {
             <Loader text="Loading videos..." />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
 
             {normalizedVideos.map((item) => (
               <div
                 key={item.id}
                 onClick={() => setActiveVideo(item.videoId)}
-                className="group relative h-52 overflow-hidden border border-slate-200 shadow-sm cursor-pointer bg-black"
+                className="group relative h-52 overflow-hidden border border-slate-200 shadow-sm cursor-pointer bg-black rounded-xl"
               >
 
                 <img

@@ -1,45 +1,45 @@
 import React, { useState } from "react";
-import principalImg from "../../assets/principal.avif";
+import principalImg from "../../assets/principal.jpg";
 import { Quote } from "lucide-react";
 
 const PrincipalMessage: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <section className=" py-10 bg-gradient-to-br from-indigo-50 via-white to-amber-50">
-      <div className="mx-auto w-full px-4">
+    <section className="py-8 sm:py-10 bg-gradient-to-br from-indigo-50 via-white to-amber-50">
+      <div className="mx-auto w-full px-4 sm:px-6">
 
-        <div className=" p-4 transition">
+        <div className="bg-white/60 backdrop-blur-md border border-slate-200 rounded-xl p-4 sm:p-6 shadow-sm">
 
-          <div className="flex flex-col md:flex-row gap-5 items-start">
+          <div className="flex flex-col md:flex-row gap-5 md:gap-8 items-start">
 
             {/* IMAGE */}
-            <div className="flex justify-center md:justify-start">
+            <div className="flex justify-center md:justify-start w-full md:w-auto">
               <img
                 src={principalImg}
                 alt="Principal"
-                className="h-56 w-44 object-cover  border border-slate-200"
+                className="h-44 w-36 sm:h-52 sm:w-40 md:h-56 md:w-44 object-cover border border-slate-200 rounded-lg"
               />
             </div>
 
             {/* CONTENT */}
-            <div className="flex-1">
+            <div className="flex-1 text-center md:text-left">
 
               <span className="inline-block text-[10px] px-3 py-1 rounded-full bg-amber-100 text-amber-700 font-bold tracking-[0.2em] uppercase">
                 Message From Principal
               </span>
 
-              <h2 className="mt-3 text-xl font-black text-slate-900">
+              <h2 className="mt-3 text-lg sm:text-xl font-black text-slate-900 leading-snug">
                 Education builds the{" "}
                 <span className="text-amber-700">future of society</span>
               </h2>
 
-              <div className="mt-3 flex items-center gap-2">
+              <div className="mt-3 flex items-center justify-center md:justify-start gap-2">
                 <Quote size={14} className="text-amber-600" />
                 <span className="text-xs text-slate-500">Principal Note</span>
               </div>
 
-              <div className="mt-3 text-sm leading-6 text-slate-600 space-y-3">
+              <div className="mt-3 text-xs sm:text-sm leading-6 text-slate-600 space-y-3">
                 <p>
                   Welcome to Sampati Devi Group of Colleges. Our mission is
                   to develop skilled, ethical and responsible professionals.
@@ -72,7 +72,7 @@ const PrincipalMessage: React.FC = () => {
 
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="mt-4 px-4 py-2 text-xs font-semibold rounded-full border border-amber-200 text-amber-700 hover:bg-amber-600 hover:text-white transition"
+                className="mt-4 px-4 py-2 text-[11px] sm:text-xs font-semibold rounded-full border border-amber-200 text-amber-700 hover:bg-amber-600 hover:text-white transition"
               >
                 {isExpanded ? "Read Less" : "Read More"}
               </button>

@@ -3185,11 +3185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+      "projectUniqueName": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
       "projectName": "sampatiFinal.Server",
-      "projectPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+      "projectPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
       "packagesPath": "C:\\Users\\lovel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\obj\\",
+      "outputPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

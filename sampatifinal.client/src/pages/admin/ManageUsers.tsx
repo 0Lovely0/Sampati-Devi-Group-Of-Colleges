@@ -25,7 +25,6 @@ const ManageUsers: React.FC = () => {
     adminMobile: "",
     adminUsername: "",
     adminPassword: "",
-    adminRole: "ADMIN",
   };
 
   const [errors, setErrors] = useState({
@@ -90,7 +89,7 @@ const ManageUsers: React.FC = () => {
       adminMobile: admin.adminMobile,
       adminUsername: admin.adminUsername,
       adminPassword: "",
-      adminRole: admin.adminRole || "ADMIN",
+     
     });
 
     setErrors({
@@ -190,31 +189,23 @@ const ManageUsers: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 p-1">
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-            Admin Management
+         <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+           Admin Management
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+
+          <p className="mt-1 text-sm text-slate-500">
             Manage administrators and access permissions
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center rounded-xl border border-indigo-100 bg-white px-4 py-2 shadow-sm">
-            <span className="text-xs font-medium text-slate-500">
-              Total Admins
-            </span>
-            <span className="ml-2 rounded-lg bg-indigo-100 px-2 py-1 text-xs font-bold text-indigo-700">
-              {users.length}
-            </span>
-          </div>
-
+        <div className="flex items-center justify-between gap-3">
           <button
             onClick={openCreateModal}
-            className="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-700"
+            className="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-700 w-full"
           >
             <Plus size={16} />
             Add Admin
@@ -223,11 +214,14 @@ const ManageUsers: React.FC = () => {
       </div>
 
       {/* Table Card */}
-      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50">
-        <div className="border-b border-slate-100 bg-gradient-to-r from-indigo-50 to-white px-5 py-4">
+      <div className="overflow-hidden rounded-3xl border border-blue-500 bg-white shadow-xl shadow-slate-200/50">
+        <div className="border-b flex items-center justify-between border-slate-100 bg-gradient-to-r from-indigo-50 to-white px-5 py-4">
           <h2 className="text-sm font-semibold text-slate-700">
             Administrators List
           </h2>
+             <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg">
+              {users.length} Admins
+            </span>
         </div>
 
         {users.length === 0 ? (

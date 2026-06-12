@@ -102,26 +102,29 @@ const Navbar: React.FC = () => {
     <header className="sticky top-0 z-50 bg-white" ref={menuRef}>
       {/* Top Bar */}
       <div className="bg-slate-950 text-white">
-        <div className="w-full mx-auto px-4 sm:px-6 py-2">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-              <span className="truncate">📧 sdmnursingcollege@gmail.com</span>
+        <div className="w-full mx-auto px-3 sm:px-6 py-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 text-[10px] sm:text-xs">
+            {/* Left */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+              <span className="break-all sm:break-normal">
+                📧 sdmnursingcollege@gmail.com
+              </span>
 
-              <span className="hidden xl:block">
+              <span className="hidden md:block">
                 📍 Bijni, Mandi, Himachal Pradesh 175001
               </span>
             </div>
 
-            <div className="flex items-center justify-between md:justify-end gap-3">
-                <Link
+            {/* Right */}
+            <div className="flex items-center justify-between sm:justify-end gap-3">
+              <Link
                 to="/login"
-                className="px-3 py-1 bg-white/5 border border-white/5 text-white/5 text-xs font-medium transition-all duration-300 hover:bg-amber-600 hover:border-amber-500 hover:text-white hover:shadow-lg hover:shadow-indigo-500/30" 
+                className="px-2 py-1 sm:px-3 sm:py-1 bg-white/5 border border-white/10 text-white text-[10px] sm:text-xs font-medium hover:bg-amber-600 transition"
               >
                 Admin Login
               </Link>
-              <span>📞 +91 70182 26132</span>
 
-            
+              <span className="whitespace-nowrap">📞 +91 70182 26132</span>
             </div>
           </div>
         </div>
@@ -131,8 +134,8 @@ const Navbar: React.FC = () => {
       <nav className="bg-white border-b border-slate-200 shadow-sm">
         <div className="w-full mx-auto px-4 sm:px-6 h-16 lg:h-20 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 min-w-0">
-            <div className="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 border border-slate-200 overflow-hidden bg-indigo-950">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 flex-shrink-0 border border-slate-200 overflow-hidden bg-indigo-950  rounded-xl">
               <img
                 src="/logo1.ico"
                 alt="College Logo"
@@ -141,11 +144,11 @@ const Navbar: React.FC = () => {
             </div>
 
             <div className="min-w-0">
-              <h2 className="font-black text-sm sm:text-base lg:text-lg text-slate-900 truncate">
+              <h2 className="font-black text-xs sm:text-sm lg:text-lg text-slate-900">
                 SAMPATI DEVI
               </h2>
 
-              <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-bold text-indigo-600 truncate">
+              <p className="text-[8px] sm:text-[10px] uppercase tracking-[0.2em] font-bold text-indigo-600">
                 Group of Colleges
               </p>
             </div>
@@ -178,14 +181,14 @@ const Navbar: React.FC = () => {
           <div className="hidden lg:flex items-center gap-3">
             <Link
               to="/adoption"
-              className="px-4 py-2 bg-slate-950 text-white text-sm font-medium hover:bg-slate-800 transition"
+              className="px-4 py-2 bg-slate-950 text-white text-sm font-medium hover:bg-slate-800 transition rounded-xl"
             >
               Adoption
             </Link>
 
             <Link
               to="/applynow"
-              className="px-5 py-2 bg-amber-500 text-black text-sm font-semibold hover:bg-amber-400 transition"
+              className="px-5 py-2 bg-amber-500 text-black text-sm font-semibold hover:bg-amber-400 transition rounded-xl"
             >
               Apply Now
             </Link>
@@ -202,8 +205,8 @@ const Navbar: React.FC = () => {
 
         {/* Mobile & Tablet Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t bg-white max-h-[calc(100vh-80px)] overflow-y-auto">
-            <div className="p-5">
+          <div className="lg:hidden border-t bg-white max-h-[80vh] overflow-y-auto">
+            <div className="p-4 space-y-2">
               <Link
                 to="/"
                 className="block py-3 font-semibold border-b"
@@ -314,10 +317,10 @@ const Navbar: React.FC = () => {
               </Link>
 
               {/* Mobile Buttons */}
-              <div className="grid grid-cols-2 gap-3 mt-5">
+              <div className="grid grid-cols-2 gap-3 mt-5 text-center py-3 rounded-md text-sm font-semibold">
                 <Link
                   to="/adoption"
-                  className="text-center py-3 bg-slate-900 text-white font-medium"
+                  className="text-center py-3 bg-slate-900 text-white font-medium rounded-xl"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Adoption
@@ -325,7 +328,7 @@ const Navbar: React.FC = () => {
 
                 <Link
                   to="/applynow"
-                  className="text-center py-3 bg-amber-500 text-black font-semibold"
+                  className="text-center py-3 bg-amber-500 text-black font-semibold rounded-xl"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Apply Now

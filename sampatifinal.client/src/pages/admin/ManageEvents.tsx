@@ -6,10 +6,6 @@ import {
   Trash2,
   Filter,
   ChevronDown,
-  Eye,
-  CheckCircle2,
-  AlertCircle,
-  CalendarDays,
   Upload,
 } from "lucide-react";
 import Loader from "../../components/common/Loader";
@@ -22,7 +18,10 @@ import {
 } from "../../services/eventService";
 import { getDepartments, type Department } from "../../services/bannerService";
 
-const BASE_URL = "https://localhost:7197/";
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
 
 const ManageEvents: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -30,7 +29,7 @@ const ManageEvents: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCompact, setIsCompact] = useState(false);
+  const [isCompact] = useState(false);
   const [previewFile, setPreviewFile] = useState<string | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -155,7 +154,7 @@ const ManageEvents: React.FC = () => {
   if (loading) return <Loader text="Loading Events..." />;
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <div className="min-h-screen bg-slate-50 p-1">
       {/* Toast */}
       {toast && (
         <div
@@ -165,23 +164,32 @@ const ManageEvents: React.FC = () => {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-extrabold text-slate-900">
-          Manage Events
-        </h1>
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            Manage Events
+          </h1>
+
+          <p className="mt-1 text-sm text-slate-500">
+            Create, edit and organize website Events
+          </p>
+        </div>
         <button
           onClick={() => {
             setEditingEvent(null);
             setIsModalOpen(true);
           }}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-xl flex items-center gap-2"
+          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
-          <Plus size={18} /> Add Event
+          <span className="flex items-center gap-2">
+            <Plus size={16} />
+            Add Events
+          </span>
         </button>
       </div>
 
       {/* Filter  */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
         <div className="relative">
           <button
             onClick={() => setFilterOpen(!filterOpen)}
@@ -196,29 +204,31 @@ const ManageEvents: React.FC = () => {
           </button>
 
           {filterOpen && (
-            <div className="absolute left-0 top-full z-20 mt-2 w-86 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
-              <button
-                onClick={() => {
-                  setDepartmentFilter("all");
-                  setFilterOpen(false);
-                }}
-                className="w-full px-3 py-2 text-left text-xs hover:bg-slate-50"
-              >
-                All Departments
-              </button>
-
-              {departments.map((dept) => (
+            <div className="mb-3 flex items-center justify-between">
+              <div className="relative">
                 <button
-                  key={dept.departmentId}
                   onClick={() => {
-                    setDepartmentFilter(dept.departmentId);
+                    setDepartmentFilter("all");
                     setFilterOpen(false);
                   }}
                   className="w-full px-3 py-2 text-left text-xs hover:bg-slate-50"
                 >
-                  {dept.departmentName}
+                  All Departments
                 </button>
-              ))}
+
+                {departments.map((dept) => (
+                  <button
+                    key={dept.departmentId}
+                    onClick={() => {
+                      setDepartmentFilter(dept.departmentId);
+                      setFilterOpen(false);
+                    }}
+                    className="w-full px-3 py-2 text-left text-xs hover:bg-slate-50"
+                  >
+                    {dept.departmentName}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -252,29 +262,30 @@ const ManageEvents: React.FC = () => {
           .map((e) => (
             <div
               key={e.eventId}
-              className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
             >
-              {/* Image */}
+              {/* IMAGE */}
               <div
                 className="relative cursor-pointer overflow-hidden"
-                onClick={() => setPreviewFile(`${BASE_URL}${e.imagePath}`)}
+                onClick={() => setPreviewFile(`${API_BASE_URL}/${e.imagePath}`)}
               >
                 <img
-                  src={`${BASE_URL}${e.imagePath}`}
+                  src={`${API_BASE_URL}/${e.imagePath}`}
                   alt={e.title}
                   className={`w-full object-cover transition duration-500 group-hover:scale-105 ${
                     isCompact ? "h-24" : "h-32"
                   }`}
                 />
 
-                <div className="absolute top-2 right-2">
+                {/* DATE BADGE */}
+                <div className="absolute right-2 top-2">
                   <span className="rounded-md bg-indigo-100 px-2 py-1 text-[10px] font-semibold text-indigo-700">
                     {new Date(e.eventDate).toLocaleDateString()}
                   </span>
                 </div>
               </div>
 
-              {/* Content */}
+              {/* CONTENT */}
               <div className="p-3">
                 <h3 className="line-clamp-2 text-xs font-semibold text-slate-800">
                   {e.title}
@@ -284,26 +295,26 @@ const ManageEvents: React.FC = () => {
                   {e.description}
                 </p>
 
-                {/* Departments */}
+                {/* DEPARTMENTS */}
                 <div className="mt-2 flex flex-wrap gap-1">
                   {e.departments?.slice(0, 3).map((dept) => (
                     <span
                       key={dept.departmentId}
-                      className="rounded-md bg-slate-100 px-2 py-1 text-[9px] text-slate-600"
+                      className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-medium text-slate-600"
                     >
                       {dept.departmentName}
                     </span>
                   ))}
 
                   {e.departments?.length > 3 && (
-                    <span className="rounded-md bg-slate-100 px-2 py-1 text-[9px] text-slate-600">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-medium text-slate-600">
                       +{e.departments.length - 3}
                     </span>
                   )}
                 </div>
 
-                {/* Actions */}
-                <div className="mt-3 flex items-center gap-2">
+                {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
+                <div className="mt-3 flex gap-2">
                   <button
                     onClick={() => {
                       setEditingEvent(e);
@@ -316,9 +327,10 @@ const ManageEvents: React.FC = () => {
                       });
                       setIsModalOpen(true);
                     }}
-                    className="rounded-lg bg-indigo-50 p-2 text-indigo-600 transition hover:bg-indigo-100"
+                    className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
                   >
                     <Pencil size={13} />
+                    Edit
                   </button>
 
                   <button
@@ -328,9 +340,10 @@ const ManageEvents: React.FC = () => {
                         fetchData();
                       }
                     }}
-                    className="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
+                    className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
                   >
                     <Trash2 size={13} />
+                    Delete
                   </button>
                 </div>
               </div>
@@ -363,6 +376,19 @@ const ManageEvents: React.FC = () => {
                 <X size={16} />
               </button>
             </div>
+
+            {previewFile && (
+              <div
+                className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4"
+                onClick={() => setPreviewFile(null)}
+              >
+                <img
+                  src={previewFile}
+                  alt="Preview"
+                  className="max-h-[90vh] max-w-[90vw] rounded-xl"
+                />
+              </div>
+            )}
 
             {/* Body */}
             <div className="max-h-[75vh] overflow-y-auto p-5">

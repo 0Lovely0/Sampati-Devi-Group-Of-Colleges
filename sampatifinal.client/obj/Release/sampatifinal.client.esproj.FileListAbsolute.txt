@@ -1,1 +1,1 @@
-C:\Users\lovel\OneDrive\Desktop\heysamapti\sampatiFinal\sampatifinal.client\obj\Release\sampatifinal.client.esproj.CoreCompileInputs.cache
+C:\Users\lovel\OneDrive\Desktop\heysampati\sampatiFinal\sampatifinal.client\obj\Release\sampatifinal.client.esproj.CoreCompileInputs.cache

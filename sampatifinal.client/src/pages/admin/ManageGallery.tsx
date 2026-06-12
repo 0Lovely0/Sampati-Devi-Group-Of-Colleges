@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Plus,
-  X,
-  Pencil,
-  Trash2,
-  Filter ,
-  ChevronDown ,
-  // Eye,
-  // CheckCircle2,
-  // AlertCircle,
-  // ImageIcon,
-} from "lucide-react";
+import { Plus, X, Pencil, Trash2, Filter, ChevronDown } from "lucide-react";
 import Loader from "../../components/common/Loader";
 import {
   getAllGalleries,
@@ -21,7 +10,10 @@ import {
 } from "../../services/galleryService";
 import { getDepartments, type Department } from "../../services/bannerService";
 
-const BASE_URL = "https://localhost:7197";
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
 
 const ManageGallery: React.FC = () => {
   const [galleries, setGalleries] = useState<Gallery[]>([]);
@@ -32,7 +24,7 @@ const ManageGallery: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCompact, setIsCompact] = useState(false);
+  const [isCompact] = useState(false);
   const [previewFile, setPreviewFile] = useState<string | null>(null);
   const [editingGallery, setEditingGallery] = useState<Gallery | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -130,7 +122,7 @@ const ManageGallery: React.FC = () => {
   if (loading) return <Loader text="Loading Gallery..." />;
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <div className="min-h-screen bg-slate-50 p-1">
       {/* TOAST */}
       {toast && (
         <div
@@ -146,11 +138,11 @@ const ManageGallery: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         {/* TITLE */}
         <div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Manage Gallery
           </h1>
 
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="mt-1 text-sm text-slate-500">
             Upload, organize and manage gallery images
           </p>
         </div>
@@ -161,132 +153,134 @@ const ManageGallery: React.FC = () => {
             setEditingGallery(null);
             setIsModalOpen(true);
           }}
-          className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow-sm"
+          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
-          <Plus size={18} />
-          Add Image
+          <span className="flex items-center gap-2">
+            <Plus size={16} />
+            Add Image
+          </span>
         </button>
       </div>
 
       {/* Filter bar */}
       <div className="mb-4 flex items-center justify-between">
-      <div className="relative z-100">
-        <button
-          onClick={() => setFilterOpen(!filterOpen)}
-          className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-        >
-          <Filter size={14} />
-          {departmentFilter === "all"
-            ? "All Departments"
-            : departments.find((d) => d.departmentId === departmentFilter)
-                ?.departmentName}
-          <ChevronDown size={14} />
-        </button>
+        <div className="relative z-100">
+          <button
+            onClick={() => setFilterOpen(!filterOpen)}
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+          >
+            <Filter size={14} />
+            {departmentFilter === "all"
+              ? "All Departments"
+              : departments.find((d) => d.departmentId === departmentFilter)
+                  ?.departmentName}
+            <ChevronDown size={14} />
+          </button>
 
-        {filterOpen && (
-          <div className="absolute mt-2 w-60 bg-white border rounded-xl shadow">
-            <button
-              className="w-full text-left p-2 hover:bg-gray-100"
-              onClick={() => {
-                setDepartmentFilter("all");
-                setFilterOpen(false);
-              }}
-            >
-              All Departments
-            </button>
-
-            {departments.map((d) => (
+          {filterOpen && (
+            <div className="absolute mt-2 w-60 bg-white border rounded-xl shadow">
               <button
-                key={d.departmentId}
                 className="w-full text-left p-2 hover:bg-gray-100"
                 onClick={() => {
-                  setDepartmentFilter(d.departmentId);
+                  setDepartmentFilter("all");
                   setFilterOpen(false);
                 }}
               >
-                {d.departmentName}
+                All Departments
               </button>
-            ))}
-          </div>
-        )}
-      </div>
+
+              {departments.map((d) => (
+                <button
+                  key={d.departmentId}
+                  className="w-full text-left p-2 hover:bg-gray-100"
+                  onClick={() => {
+                    setDepartmentFilter(d.departmentId);
+                    setFilterOpen(false);
+                  }}
+                >
+                  {d.departmentName}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Grids section */}
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+  {galleries.map((g) => (
+    <div
+      key={g.imgId}
+      className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+    >
+      {/* IMAGE */}
       <div
-        className={`grid gap-6 transition-all ${
-          isCompact
-            ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6"
-            : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+        className={`relative cursor-pointer overflow-hidden ${
+          isCompact ? "aspect-square" : "aspect-video"
         }`}
+        onClick={() => setPreviewFile(`${API_BASE_URL}${g.imgPic}`)}
       >
-        {galleries.map((g) => (
-          <div
-            key={g.imgId}
-            className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition overflow-hidden border border-slate-100"
-          >
-            {/* IMAGE */}
-            <div
-              className={`relative cursor-pointer overflow-hidden ${
-                isCompact ? "aspect-square" : "aspect-video"
-              }`}
-              onClick={() => setPreviewFile(`${BASE_URL}${g.imgPic}`)}
-            >
-              <img
-                src={`${BASE_URL}${g.imgPic}`}
-                className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-              />
+        <img
+          src={`${API_BASE_URL}${g.imgPic}`}
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+          alt="gallery"
+        />
 
-              {/* hover overlay */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center">
-                <span className="text-white text-xs opacity-0 group-hover:opacity-100">
-                  Click to preview
-                </span>
-              </div>
-            </div>
-
-            {/* CONTENT */}
-            <div className="p-4">
-              <h3 className="font-bold text-sm truncate">{g.imgMaincat}</h3>
-              <p className="text-xs text-slate-400">{g.imgCat}</p>
-
-              {/* ACTIONS */}
-              <div className="flex gap-2 mt-4">
-                <button
-                  onClick={() => {
-                    setEditingGallery(g);
-                    setFormData({
-                      imgMaincat: g.imgMaincat,
-                      imgCat: g.imgCat,
-                      imgDes: g.imgDes,
-                      imgSession: g.imgSession,
-                      uploadedBy: g.uploadedBy,
-                      imageFile: null,
-                      departmentIds: g.departments.map((d) => d.departmentId),
-                    });
-                    setIsModalOpen(true);
-                  }}
-                  className="p-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
-                >
-                  <Pencil size={16} />
-                </button>
-
-                <button
-                  onClick={async () => {
-                    if (confirm("Delete?")) {
-                      await deleteGallery(g.imgId);
-                      fetchData();
-                    }
-                  }}
-                  className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+        {/* hover overlay (keep only preview hint) */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
+          <span className="text-xs text-white opacity-0 transition group-hover:opacity-100">
+            Click to preview
+          </span>
+        </div>
       </div>
+
+      {/* CONTENT */}
+      <div className="p-3">
+        <h3 className="truncate text-sm font-semibold text-slate-800">
+          {g.imgMaincat}
+        </h3>
+
+        <p className="text-xs text-slate-500">{g.imgCat}</p>
+
+        {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={() => {
+              setEditingGallery(g);
+              setFormData({
+                imgMaincat: g.imgMaincat,
+                imgCat: g.imgCat,
+                imgDes: g.imgDes,
+                imgSession: g.imgSession,
+                uploadedBy: g.uploadedBy,
+                imageFile: null,
+                departmentIds: g.departments.map((d) => d.departmentId),
+              });
+              setIsModalOpen(true);
+            }}
+            className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+          >
+            <Pencil size={13} />
+            Edit
+          </button>
+
+          <button
+            onClick={async () => {
+              if (confirm("Delete?")) {
+                await deleteGallery(g.imgId);
+                fetchData();
+              }
+            }}
+            className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+          >
+            <Trash2 size={13} />
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
       {/* MODAL */}
       {isModalOpen && (
@@ -310,7 +304,18 @@ const ManageGallery: React.FC = () => {
                 <X size={18} />
               </button>
             </div>
-
+            {previewFile && (
+              <div
+                className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4"
+                onClick={() => setPreviewFile(null)}
+              >
+                <img
+                  src={previewFile}
+                  alt="Preview"
+                  className="max-h-[90vh] max-w-[90vw] rounded-xl"
+                />
+              </div>
+            )}
             {/* BODY */}
             <div className="max-h-[75vh] overflow-y-auto p-6 space-y-6">
               {/* BASIC INFO */}

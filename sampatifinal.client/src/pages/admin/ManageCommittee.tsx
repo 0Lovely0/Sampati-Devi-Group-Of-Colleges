@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, X, ChevronDown  } from "lucide-react";
+import { Plus, Pencil, Trash2, ChevronDown, Filter } from "lucide-react";
 import Loader from "../../components/common/Loader";
 import {
   getAllCommitteeMembers,
@@ -12,7 +12,10 @@ import {
   type DropdownDto,
 } from "../../services/committeeService";
 
-const BASE_URL = "https://localhost:7197";
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
 
 export const ManageCommittee: React.FC = () => {
   const [committeeFilter, setCommitteeFilter] = useState<number | "all">("all");
@@ -113,16 +116,16 @@ export const ManageCommittee: React.FC = () => {
   if (loading) return <Loader text="Loading..." />;
 
   return (
-    <div className="p-8 bg-slate-50 min-h-screen">
+    <div className="p-1 bg-slate-50 min-h-screen">
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         {/* TITLE */}
         <div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Manage Committee
           </h1>
 
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="mt-1 text-sm text-slate-500">
             Create and manage committee members
           </p>
         </div>
@@ -130,10 +133,12 @@ export const ManageCommittee: React.FC = () => {
         {/* ACTION BUTTON */}
         <button
           onClick={() => openModal()}
-          className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow-sm"
+          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
-          <Plus size={18} />
-          Add Member
+          <span className="flex items-center gap-2">
+            <Plus size={16} />
+            Add Member
+          </span>
         </button>
       </div>
 
@@ -142,8 +147,9 @@ export const ManageCommittee: React.FC = () => {
         <div className="relative">
           <button
             onClick={() => setFilterOpen(!filterOpen)}
-            className="flex items-center gap-2 px-4 py-2 bg-white border rounded-xl text-sm shadow-sm hover:bg-slate-50"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
           >
+            <Filter size={14} />
             Filter Committee
             <ChevronDown size={14} />
           </button>
@@ -191,7 +197,7 @@ export const ManageCommittee: React.FC = () => {
       </div>
 
       {/* Grid section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         {members
           .filter((m) =>
             committeeFilter === "all"
@@ -201,44 +207,45 @@ export const ManageCommittee: React.FC = () => {
           .map((m) => (
             <div
               key={m.committeeMemberId}
-              className="group bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
-              {/* IMAGE SECTION */}
-              <div className="relative flex justify-center pt-6">
+              {/* IMAGE */}
+              <div className="flex justify-center pt-4">
                 <img
                   src={
                     m.memberImage?.startsWith("http")
                       ? m.memberImage
-                      : `${BASE_URL}/${m.memberImage || ""}`
+                      : `${API_BASE_URL}/${m.memberImage || ""}`
                   }
-                  className="w-30 h-40 object-cover border-4 border-white shadow-md transition group-hover:scale-105"
+                  className="h-24 w-20 rounded-lg border border-slate-100 object-cover shadow-sm transition group-hover:scale-105"
                   alt="Member"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
               </div>
 
               {/* CONTENT */}
-              <div className="p-2 text-center">
-                <h3 className="font-semibold text-slate-800 text-sm">
+              <div className="space-y-0.5 p-2 text-center">
+                <h3 className="text-xs font-semibold leading-tight text-slate-800">
                   {m.memberName}
                 </h3>
 
-                <p className="text-xs text-indigo-600 font-medium mt-1">
+                <p className="text-[11px] font-medium text-indigo-600">
                   {m.committeeName}
                 </p>
 
-                <p className="text-[11px] text-slate-500 uppercase mt-1">
+                <p className="text-[10px] uppercase tracking-wide text-slate-500">
                   {m.positionName}
                 </p>
               </div>
 
-              {/* ACTIONS (HOVER OVERLAY STYLE) */}
-              <div className="flex justify-center gap-2 pb-4 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition">
+              {/* ACTIONS (ALWAYS VISIBLE LIKE BANNER) */}
+              <div className="flex justify-center gap-2 px-2 pb-3">
                 <button
                   onClick={() => openModal(m)}
-                  className="p-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
+                  className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
                 >
-                  <Pencil size={14} />
+                  <Pencil size={12} />
+                  Edit
                 </button>
 
                 <button
@@ -247,9 +254,10 @@ export const ManageCommittee: React.FC = () => {
                       fetchInitialData,
                     )
                   }
-                  className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+                  className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={12} />
+                  Delete
                 </button>
               </div>
             </div>

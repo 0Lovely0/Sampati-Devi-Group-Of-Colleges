@@ -203,14 +203,15 @@ const VideoGallery: React.FC = () => {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 py-10 px-4">
+      <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 py-10 px-4 sm:px-6">
         <div className="w-full mx-auto">
-          {/* Heading */}
-          <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+          {/* HEADER */}
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900">
               Campus Videos
             </h2>
-            <p className="text-sm text-slate-500 mt-1">
+
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
               Watch campus highlights & events
             </p>
           </div>
@@ -222,30 +223,33 @@ const VideoGallery: React.FC = () => {
             </div>
           ) : (
             <>
-              {/* Grid */}
-             <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+              {/* GRID */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
                 {normalizedVideos.map((item) => (
                   <div
                     key={item.id}
                     onClick={() => setSelectedVideo(item)}
-                    className="group relative h-28 md:h-32 overflow-hidden shadow-sm border border-slate-200 cursor-pointer"
+                    className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm cursor-pointer transition hover:-translate-y-1 hover:shadow-lg"
                   >
-                    <img
-                      src={item.thumbnail}
-                      alt={item.title}
-                      className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-                    />
+                    {/* THUMBNAIL */}
+                    <div className="h-24 sm:h-28 md:h-32 overflow-hidden">
+                      <img
+                        src={item.thumbnail}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                      />
+                    </div>
 
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition flex items-center justify-center">
-                      <div className="w-6 h-6 md:w-7 md:h-7 bg-white/90 rounded-full flex items-center justify-center shadow-sm">
+                    {/* PLAY OVERLAY */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/90 rounded-full flex items-center justify-center shadow-md">
                         <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[8px] border-l-slate-900 border-b-[5px] border-b-transparent ml-1" />
                       </div>
                     </div>
 
-                    {/* Title */}
-                    <div className="absolute bottom-0 w-full bg-gradient-to-t from-white/95 to-transparent p-1.5">
-                      <h3 className="text-[11px] font-semibold text-slate-800 truncate">
+                    {/* TITLE */}
+                    <div className="absolute bottom-0 w-full bg-gradient-to-t from-white/95 to-transparent p-2">
+                      <h3 className="text-[10px] sm:text-xs font-semibold text-slate-800 truncate">
                         {item.title}
                       </h3>
                     </div>
@@ -253,11 +257,11 @@ const VideoGallery: React.FC = () => {
                 ))}
               </div>
 
-              {/* Button */}
-              <div className="flex justify-center mt-6">
+              {/* BUTTON */}
+              <div className="flex justify-center mt-6 sm:mt-8">
                 <Link
                   to="/videogallerypage"
-                  className="px-5 py-2 text-xs font-semibold bg-slate-100 text-black hover:bg-amber-600 hover:text-white transition"
+                  className="rounded-full px-5 py-2 text-xs sm:text-sm font-semibold bg-slate-100 text-black hover:bg-amber-600 hover:text-white transition"
                 >
                   Watch More Videos
                 </Link>
@@ -265,6 +269,45 @@ const VideoGallery: React.FC = () => {
             </>
           )}
         </div>
+
+        {/* MODAL */}
+        {selectedVideo && (
+          <div
+            className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-3 sm:p-4"
+            onClick={() => setSelectedVideo(null)}
+          >
+            <div
+              className="relative w-full max-w-5xl bg-white rounded-xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* CLOSE */}
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute top-3 right-3 z-10 rounded-full bg-black/70 px-3 py-1 text-[10px] font-semibold text-white hover:bg-black"
+              >
+                CLOSE
+              </button>
+
+              {/* VIDEO */}
+              <div className="aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1`}
+                  title={selectedVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+
+              {/* TITLE */}
+              <div className="border-t border-slate-200 p-3 sm:p-4">
+                <h3 className="text-sm sm:text-lg font-semibold text-slate-900">
+                  {selectedVideo.title}
+                </h3>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Modal */}

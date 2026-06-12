@@ -165,7 +165,10 @@ export const GalleryPage: React.FC = () => {
   const [selectedImg, setSelectedImg] = useState<Gallery | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const BASE_URL = "https://localhost:7197";
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "https://localhost:7197"
+      : "https://sampatigroup.stdruraltech.org";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,7 +188,7 @@ export const GalleryPage: React.FC = () => {
 
   const getImageUrl = (path?: string) => {
     if (!path) return "/placeholder.jpg";
-    return `${BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+    return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
   };
 
   // ✅ ONLY "Main" department filter
@@ -208,7 +211,7 @@ export const GalleryPage: React.FC = () => {
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="w-full mx-auto px-2 py-2">
 
         {/* Loading */}
         {loading ? (
@@ -216,13 +219,13 @@ export const GalleryPage: React.FC = () => {
             <Loader text="Loading videos..." />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
 
             {mainOnlyItems.map((item) => (
               <div
                 key={item.imgId}
                 onClick={() => setSelectedImg(item)}
-                className="group relative h-56 overflow-hidden border border-slate-200 bg-white shadow-sm cursor-pointer"
+                className="group relative h-46 overflow-hidden border border-slate-200 bg-white shadow-sm cursor-pointer rounded-xl"
               >
                 <img
                   src={getImageUrl(item.imgPic)}

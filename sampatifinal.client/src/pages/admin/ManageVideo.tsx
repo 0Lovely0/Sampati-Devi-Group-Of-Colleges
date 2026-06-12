@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Plus,
-  X,
-  Pencil,
-  Trash2,
-  // CalendarDays,
-  Filter,
-  ChevronDown,
-} from "lucide-react";
+import { Plus, X, Pencil, Trash2, Filter, ChevronDown } from "lucide-react";
 import Loader from "../../components/common/Loader";
 import {
   getAllVideos,
@@ -85,51 +77,51 @@ const ManageVideos: React.FC = () => {
     }));
   };
 
- const handleSave = async () => {
-  const data = new FormData();
+  const handleSave = async () => {
+    const data = new FormData();
 
-  // REQUIRED FIELDS (match backend DTO exactly)
-  data.append("VideoTitle", formData.videoTitle?.trim() || "");
-  data.append("VideoDescription", formData.videoDescription?.trim() || "");
-  data.append("VideoUrl", formData.videoUrl?.trim() || "");
+    // REQUIRED FIELDS (match backend DTO exactly)
+    data.append("VideoTitle", formData.videoTitle?.trim() || "");
+    data.append("VideoDescription", formData.videoDescription?.trim() || "");
+    data.append("VideoUrl", formData.videoUrl?.trim() || "");
 
-  // Departments (List<int>)
-  formData.departmentIds.forEach((id) => {
-    data.append("DepartmentIds", String(id));
-  });
-
-  try {
-    setSubmitting(true);
-
-    if (editingVideo) {
-      await updateVideo(editingVideo.videoId, data);
-    } else {
-      await createVideo(data);
-    }
-
-    showToast("Saved successfully", "success");
-    setIsModalOpen(false);
-    setEditingVideo(null); // important reset
-    setFormData({
-      videoTitle: "",
-      videoDescription: "",
-      videoUrl: "",
-      departmentIds: [],
+    // Departments (List<int>)
+    formData.departmentIds.forEach((id) => {
+      data.append("DepartmentIds", String(id));
     });
 
-    fetchData();
-  } catch (err: any) {
-    console.error("Video Save Error:", err?.response?.data || err);
-    showToast("Operation failed", "error");
-  } finally {
-    setSubmitting(false);
-  }
-};
+    try {
+      setSubmitting(true);
+
+      if (editingVideo) {
+        await updateVideo(editingVideo.videoId, data);
+      } else {
+        await createVideo(data);
+      }
+
+      showToast("Saved successfully", "success");
+      setIsModalOpen(false);
+      setEditingVideo(null); // important reset
+      setFormData({
+        videoTitle: "",
+        videoDescription: "",
+        videoUrl: "",
+        departmentIds: [],
+      });
+
+      fetchData();
+    } catch (err: any) {
+      console.error("Video Save Error:", err?.response?.data || err);
+      showToast("Operation failed", "error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (loading) return <Loader text="Loading Videos..." />;
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <div className="min-h-screen bg-slate-50 p-1">
       {toast && (
         <div
           className={`fixed top-6 right-6 z-[200] px-5 py-3 rounded-xl text-white ${toast.type === "success" ? "bg-emerald-500" : "bg-red-500"}`}
@@ -138,18 +130,30 @@ const ManageVideos: React.FC = () => {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-extrabold text-slate-900">
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        {/* <h1 className="text-4xl font-extrabold text-slate-900">
           Manage Videos
-        </h1>
+        </h1> */}
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            Manage Videos
+          </h1>
+
+          <p className="mt-1 text-sm text-slate-500">
+            Create, edit and organize website Videos
+          </p>
+        </div>
         <button
           onClick={() => {
             setEditingVideo(null);
             setIsModalOpen(true);
           }}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-xl flex items-center gap-2"
+          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
-          <Plus size={18} /> Add Video
+          <span className="flex items-center gap-2">
+            <Plus size={16} />
+            Add Video
+          </span>
         </button>
       </div>
 
@@ -196,94 +200,99 @@ const ManageVideos: React.FC = () => {
       </div>
 
       {/* Grids section */}
+<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+  {videos.map((v) => {
+    const thumbnail = getYouTubeThumbnail(v.videoUrl);
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {videos.map((v) => {
-          const thumbnail = getYouTubeThumbnail(v.videoUrl);
-
-          return (
-            <div
-              key={v.videoId}
-              className="group bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-            >
-              {/* THUMBNAIL */}
-              <div className="relative aspect-video overflow-hidden cursor-pointer">
-                {thumbnail ? (
-                  <img
-                    src={thumbnail}
-                    alt="Thumbnail"
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-slate-400">
-                    No Image
-                  </div>
-                )}
-
-                {/* hover overlay */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center">
-                  <span className="text-white text-xs opacity-0 group-hover:opacity-100">
-                    Watch Video
-                  </span>
-                </div>
-              </div>
-
-              {/* CONTENT */}
-              <div className="p-4">
-                <h3 className="font-bold text-sm truncate">{v.videoTitle}</h3>
-
-                <p className="text-xs text-slate-500 line-clamp-2 mt-1">
-                  {v.videoDescription}
-                </p>
-
-                {/* ACTIONS */}
-                <div className="flex items-center justify-between mt-4">
-                  <a
-                    href={v.videoUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-indigo-600 text-xs font-medium hover:underline"
-                  >
-                    Watch
-                  </a>
-
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        setEditingVideo(v);
-                        setFormData({
-                          videoTitle: v.videoTitle,
-                          videoDescription: v.videoDescription,
-                          videoUrl: v.videoUrl,
-                          departmentIds: v.departments.map(
-                            (d) => d.departmentId,
-                          ),
-                        });
-                        setIsModalOpen(true);
-                      }}
-                      className="p-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
-                    >
-                      <Pencil size={16} />
-                    </button>
-
-                    <button
-                      onClick={async () => {
-                        if (confirm("Delete this video?")) {
-                          await deleteVideo(v.videoId);
-                          fetchData();
-                        }
-                      }}
-                      className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
+    return (
+      <div
+        key={v.videoId}
+        className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+      >
+        {/* THUMBNAIL */}
+        <div className="relative aspect-video overflow-hidden cursor-pointer">
+          {thumbnail ? (
+            <img
+              src={thumbnail}
+              alt="Thumbnail"
+              className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-slate-400">
+              No Image
             </div>
-          );
-        })}
+          )}
+
+          {/* overlay hint only */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
+            <span className="text-xs text-white opacity-0 transition group-hover:opacity-100">
+              Watch Video
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className="p-3">
+          <h3 className="truncate text-sm font-semibold text-slate-800">
+            {v.videoTitle}
+          </h3>
+
+          <p className="mt-1 line-clamp-2 text-xs text-slate-500">
+            {v.videoDescription}
+          </p>
+
+          {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
+          <div className="mt-3 flex items-center justify-between">
+            {/* Watch Link */}
+            {/* <a
+              href={v.videoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs font-medium text-indigo-600 hover:underline"
+            >
+              Watch
+            </a> */}
+
+            {/* Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setEditingVideo(v);
+                  setFormData({
+                    videoTitle: v.videoTitle,
+                    videoDescription: v.videoDescription,
+                    videoUrl: v.videoUrl,
+                    departmentIds: v.departments.map(
+                      (d) => d.departmentId,
+                    ),
+                  });
+                  setIsModalOpen(true);
+                }}
+                className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+              >
+                <Pencil size={13} />
+                Edit
+              </button>
+
+              <button
+                onClick={async () => {
+                  if (confirm("Delete this video?")) {
+                    await deleteVideo(v.videoId);
+                    fetchData();
+                  }
+                }}
+                className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+              >
+                <Trash2 size={13} />
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+    );
+  })}
+</div>
 
       {/* Modal */}
       {isModalOpen && (

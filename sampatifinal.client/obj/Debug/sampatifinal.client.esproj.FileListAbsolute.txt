@@ -1,4 +1,0 @@
-C:\Users\lovel\OneDrive\Desktop\Projects\sampatiFinal\sampatifinal.client\obj\Debug\sampatifinal.client.esproj.CoreCompileInputs.cache
-C:\Users\sudha\Desktop\AppologiscProz\sampatiFinal\sampatiFinal\sampatifinal.client\obj\Debug\sampatifinal.client.esproj.CoreCompileInputs.cache
-C:\Users\lovel\OneDrive\Desktop\heysamapti\sampatiFinal\sampatiFinal\sampatifinal.client\obj\Debug\sampatifinal.client.esproj.CoreCompileInputs.cache
-C:\Users\sudha\Desktop\sampatiFinal\sampatifinal.client\obj\Debug\sampatifinal.client.esproj.CoreCompileInputs.cache

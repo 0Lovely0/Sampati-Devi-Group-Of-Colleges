@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "c7fc///3LTE=",
+  "dgSpecHash": "HevaymTEks4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+  "projectFilePath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lovel\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\lovel\\.nuget\\packages\\magick.net-q16-anycpu\\14.13.1\\magick.net-q16-anycpu.14.13.1.nupkg.sha512",

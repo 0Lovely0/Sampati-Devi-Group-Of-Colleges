@@ -135,8 +135,8 @@ export const ToppersGalleryPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Filter Tabs */}
-      {/* <div className="flex justify-center gap-4 mb-12">
+      {/* Filter Tabs  */}
+      <div className="flex justify-center gap-4 mb-12">
         {years.map((year) => (
           <button
             key={year}
@@ -150,7 +150,7 @@ export const ToppersGalleryPage: React.FC = () => {
             {year === "All" ? "All Batches" : `Batch ${year}`}
           </button>
         ))}
-      </div> */}
+      </div>
 
       {/* LOADING */}
          {loading ? (

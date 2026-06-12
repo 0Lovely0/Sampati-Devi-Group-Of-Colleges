@@ -113,9 +113,8 @@ const ImageCarousel = () => {
 
         const mainBanners = data.filter((banner) =>
           banner.departments?.some(
-            (dept) =>
-              dept.departmentName.trim().toLowerCase() === "main"
-          )
+            (dept) => dept.departmentName.trim().toLowerCase() === "main",
+          ),
         );
 
         setBanners(mainBanners);
@@ -129,15 +128,11 @@ const ImageCarousel = () => {
     fetchBanners();
   }, []);
 
-  const getImageUrl = (path?: string) => {
-    if (!path) return "";
-
-    if (path.startsWith("http")) return path;
-
-    return path.startsWith("/")
-      ? `https://localhost:7197${path}`
-      : `https://localhost:7197/${path}`;
-  };
+  // Use the environment variable defined in your .env file
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "https://localhost:7197"
+      : "https://sampatigroup.stdruraltech.org";
 
   // ✅ LOADER INSIDE BANNER AREA
   if (loading) {
@@ -156,7 +151,7 @@ const ImageCarousel = () => {
       </div>
     );
   }
-
+  console.log("Banners:", banners);
   return (
     <div className="relative w-full">
       <Swiper
@@ -169,12 +164,12 @@ const ImageCarousel = () => {
           disableOnInteraction: false,
         }}
         pagination={{ clickable: true }}
-        className="h-[50vh] md:h-[80vh]"
+        className="h-[30vh] md:h-[80vh]"
       >
         {banners.map((banner) => (
           <SwiperSlide key={banner.bnnrId}>
             <img
-              src={getImageUrl(banner.bnnrImage)}
+              src={`${API_BASE_URL}/${banner.bnnrImage}`}
               alt={banner.bnnrCat}
               className="h-full w-full object-cover"
             />
@@ -185,7 +180,7 @@ const ImageCarousel = () => {
       {/* Prev */}
       <button
         onClick={() => swiper?.slidePrev()}
-        className="absolute left-4 top-1/2 z-20 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
+        className="absolute left-2 sm:left-4 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
       >
         <ChevronLeft size={18} />
       </button>
@@ -193,7 +188,7 @@ const ImageCarousel = () => {
       {/* Next */}
       <button
         onClick={() => swiper?.slideNext()}
-        className="absolute right-4 top-1/2 z-20 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
+        className="absolute right-2 sm:right-4 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
       >
         <ChevronRight size={18} />
       </button>
