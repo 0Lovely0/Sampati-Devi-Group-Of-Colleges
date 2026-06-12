@@ -31,50 +31,54 @@ const WhyChooseUs: React.FC = () => {
   return (
     <section className="py-10 bg-slate-50 border-t border-slate-200">
       <div className="w-full mx-auto px-4 sm:px-6">
-        {/* Heading */}
-        <div className="text-center mb-10">
+        {/* HEADING */}
+        <div className="text-center mb-8 sm:mb-10">
           <span className="inline-block border border-indigo-200 bg-indigo-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-indigo-700">
             Why Choose Us
           </span>
 
-          <h2 className="mt-4 text-2xl md:text-3xl font-black text-slate-900">
+          <h2 className="mt-4 text-xl sm:text-2xl md:text-3xl font-black text-slate-900">
             Why Choose Sampati Devi College?
           </h2>
 
-          <div className="w-16 h-px bg-indigo-600 mx-auto mt-3"></div>
+          <div className="w-14 sm:w-16 h-px bg-indigo-600 mx-auto mt-3"></div>
 
-          <p className="mt-4 text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
             We are committed to preparing future healthcare professionals
             through quality education, practical training, and a supportive
             academic environment.
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 border border-slate-200 bg-white">
+        {/* GRID */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 bg-white border border-slate-200 rounded-xl overflow-hidden">
           {reasons.map((item, index) => (
             <div
               key={item.id}
-              className={`p-5 transition-all duration-300 hover:bg-indigo-950 group
-              ${
-                index !== reasons.length - 1
-                  ? "border-b md:border-b lg:border-b-0 lg:border-r border-slate-200"
-                  : ""
-              }`}
+              className={`
+            group p-5 sm:p-6 transition duration-300
+            hover:bg-indigo-950
+            border-slate-200
+            ${index !== reasons.length - 1 ? "border-b sm:border-b lg:border-b-0 lg:border-r" : ""}
+          `}
             >
-              <div className="w-12 h-12 border border-slate-200 bg-slate-50 flex items-center justify-center text-2xl mb-4 group-hover:bg-white/10 group-hover:border-white/20">
+              {/* ICON */}
+              <div className="w-11 h-11 sm:w-12 sm:h-12 border border-slate-200 bg-slate-50 flex items-center justify-center text-xl sm:text-2xl mb-4 group-hover:bg-white/10 group-hover:border-white/20 transition">
                 {item.icon}
               </div>
 
-              <h3 className="text-base font-bold text-slate-900 mb-2 group-hover:text-white transition-colors">
+              {/* TITLE */}
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-2 group-hover:text-white transition-colors">
                 {item.title}
               </h3>
 
-              <p className="text-xs leading-relaxed text-slate-600 group-hover:text-slate-300 transition-colors">
+              {/* DESCRIPTION */}
+              <p className="text-[11px] sm:text-xs leading-relaxed text-slate-600 group-hover:text-slate-300 transition-colors">
                 {item.desc}
               </p>
 
-              <div className="mt-4 w-8 h-px bg-indigo-600 group-hover:bg-white"></div>
+              {/* LINE */}
+              <div className="mt-4 w-8 h-px bg-indigo-600 group-hover:bg-white transition"></div>
             </div>
           ))}
         </div>

@@ -155,7 +155,7 @@
 // );
 
 import { useState } from "react";
-import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -176,7 +176,7 @@ import {
 export default function AdminLayout() {
   const [isManagementOpen, setIsManagementOpen] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const location = useLocation();
+  // const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {

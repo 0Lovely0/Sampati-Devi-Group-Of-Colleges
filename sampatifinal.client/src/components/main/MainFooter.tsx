@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { collegeInfo, footerLinks, departments } from "../../data/content";
-import { GraduationCap, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 
 // Social Icons
 const FacebookIcon = () => (
@@ -30,58 +30,65 @@ const YoutubeIcon = () => (
 export default function MainFooter() {
   return (
     <footer className="bg-indigo-950 text-white border-t border-white/10">
-      {/* MAIN */}
-      <div className="container-main px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+      <div className="container-main px-4 sm:px-6 py-10">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* COLLEGE INFO */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/10">
                 <img
                   src="/logo1.ico"
                   alt="College Logo"
-                  className="h-8 w-8 object-contain"
+                  className="h-7 w-7 sm:h-8 sm:w-8 object-contain"
                 />
               </div>
+
               <div>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-base sm:text-xl font-bold">
                   {collegeInfo.name}
                 </h3>
-                <p className="text-xs text-slate-300">{collegeInfo.tagline}</p>
+                <p className="text-[11px] sm:text-xs text-slate-300">
+                  {collegeInfo.tagline}
+                </p>
               </div>
             </div>
 
-            <p className="mb-4 text-sm text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               Established in {collegeInfo.established}, we are committed to
               providing quality healthcare education and producing competent
               professionals.
             </p>
 
-            <div className="space-y-2 text-sm text-slate-300">
-              <div className="flex gap-2">
-                <MapPin className="h-4 w-4 text-amber-400" />
-                {collegeInfo.address}
+            <div className="space-y-2 text-xs sm:text-sm text-slate-300">
+              <div className="flex gap-2 items-start">
+                <MapPin className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                <span>{collegeInfo.address}</span>
               </div>
-              <div className="flex gap-2">
+
+              <div className="flex gap-2 items-center">
                 <Phone className="h-4 w-4 text-amber-400" />
-                {collegeInfo.phone}
+                <span>{collegeInfo.phone}</span>
               </div>
-              <div className="flex gap-2">
+
+              <div className="flex gap-2 items-center">
                 <Mail className="h-4 w-4 text-amber-400" />
-                {collegeInfo.email}
+                <span className="break-all">{collegeInfo.email}</span>
               </div>
             </div>
           </div>
 
           {/* ABOUT */}
           <div>
-            <h4 className="mb-4 font-semibold text-amber-400">About</h4>
+            <h4 className="mb-4 font-semibold text-amber-400 text-sm sm:text-base">
+              About
+            </h4>
+
             <ul className="space-y-2">
               {footerLinks.about.map((link) => (
                 <li key={link.href}>
                   <Link
-                    className="text-sm text-slate-300 hover:text-white"
                     to={link.href}
+                    className="text-xs sm:text-sm text-slate-300 hover:text-white transition"
                   >
                     {link.label}
                   </Link>
@@ -92,13 +99,16 @@ export default function MainFooter() {
 
           {/* DEPARTMENTS */}
           <div>
-            <h4 className="mb-4 font-semibold text-amber-400">Departments</h4>
+            <h4 className="mb-4 font-semibold text-amber-400 text-sm sm:text-base">
+              Departments
+            </h4>
+
             <ul className="space-y-2">
               {departments.map((dept) => (
                 <li key={dept.id}>
                   <Link
-                    className="text-sm text-slate-300 hover:text-white"
                     to={`/department/${dept.id}`}
+                    className="text-xs sm:text-sm text-slate-300 hover:text-white transition"
                   >
                     {dept.shortName}
                   </Link>
@@ -109,13 +119,16 @@ export default function MainFooter() {
 
           {/* QUICK LINKS */}
           <div>
-            <h4 className="mb-4 font-semibold text-amber-400">Quick Links</h4>
-            <ul className="space-y-2 mb-6">
+            <h4 className="mb-4 font-semibold text-amber-400 text-sm sm:text-base">
+              Quick Links
+            </h4>
+
+            <ul className="space-y-2 mb-5">
               {footerLinks.quick.map((link) => (
                 <li key={link.href}>
                   <Link
-                    className="text-sm text-slate-300 hover:text-white"
                     to={link.href}
+                    className="text-xs sm:text-sm text-slate-300 hover:text-white transition"
                   >
                     {link.label}
                   </Link>
@@ -125,7 +138,7 @@ export default function MainFooter() {
 
             <Link
               to="/admissions"
-              className="inline-flex items-center gap-2 rounded-md bg-amber-500 px-4 py-2 text-sm font-semibold text-black hover:bg-amber-400"
+              className="inline-flex items-center gap-2 rounded-md bg-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-black hover:bg-amber-400 transition"
             >
               Apply Now <ArrowRight className="h-4 w-4" />
             </Link>
@@ -135,17 +148,25 @@ export default function MainFooter() {
 
       {/* BOTTOM BAR */}
       <div className="border-t border-white/10">
-        <div className="container-main flex flex-col md:flex-row items-center justify-between gap-4 px-4 py-4">
-          <p className="text-xs text-slate-400">
+        <div className="container-main flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-4">
+          <p className="text-[10px] sm:text-xs text-slate-400 text-center sm:text-left">
             © {new Date().getFullYear()} {collegeInfo.name}. All rights
             reserved.
           </p>
 
-          <div className="flex gap-4 text-slate-300">
-            <FacebookIcon />
-            <TwitterIcon />
-            <InstagramIcon />
-            <YoutubeIcon />
+          <div className="flex gap-5 text-slate-300">
+            <div className="hover:text-white cursor-pointer transition">
+              <FacebookIcon />
+            </div>
+            <div className="hover:text-white cursor-pointer transition">
+              <TwitterIcon />
+            </div>
+            <div className="hover:text-white cursor-pointer transition">
+              <InstagramIcon />
+            </div>
+            <div className="hover:text-white cursor-pointer transition">
+              <YoutubeIcon />
+            </div>
           </div>
         </div>
       </div>

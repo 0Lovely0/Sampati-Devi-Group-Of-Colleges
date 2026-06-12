@@ -233,6 +233,7 @@
 
 import React, { useEffect, useState } from "react";
 import { getAllNews, type News } from "../../services/newsService";
+import Loader from "../../components/common/Loader";
 
 export const NewsPage: React.FC = () => {
   const [newsData, setNewsData] = useState<News[]>([]);
@@ -285,13 +286,13 @@ export const NewsPage: React.FC = () => {
     fetchNews();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-slate-600">
-        Loading news...
-      </div>
-    );
-  }
+ if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <Loader text="Loading news..." />
+    </div>
+  );
+}
 
   if (!selectedNews) {
     return (
@@ -378,7 +379,7 @@ export const NewsPage: React.FC = () => {
 
           {/* RIGHT */}
           <div className="lg:col-span-7">
-            <div className="sticky top-24">
+            <div className="sticky top-32">
               <div className="bg-white border shadow-xl p-6">
 
                 <div className="flex gap-3 mb-5">
@@ -406,7 +407,7 @@ export const NewsPage: React.FC = () => {
                   onClick={handleViewFile}
                   className="bg-amber-600 text-white px-5 py-2.5 text-sm font-semibold uppercase hover:bg-amber-700"
                 >
-                  View File
+                  View Attached File
                 </button>
 
               </div>

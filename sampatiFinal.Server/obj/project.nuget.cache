@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "vIF7r/Qg5VA=",
   "success": true,
   "projectFilePath": "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+=======
+  "dgSpecHash": "HevaymTEks4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+>>>>>>> 9d46959a76b122f1610c471d83a8f0635dcda354
   "expectedPackageFiles": [
     "C:\\Users\\sudha\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\sudha\\.nuget\\packages\\magick.net-q16-anycpu\\14.13.1\\magick.net-q16-anycpu.14.13.1.nupkg.sha512",

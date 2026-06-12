@@ -4,8 +4,9 @@ import {
   X,
   Pencil,
   Trash2,
-  Eye,
   CheckCircle2,
+  Filter,
+  ChevronDown,
   AlertCircle,
 } from "lucide-react";
 import Loader from "../../components/common/Loader";
@@ -18,12 +19,17 @@ import {
 } from "../../services/newsService";
 import { getDepartments, type Department } from "../../services/bannerService";
 
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
+
 const ManageNews: React.FC = () => {
   const [news, setNews] = useState<News[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCompact, setIsCompact] = useState(false);
+  const [isCompact,] = useState(false);
   const [editingNews, setEditingNews] = useState<News | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<{
@@ -135,63 +141,60 @@ const ManageNews: React.FC = () => {
   if (loading) return <Loader text="Loading News..." />;
 
   return (
-   <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6 lg:p-8">
-
-  {/* Toast */}
-  {toast && (
-    <div
-      className={`fixed right-6 top-6 z-[200] flex items-center gap-3 rounded-2xl px-5 py-3 text-white shadow-2xl backdrop-blur-xl ${
-        toast.type === "success"
-          ? "bg-emerald-500"
-          : "bg-red-500"
-      }`}
-    >
-      {toast.type === "success" ? (
-        <CheckCircle2 size={18} />
-      ) : (
-        <AlertCircle size={18} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      {/* Toast */}
+      {toast && (
+        <div
+          className={`fixed right-6 top-6 z-[200] flex items-center gap-3 rounded-2xl px-5 py-3 text-white shadow-2xl backdrop-blur-xl ${
+            toast.type === "success" ? "bg-emerald-500" : "bg-red-500"
+          }`}
+        >
+          {toast.type === "success" ? (
+            <CheckCircle2 size={18} />
+          ) : (
+            <AlertCircle size={18} />
+          )}
+          <span className="font-medium">{toast.msg}</span>
+        </div>
       )}
-      <span className="font-medium">{toast.msg}</span>
-    </div>
-  )}
 
-  {/* Header */}
-  <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+      {/* Header */}
+      <div className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            News Management
+          </h1>
 
-    <div>
-      <h1 className="text-4xl font-black tracking-tight text-slate-900">
-        News Management
-      </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Manage all news articles and department assignments.
+          </p>
+        </div>
 
-      <p className="mt-2 text-slate-500">
-        Manage all news articles and department assignments.
-      </p>
-    </div>
+        <div className="flex gap-3">
+          {/* <button
+            onClick={() => setIsCompact(!isCompact)}
+            className="rounded-2xl border border-slate-200 bg-white px-5 py-3 font-medium text-slate-700 shadow-sm transition hover:shadow-md"
+          >
+            {isCompact ? "Expanded View" : "Compact View"}
+          </button> */}
 
-    <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => {
+              setEditingNews(null);
+              setIsModalOpen(true);
+            }}
+            className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02 w-full"
+          >
+            <span className="flex items-center gap-2">
+              <Plus size={16} />
+              Add News
+            </span>
+          </button>
+        </div>
+      </div>
 
-      <button
-        onClick={() => setIsCompact(!isCompact)}
-        className="rounded-2xl border border-slate-200 bg-white px-5 py-3 font-medium text-slate-700 shadow-sm transition hover:shadow-md"
-      >
-        {isCompact ? "Expanded View" : "Compact View"}
-      </button>
-
-      <button
-        onClick={() => {
-          setEditingNews(null);
-          setIsModalOpen(true);
-        }}
-        className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:bg-indigo-700"
-      >
-        <Plus size={18} />
-        Add News
-      </button>
-    </div>
-  </div>
-
-  {/* Stats */}
-  {/* <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Stats */}
+      {/* <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
     <div className="rounded-3xl bg-white p-5 shadow-sm">
       <p className="text-sm text-slate-500">Total News</p>
@@ -223,167 +226,162 @@ const ManageNews: React.FC = () => {
 
   </div> */}
 
-  {/* Filter */}
-  <div className="mb-8 flex justify-start">
-    <div className="relative w-full max-w-xs">
-      <button
-        onClick={() => setFilterOpen(!filterOpen)}
-        className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
-      >
-        <span>
-          {departmentFilter === "all"
-            ? "All Departments"
-            : departments.find(
-                (d) => d.departmentId === departmentFilter
-              )?.departmentName}
-        </span>
-
-        <span className="text-slate-400">▾</span>
-      </button>
-
-      {filterOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
-
+      {/* Filter */}
+      <div className="mb-4 flex items-center justify-between">
+        <div className="relative">
           <button
-            onClick={() => {
-              setDepartmentFilter("all");
-              setFilterOpen(false);
-            }}
-            className="w-full px-4 py-3 text-left hover:bg-slate-50"
+            onClick={() => setFilterOpen(!filterOpen)}
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
           >
-            All Departments
+            <Filter size={14} />
+            {departmentFilter === "all"
+              ? "All Departments"
+              : departments.find((d) => d.departmentId === departmentFilter)
+                  ?.departmentName}
+            <ChevronDown size={14} />
           </button>
 
-          {departments.map((d) => (
-            <button
-              key={d.departmentId}
-              onClick={() => {
-                setDepartmentFilter(d.departmentId);
-                setFilterOpen(false);
-              }}
-              className="w-full px-4 py-3 text-left hover:bg-slate-50"
-            >
-              {d.departmentName}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  </div>
-
-  {/* Cards */}
- <div
-  className={`grid gap-3 ${
-    isCompact
-      ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6"
-      : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-  }`}
->
-  {news
-    .filter(
-      (n) =>
-        departmentFilter === "all" ||
-        n.departments.some(
-          (d) => d.departmentId === departmentFilter
-        )
-    )
-    .map((n) => (
-      <div
-        key={n.news_id}
-        className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-      >
-        {/* Image */}
-        <div
-          className={`overflow-hidden ${
-            isCompact ? "h-24" : "h-32"
-          }`}
-        >
-          <img
-            src={`https://localhost:7197/${n.news_images}`}
-            alt={n.news_subject}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        {/* Content */}
-        <div className="p-2.5">
-          <div className="mb-2">
-            <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-700">
-              {n.news_cat}
-            </span>
-          </div>
-
-          <h3
-            className={`font-semibold text-slate-900 ${
-              isCompact
-                ? "line-clamp-1 text-xs"
-                : "line-clamp-2 text-sm"
-            }`}
-          >
-            {n.news_subject}
-          </h3>
-
-          {!isCompact && (
-            <p className="mt-1 line-clamp-2 text-[11px] text-slate-500">
-              {n.news_description}
-            </p>
-          )}
-
-          <div className="mt-2 flex flex-wrap gap-1">
-            {n.departments.slice(0, 2).map((dept) => (
-              <span
-                key={dept.departmentId}
-                className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px] font-medium text-slate-600"
+          {filterOpen && (
+            <div className="absolute left-0 top-full z-20 mt-2 w-86 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+              <button
+                onClick={() => {
+                  setDepartmentFilter("all");
+                  setFilterOpen(false);
+                }}
+                className="w-full px-3 py-2 text-left text-xs hover:bg-slate-50"
               >
-                {dept.departmentName}
-              </span>
-            ))}
+                All Departments
+              </button>
 
-            {n.departments.length > 2 && (
-              <span className="rounded-full bg-slate-200 px-1.5 py-0.5 text-[9px] font-medium text-slate-600">
-                +{n.departments.length - 2}
-              </span>
-            )}
-          </div>
-
-          <div className="mt-3 flex gap-1.5">
-            <button
-              onClick={() => {
-                setEditingNews(n);
-                setFormData({
-                  news_subject: n.news_subject,
-                  news_description: n.news_description,
-                  news_type: n.news_type,
-                  news_cat: n.news_cat,
-                  imageFile: null,
-                  departmentIds: n.departments.map(
-                    (d) => d.departmentId
-                  ),
-                });
-                setIsModalOpen(true);
-              }}
-              className="flex-1 rounded-lg bg-indigo-50 py-1.5 text-indigo-700 hover:bg-indigo-100"
-            >
-              <Pencil size={13} className="mx-auto" />
-            </button>
-
-            <button
-              onClick={async () => {
-                if (confirm("Delete this news item?")) {
-                  await deleteNews(n.news_id);
-                  fetchData();
-                }
-              }}
-              className="flex-1 rounded-lg bg-red-50 py-1.5 text-red-600 hover:bg-red-100"
-            >
-              <Trash2 size={13} className="mx-auto" />
-            </button>
-          </div>
+              {departments.map((dept) => (
+                <button
+                  key={dept.departmentId}
+                  onClick={() => {
+                    setDepartmentFilter(dept.departmentId);
+                    setFilterOpen(false);
+                  }}
+                  className="w-full px-3 py-2 text-left text-xs hover:bg-slate-50"
+                >
+                  {dept.departmentName}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
-    ))}
-</div>
 
+        <span className="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700">
+          {
+            news.filter(
+              (e) =>
+                departmentFilter === "all" ||
+                e.departments?.some((d) => d.departmentId === departmentFilter),
+            ).length
+          }{" "}
+          Events
+        </span>
+      </div>
+
+      {/* Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+        {news
+          .filter(
+            (n) =>
+              departmentFilter === "all" ||
+              n.departments.some((d) => d.departmentId === departmentFilter),
+          )
+          .map((n) => (
+            <div
+              key={n.news_id}
+              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            >
+              {/* IMAGE */}
+              <div className={`overflow-hidden ${isCompact ? "h-24" : "h-32"}`}>
+                <img
+                  src={`${API_BASE_URL}/${n.news_images}`}
+                  alt={n.news_subject}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+              </div>
+
+              {/* CONTENT */}
+              <div className="p-3">
+                {/* CATEGORY */}
+                <span className="mb-2 inline-block rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-700">
+                  {n.news_cat}
+                </span>
+
+                {/* TITLE */}
+                <h3
+                  className={`font-semibold text-slate-900 ${
+                    isCompact ? "line-clamp-1 text-xs" : "line-clamp-2 text-sm"
+                  }`}
+                >
+                  {n.news_subject}
+                </h3>
+
+                {/* DESCRIPTION */}
+                {!isCompact && (
+                  <p className="mt-1 line-clamp-2 text-[11px] text-slate-500">
+                    {n.news_description}
+                  </p>
+                )}
+
+                {/* DEPARTMENTS */}
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {n.departments.slice(0, 2).map((dept) => (
+                    <span
+                      key={dept.departmentId}
+                      className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-medium text-slate-600"
+                    >
+                      {dept.departmentName}
+                    </span>
+                  ))}
+
+                  {n.departments.length > 2 && (
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-medium text-slate-600">
+                      +{n.departments.length - 2}
+                    </span>
+                  )}
+                </div>
+
+                {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
+                <div className="mt-3 flex gap-2">
+                  <button
+                    onClick={() => {
+                      setEditingNews(n);
+                      setFormData({
+                        news_subject: n.news_subject,
+                        news_description: n.news_description,
+                        news_type: n.news_type,
+                        news_cat: n.news_cat,
+                        imageFile: null,
+                        departmentIds: n.departments.map((d) => d.departmentId),
+                      });
+                      setIsModalOpen(true);
+                    }}
+                    className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                  >
+                    <Pencil size={13} />
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={async () => {
+                      if (confirm("Delete this news item?")) {
+                        await deleteNews(n.news_id);
+                        fetchData();
+                      }
+                    }}
+                    className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                  >
+                    <Trash2 size={13} />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
 
       {/* Modal */}
       {isModalOpen && (

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("sampatiFinal.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2cbc4d30f2425686c79eee9db5c4baf8c3d9e13")]
 [assembly: System.Reflection.AssemblyProductAttribute("sampatiFinal.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("sampatiFinal.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

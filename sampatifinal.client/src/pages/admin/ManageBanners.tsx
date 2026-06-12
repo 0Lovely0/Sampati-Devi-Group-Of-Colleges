@@ -4,7 +4,6 @@ import {
   X,
   Pencil,
   Trash2,
-  Eye,
   CheckCircle2,
   AlertCircle,
   Filter,
@@ -22,12 +21,17 @@ import {
   type Department,
 } from "../../services/bannerService";
 
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
+
 const ManageBanners: React.FC = () => {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  // const [ setLightbox] = useState<string | null>(null);
   const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
 
   const [submitting, setSubmitting] = useState(false);
@@ -206,7 +210,7 @@ const ManageBanners: React.FC = () => {
     return <Loader text="Loading Banners..." />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-4 md:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-1">
       {/* Toast */}
       {toast && (
         <div
@@ -307,8 +311,8 @@ const ManageBanners: React.FC = () => {
           {filteredBanners.length} Banners
         </div>
       </div>
-
       {/* Grid section */}
+      
       {banners.length === 0 ? (
         <div className="flex h-[350px] items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-white">
           <div className="text-center">
@@ -326,12 +330,12 @@ const ManageBanners: React.FC = () => {
           {filteredBanners.map((b) => (
             <div
               key={b.bnnrId}
-              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              className="group overflow-hidden rounded-2xl border border-indigo-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               {/* Image */}
               <div className="relative overflow-hidden">
                 <img
-                  src={`https://localhost:7197/${b.bnnrImage}`}
+                  src={`${API_BASE_URL}/${b.bnnrImage}`}
                   alt={b.bnnrCat}
                   className="h-32 w-full object-cover transition duration-500 group-hover:scale-105"
                 />
@@ -366,16 +370,7 @@ const ManageBanners: React.FC = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="mt-3 flex gap-1.5">
-                  <button
-                    onClick={() =>
-                      setLightbox(`https://localhost:7197/${b.bnnrImage}`)
-                    }
-                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200"
-                  >
-                    <Eye size={13} />
-                  </button>
-
+                <div className="mt-3 flex gap-2">
                   <button
                     onClick={() => {
                       setEditingBanner(b);
@@ -396,16 +391,18 @@ const ManageBanners: React.FC = () => {
 
                       setIsModalOpen(true);
                     }}
-                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                    className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
                   >
                     <Pencil size={13} />
+                    Edit
                   </button>
 
                   <button
                     onClick={() => handleDelete(b.bnnrId)}
-                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-100 text-red-700 hover:bg-red-200"
+                    className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
                   >
                     <Trash2 size={13} />
+                    Delete
                   </button>
                 </div>
               </div>

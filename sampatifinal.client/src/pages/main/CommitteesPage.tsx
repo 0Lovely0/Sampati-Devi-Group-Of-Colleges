@@ -37,71 +37,6 @@ const committees: Committee[] = [
       { name: "Dr. Neha", image: "/Principal.png" },
     ],
   },
-  {
-    name: "Library Committee",
-    members: [
-      { name: "Miss Varuni", image: "/Miss Varuni.png" },
-      { name: "Hemlata", image: "/Hemlata.png" },
-      { name: "Lata Sharma", image: "/Lata Sharma.png" },
-      { name: "Poonam", image: "/Poonam.png" },
-      { name: "Geetanjali", image: "/Geetanjali.png" },
-    ],
-  },
-  {
-    name: "Cultural Committee",
-    members: [
-      { name: "Miss Aanchal", image: "/Miss Aanchal.png" },
-      { name: "Vartika", image: "/Vertika.png" },
-      { name: "Renu", image: "/Renu.png" },
-      { name: "Riya", image: "/Riya.png" },
-      { name: "Riya", image: "/Riya 2.png" },
-    ],
-  },
-  {
-    name: "SNA Committee",
-    members: [
-      { name: "Miss Himani", image: "/Miss Himani.png" },
-      { name: "Sanjana Thakur", image: "/Sanjana Thakur.png" },
-      { name: "Neha", image: "/Neha.png" },
-      { name: "Shrutkritika", image: "/Shrutkritika.png" },
-      { name: "Tanuja", image: "/Tanuja.png" },
-    ],
-  },
-  {
-    name: "Health And Hygiene Committee",
-    members: [
-      { name: "Miss Kritika", image: "/Miss Kritika.png" },
-      { name: "Banita", image: "/Banita.png" },
-      { name: "Rashmi", image: "/Rashmi.png" },
-      { name: "Tanisha", image: "/Tanisha.png" },
-      { name: "Palak", image: "/Palak.png" },
-    ],
-  },
-  {
-    name: "Examination Committee",
-    members: [
-      { name: "Dr. Neha", image: "/Principal.png" },
-      { name: "Ms. Pallavi", image: "/Ms Pallavi.png" },
-    ],
-  },
-  {
-    name: "Placement And Career Guidance Committee",
-    members: [
-      { name: "Dr. Chander Shekhar Sharma", image: "/Chander Shekhar Sahrma.png" },
-    ],
-  },
-  {
-    name: "Hostel Committee",
-    members: [
-      { name: "Miss Anjali", image: "/Miss Anjali.png" },
-      { name: "Sapna", image: "/Sapna.png" },
-      { name: "Miss Pooja", image: "/Miss Pooja.png" },
-      { name: "Poonam", image: "/Poonam 2.png" },
-      { name: "Komal", image: "/Komal.png" },
-      { name: "Pooja", image: "/Pooja.png" },
-      { name: "Sonika", image: "/Sonika.png" },
-    ],
-  },
 ];
 
 const CommitteesPage: React.FC = () => {
@@ -110,22 +45,25 @@ const CommitteesPage: React.FC = () => {
   const activeCommittee = committees.find((c) => c.name === selected);
 
   return (
-    <section className="min-h-screen bg-white ">
+    <section className="w-full min-h-screen bg-white">
 
       {/* HEADER */}
-      <div className="w-full mx-auto mb-6 bg-indigo-950 py-10">
-        <h1 className="text-4xl font-bold text-center text-white">College Committees</h1>
-        <p className="text-lg text-slate-300 mt-1 text-center">
+      <div className="w-full bg-indigo-950 py-10 sm:py-14 text-center px-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+          College Committees
+        </h1>
+
+        <p className="text-sm sm:text-lg text-slate-300 mt-2">
           Select a committee to view its members
         </p>
       </div>
 
-      {/* SELECT DROPDOWN */}
-      <div className="w-full mx-auto mb-8 px-10">
+      {/* DROPDOWN */}
+      <div className="w-full px-4 sm:px-6 lg:px-10 mt-6">
         <select
           value={selected}
           onChange={(e) => setSelected(e.target.value)}
-          className="w-full bg-white text-black text-xs px-3 py-2 border border-slate-500"
+          className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 bg-white text-sm px-3 py-2 border border-slate-300 rounded-md shadow-sm"
         >
           {committees.map((c) => (
             <option key={c.name} value={c.name}>
@@ -136,24 +74,27 @@ const CommitteesPage: React.FC = () => {
       </div>
 
       {/* MEMBERS GRID */}
-      <div className="w-full mx-auto grid grid-cols-3 md:grid-cols-5 gap-4 px-10">
+      <div className="w-full px-4 sm:px-6 lg:px-10 py-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
 
-        {activeCommittee?.members.map((member, index) => (
-          <div
-            key={index}
-            className="border border-slate-500 bg-white/5 p-2"
-          >
-            <img
-              src={member.image}
-              alt={member.name}
-              className="w-full h-58 object-cover"
-            />
-            <p className="text-[11px] mt-2 ">
-              {member.name}
-            </p>
-          </div>
-        ))}
+          {activeCommittee?.members.map((member, index) => (
+            <div
+              key={index}
+              className="border border-slate-200 bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition"
+            >
+              <img
+                src={member.image}
+                alt={member.name}
+                className="w-full h-32 sm:h-36 object-contain rounded-md"
+              />
 
+              <p className="text-[11px] sm:text-xs mt-2 text-center font-medium text-slate-700">
+                {member.name}
+              </p>
+            </div>
+          ))}
+
+        </div>
       </div>
     </section>
   );

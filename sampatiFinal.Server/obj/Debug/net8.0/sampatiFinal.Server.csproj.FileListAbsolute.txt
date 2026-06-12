@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\lovel\OneDrive\Desktop\Projects\sampatiFinal\sampatiFinal.Server\bin\Debug\net8.0\spa.proxy.json
 C:\Users\lovel\OneDrive\Desktop\Projects\sampatiFinal\sampatiFinal.Server\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\lovel\OneDrive\Desktop\Projects\sampatiFinal\sampatiFinal.Server\bin\Debug\net8.0\appsettings.json
@@ -688,3 +689,5 @@ C:\Users\sudha\Desktop\Sampati-Devi-Group-Of-Colleges\sampatiFinal.Server\obj\De
 C:\Users\sudha\Desktop\Sampati-Devi-Group-Of-Colleges\sampatiFinal.Server\obj\Debug\net8.0\sampatiF.913F3B5F.Up2Date
 C:\Users\sudha\Desktop\Sampati-Devi-Group-Of-Colleges\sampatiFinal.Server\obj\Debug\net8.0\sampatiFinal.Server.genruntimeconfig.cache
 C:\Users\sudha\Desktop\Sampati-Devi-Group-Of-Colleges\sampatiFinal.Server\obj\Debug\net8.0\ref\sampatiFinal.Server.dll
+=======
+>>>>>>> 9d46959a76b122f1610c471d83a8f0635dcda354

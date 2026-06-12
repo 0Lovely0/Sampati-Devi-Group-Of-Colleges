@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\sampatiFinal.Server.csproj": {}
   },
   "projects": {
@@ -12,6 +13,19 @@
         "projectPath": "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
         "packagesPath": "C:\\Users\\sudha\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\obj\\",
+=======
+    "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+        "projectName": "sampatiFinal.Server",
+        "projectPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+        "packagesPath": "C:\\Users\\lovel\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysampati\\sampatiFinal\\sampatiFinal.Server\\obj\\",
+>>>>>>> 9d46959a76b122f1610c471d83a8f0635dcda354
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

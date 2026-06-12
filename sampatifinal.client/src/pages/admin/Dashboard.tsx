@@ -1,36 +1,34 @@
 import React from 'react';
-import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
-import FileText from 'lucide-react/dist/esm/icons/file-text';
-import ImageIcon from 'lucide-react/dist/esm/icons/image';
-import Video from 'lucide-react/dist/esm/icons/video';
-import Bell from 'lucide-react/dist/esm/icons/bell';
-import Users from 'lucide-react/dist/esm/icons/users';
-import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import { LayoutDashboard, FileText, Image as ImageIcon, Video, Users, UserPlus } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   return (
     <div className="space-y-8 pb-10">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Admin Control Center</h1>
-        <p className="text-slate-500 mt-1">Manage portal content, user activity, and site statistics.</p>
-      </div>
+       <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+          Admin Control Center
+          </h1>
+
+          <p className="mt-1 text-sm text-slate-500">
+           Manage portal content, user activity, and site statistics.
+          </p>
+        </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-        <StatCard title="Total Users" value="1,284" icon={<Users className="text-orange-600" />} />
-        <StatCard title="New Users" value="24" icon={<UserPlus className="text-sky-600" />} />
-        <StatCard title="Notices" value="12" icon={<FileText className="text-blue-600" />} />
-        <StatCard title="Gallery" value="84" icon={<ImageIcon className="text-purple-600" />} />
-        <StatCard title="Events" value="05" icon={<LayoutDashboard className="text-emerald-600" />} />
-        <StatCard title="Videos" value="03" icon={<Video className="text-rose-600" />} />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <StatCard title="Total Users" value="1,284" icon={<Users className="text-orange-600" />} className="bg-orange-100 border-orange-500" />
+        <StatCard title="New Users" value="24" icon={<UserPlus className="text-sky-600" />} className="bg-sky-100 border-sky-500" />
+        <StatCard title="Notices" value="12" icon={<FileText className="text-blue-600" />} className="bg-blue-100 border-blue-500" />
+        <StatCard title="Gallery" value="84" icon={<ImageIcon className="text-purple-600" />} className="bg-purple-100 border-purple-500" />
+        <StatCard title="Events" value="05" icon={<LayoutDashboard className="text-emerald-600" />} className="bg-emerald-100 border-emerald-500" />
+        <StatCard title="Videos" value="03" icon={<Video className="text-rose-600" />} className="bg-rose-100 border-rose-500" />
       </div>
 
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {/* Recently Added Users Section */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+        <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-indigo-500 shadow-sm">
           <h2 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
             <UserPlus size={20} className="text-sky-600" /> Recently Registered Users
           </h2>
@@ -58,12 +56,12 @@ const Dashboard: React.FC = () => {
   );
 };
 
-// Helper Components
-const StatCard = ({ title, value, icon }: { title: string, value: string, icon: React.ReactNode }) => (
-  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-2">
-    <div className="p-2 bg-slate-50 w-fit rounded-xl">{icon}</div>
+// Fixed Helper Component
+const StatCard = ({ title, value, icon, className }: { title: string, value: string, icon: React.ReactNode, className?: string }) => (
+  <div className={`p-6 rounded-3xl border shadow-sm flex flex-col gap-2 ${className || 'bg-white border-slate-100'}`}>
+    <div className="p-2 bg-white/50 w-fit rounded-xl">{icon}</div>
     <div>
-      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{title}</p>
+      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{title}</p>
       <h3 className="text-xl font-bold text-slate-900">{value}</h3>
     </div>
   </div>

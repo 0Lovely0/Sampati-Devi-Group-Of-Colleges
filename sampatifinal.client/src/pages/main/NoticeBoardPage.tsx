@@ -161,7 +161,13 @@ import {
   getAllNotifications,
   type Notification,
 } from "../../services/notificationService";
+import Loader from "../../components/common/Loader";
 import { X } from "lucide-react";
+
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
 
 export const NoticeBoardPage: React.FC = () => {
   const [notices, setNotices] = useState<Notification[]>([]);
@@ -220,13 +226,13 @@ export const NoticeBoardPage: React.FC = () => {
 
   const getFileUrl = (file?: string | null) => {
     if (!file) return "";
-    return file.startsWith("http") ? file : `https://localhost:7197/${file}`;
+    return file.startsWith("http") ? file : `${API_BASE_URL}/${file}`;
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-600">
-        Loading notices...
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader text="Loading notices..." />
       </div>
     );
   }

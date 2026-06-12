@@ -137,8 +137,6 @@
 
 // export default NoticeBoard;
 
-
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, Sparkles, ArrowRight } from "lucide-react";
@@ -146,6 +144,7 @@ import {
   getAllNotifications,
   type Notification,
 } from "../../services/notificationService";
+import Loader from "../../components/common/Loader";
 
 const NoticeBoard: React.FC = () => {
   const [notices, setNotices] = useState<Notification[]>([]);
@@ -165,7 +164,7 @@ const NoticeBoard: React.FC = () => {
         active.sort(
           (a, b) =>
             new Date(b.notification_date).getTime() -
-            new Date(a.notification_date).getTime()
+            new Date(a.notification_date).getTime(),
         );
 
         setNotices(active);
@@ -194,97 +193,101 @@ const NoticeBoard: React.FC = () => {
   };
 
   return (
-    <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 py-10">
-      <div className="mx-auto w-full px-8">
-        <div className="grid lg:grid-cols-12 gap-6">
-
+    <section className="bg-gradient-to-br from-indigo-50 via-white to-amber-50 py-8 sm:py-10">
+      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* LEFT CARD */}
           <div className="lg:col-span-4">
-            <div className="relative overflow-hidden bg-indigo-950 border border-slate-200 p-6 shadow-lg">
-
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-200 blur-3xl opacity-40 rounded-full" />
+            <div className="relative overflow-hidden bg-indigo-950 border border-slate-200 p-5 sm:p-6 shadow-lg rounded-xl">
+              <div className="absolute -top-10 -right-10 w-28 h-28 sm:w-32 sm:h-32 bg-indigo-200 blur-3xl opacity-40 rounded-full" />
 
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-amber-600 text-white shadow-md">
-                  <Bell size={20} />
+                <div className="p-2.5 sm:p-3 rounded-2xl bg-amber-600 text-white shadow-md">
+                  <Bell size={18} />
                 </div>
 
                 <div>
-                  <h2 className="text-lg font-black text-white">
+                  <h2 className="text-base sm:text-lg font-black text-white">
                     Notice Board
                   </h2>
-                  <p className="text-xs text-white">
+                  <p className="text-[11px] sm:text-xs text-white/80">
                     Live Notification System
                   </p>
                 </div>
               </div>
 
-              <div className="mt-5 flex items-center gap-2 text-amber-500 font-semibold text-sm">
+              <div className="mt-4 flex items-center gap-2 text-amber-500 font-semibold text-xs sm:text-sm">
                 <Sparkles size={14} />
                 Real-time Updates
               </div>
 
-              <p className="mt-3 text-sm text-white leading-6">
+              <p className="mt-3 text-xs sm:text-sm text-white leading-6">
                 All academic updates, exams, placements, events and circulars
                 are published here instantly.
               </p>
 
+              {/* STATS */}
               <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl bg-white p-3">
-                  <h3 className="text-lg font-bold text-amber-600">
+                <div className="rounded-xl bg-white p-3 text-center">
+                  <h3 className="text-base sm:text-lg font-bold text-amber-600">
                     {notices.length}
                   </h3>
-                  <p className="text-xs text-slate-500">Active Notices</p>
+                  <p className="text-[10px] sm:text-xs text-slate-500">
+                    Active Notices
+                  </p>
                 </div>
 
-                <div className="rounded-2xl bg-white p-3">
-                  <h3 className="text-lg font-bold text-amber-600">Live</h3>
-                  <p className="text-xs text-slate-500">System Status</p>
+                <div className="rounded-xl bg-white p-3 text-center">
+                  <h3 className="text-base sm:text-lg font-bold text-amber-600">
+                    Live
+                  </h3>
+                  <p className="text-[10px] sm:text-xs text-slate-500">
+                    System Status
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* RIGHT SCROLL BOARD */}
+          {/* RIGHT BOARD */}
           <div className="lg:col-span-8">
-            <div className="border border-slate-200 bg-white p-5">
-
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-slate-900">
+            <div className="border border-slate-200 bg-white p-4 sm:p-5 rounded-xl">
+              {/* HEADER */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900">
                   Latest Notices
                 </h3>
 
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-600">
+                <span className="text-[10px] sm:text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-600 w-fit">
                   Auto Scroll
                 </span>
               </div>
 
               {/* LOADING */}
               {loading ? (
-                <div className="h-[320px] flex items-center justify-center text-slate-500">
-                  Loading notices...
+                <div className="h-[250px] sm:h-[320px] flex items-center justify-center">
+                  <Loader text="Loading notices..." />
                 </div>
               ) : (
-                <div className="relative h-[320px] overflow-hidden">
-
+                <div className="relative h-[250px] sm:h-[320px] overflow-hidden">
                   <div className="animate-[scrollTop_18s_linear_infinite] space-y-3">
                     {scrollingNotices.map((notice, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 hover:bg-amber-50 transition"
+                        className="flex items-start sm:items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3 hover:bg-amber-50 transition"
                       >
-                        <span className="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded-md">
+                        <span className="text-[10px] font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded-md whitespace-nowrap">
                           {formatDate(notice.notification_date)}
                         </span>
 
-                        <p className="text-sm font-medium text-slate-700">
+                        <p className="text-xs sm:text-sm font-medium text-slate-700 line-clamp-2">
                           {notice.notification_sub}
                         </p>
                       </div>
                     ))}
                   </div>
 
-                  {/* fades */}
+                  {/* GRADIENT FADE */}
                   <div className="pointer-events-none absolute top-0 h-10 w-full bg-gradient-to-b from-white to-transparent" />
                   <div className="pointer-events-none absolute bottom-0 h-10 w-full bg-gradient-to-t from-white to-transparent" />
                 </div>
@@ -292,24 +295,23 @@ const NoticeBoard: React.FC = () => {
 
               {/* BUTTON */}
               <Link to="/noticeboardpage">
-                <button className="mt-5 w-full flex items-center justify-center gap-2 bg-amber-600 py-3 text-white font-semibold hover:bg-amber-700 transition">
+                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-amber-600 py-2.5 sm:py-3 text-sm font-semibold text-white hover:bg-amber-700 transition rounded-lg">
                   View All Notices <ArrowRight size={16} />
                 </button>
               </Link>
             </div>
           </div>
-
         </div>
       </div>
 
-      {/* SCROLL ANIMATION */}
+      {/* ANIMATION */}
       <style>
         {`
-          @keyframes scrollTop {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-          }
-        `}
+      @keyframes scrollTop {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+      }
+    `}
       </style>
     </section>
   );
