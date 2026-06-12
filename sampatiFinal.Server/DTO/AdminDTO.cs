@@ -306,32 +306,11 @@ namespace sampatiFinal.Server.DTO
             [Required]
             public string Name { get; set; }
 
-            [Required]
-            public string Achievement { get; set; }
-
-            [Required]
-            public string FatherName { get; set; }
-
-            [Required]
-            public string MotherName { get; set; }
-
-            [Required]
-            public string Degree { get; set; }
-
-            [Required]
-            public string CollegeName { get; set; }
-
-            public string SchoolDetails { get; set; }
-
-            [Required]
-            public string Address { get; set; }
-
-            [Required]
-            public string PhoneNumber { get; set; }
-
-            [Required]
-            public int Rank { get; set; }
-
+            public string YearSemester { get; set; }
+            public string CollegeRank { get; set; }
+            public string UniversityRank { get; set; }
+            public string Batch { get; set; }
+            public string Percentile { get; set; }
             public List<int> DepartmentIds { get; set; }
 
             public IFormFile Image { get; set; }
@@ -346,9 +325,13 @@ namespace sampatiFinal.Server.DTO
         {
             public int TopperId { get; set; }
             public string Name { get; set; }
-            public string Achievement { get; set; }
+
+            public string YearSemester { get; set; }
+            public string CollegeRank { get; set; }
+            public string UniversityRank { get; set; }
+            public string Batch { get; set; }
+            public string Percentile { get; set; }
             public string ImagePath { get; set; }
-            public int Rank { get; set; }
 
             public List<DepartmentResponseDto> Departments { get; set; }
         }
@@ -424,6 +407,43 @@ namespace sampatiFinal.Server.DTO
             public IFormFile Image { get; set; }
             public string DescriptionHeading { get; set; }
             public string Description { get; set; }
+        }
+
+        public class CreatePlacementDto
+        {
+            [Required]
+            public string StudentName { get; set; }
+
+            [Required]
+            public string Batch { get; set; }
+
+            [Required]
+            public string PlacementName { get; set; }
+
+            [Required]
+            public string Location { get; set; }
+
+            public List<int> DepartmentIds { get; set; }
+
+            public IFormFile Image { get; set; }
+        }
+
+        public class UpdatePlacementDto : CreatePlacementDto
+        {
+            [Required]
+            public int PlacementId { get; set; }
+        }
+
+        public class PlacementResponseDto
+        {
+            public int PlacementId { get; set; }
+            public string StudentName { get; set; }
+            public string Batch { get; set; }
+            public string PlacementName { get; set; }
+            public string Location { get; set; }
+            public string ImagePath { get; set; }
+
+            public List<DepartmentResponseDto> Departments { get; set; }
         }
 
     }

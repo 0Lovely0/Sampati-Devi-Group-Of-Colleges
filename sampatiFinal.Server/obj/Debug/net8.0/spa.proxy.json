@@ -3,7 +3,7 @@
 "ServerUrl": "https://localhost:57685",
 "RedirectUrl": "",
 "LaunchCommand": "npm run dev",
-"WorkingDirectory": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\..\\sampatifinal.client",
+"WorkingDirectory": "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\..\\sampatifinal.client",
 "MaxTimeoutInSeconds": "120",
 "KeepRunning": "false"
 }

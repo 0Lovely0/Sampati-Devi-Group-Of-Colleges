@@ -729,7 +729,7 @@ namespace sampatiFinal.Server.Controllers
             var data = await _service.GetAllBanner();
             return Ok(new { success = true, data });
         }
-
+        
         [HttpGet("banner/{id}")]
         public async Task<IActionResult> GetBannerById(int id)
         {
@@ -860,6 +860,7 @@ namespace sampatiFinal.Server.Controllers
         }
 
         // ✅ GET ALL EVENTS
+        [AllowAnonymous]
         [HttpGet("get-all-events")]
         public async Task<IActionResult> GetAllEvents()
         {
@@ -911,6 +912,8 @@ namespace sampatiFinal.Server.Controllers
         }
 
         // ================= GET ALL =================
+        [AllowAnonymous]
+
         [HttpGet("get-all-toppers")]
         public async Task<IActionResult> GetAllToppers()
         {
@@ -1030,6 +1033,8 @@ namespace sampatiFinal.Server.Controllers
 
         #region Committee
         [HttpGet("committee-get-all")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetAllCommitteeMembers()
         {
             try
@@ -1247,6 +1252,8 @@ namespace sampatiFinal.Server.Controllers
         #region Facility
 
         [HttpGet("GetAllFacilities")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> GetAllFacilitiesAsync()
         {
             var facilities = await _service.GetAllFacilitiesAsync();
@@ -1314,6 +1321,160 @@ namespace sampatiFinal.Server.Controllers
         {
             var data = await _service.GetAllActiveFacilityMastersAsync();
             return Ok(data);
+        }
+        #endregion
+
+        #region placement
+        // ================= CREATE =================
+        [HttpPost("create-placement")]
+        public async Task<IActionResult> CreatePlacement([FromForm] CreatePlacementDto dto)
+       {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Validation failed",
+                        errors = ModelState.Values.SelectMany(v => v.Errors)
+                                                   .Select(e => e.ErrorMessage)
+                    });
+                }
+
+                await _service.CreatePlacementAsync(dto);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Placement created successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
+        // ================= GET ALL =================
+        [HttpGet("get-all-placements")]
+        public async Task<IActionResult> GetAllPlacements()
+        {
+            try
+            {
+                var data = await _service.GetAllPlacementsAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    count = data.Count,
+                    data
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
+        // ================= GET BY ID =================
+        [HttpGet("get-placement-by-id/{id}")]
+        public async Task<IActionResult> GetPlacementById(int id)
+        {
+            try
+            {
+                var data = await _service.GetPlacementByIdAsync(id);
+
+                if (data == null)
+                {
+                    return NotFound(new
+                    {
+                        success = false,
+                        message = "Placement not found"
+                    });
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    data
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
+        // ================= UPDATE =================
+        [HttpPut("update-placement")]
+        public async Task<IActionResult> UpdatePlacement([FromForm] UpdatePlacementDto dto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Validation failed",
+                        errors = ModelState.Values.SelectMany(v => v.Errors)
+                                                   .Select(e => e.ErrorMessage)
+                    });
+                }
+
+                await _service.UpdatePlacementAsync(dto);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Placement updated successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
+        // ================= DELETE =================
+        [HttpDelete("delete-placement/{id}")]
+        public async Task<IActionResult> DeletePlacement(int id)
+        {
+            try
+            {
+                await _service.DeletePlacementAsync(id);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Placement deleted successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
         }
         #endregion
     }

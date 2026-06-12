@@ -19,5 +19,7 @@ namespace sampatiFinal.Server.Data.Entities
         public ICollection<GalleryCategoryDepartment> GalleryCategoryDepartments { get; set; }
     = new List<GalleryCategoryDepartment>();
         public ICollection<VideoDepartment> VideoDepartments { get; set; } = new List<VideoDepartment>();
+        public ICollection<PlacementDepartment> PlacementDepartments { get; set; }
+    = new List<PlacementDepartment>();
     }
 }

@@ -118,7 +118,7 @@ namespace sampatiFinal.Server.Services.Services
             Task<List<EventResponseDto>> GetAllEvents();
         #endregion
 
-        #region 
+        #region topper
         Task CreateTopperAsync(CreateTopperDto dto);
         Task UpdateTopperAsync(UpdateTopperDto dto);
         Task DeleteTopperAsync(int id);
@@ -144,6 +144,14 @@ namespace sampatiFinal.Server.Services.Services
         Task<string> DeleteFacilityAsync(int id);
         Task<IEnumerable<FacilityMaster>> GetAllActiveFacilityMastersAsync();
 
+        #endregion
+
+        #region
+        Task CreatePlacementAsync(CreatePlacementDto dto);
+        Task UpdatePlacementAsync(UpdatePlacementDto dto);
+        Task DeletePlacementAsync(int id);
+        Task<List<PlacementResponseDto>> GetAllPlacementsAsync();
+        Task<PlacementResponseDto> GetPlacementByIdAsync(int id);
         #endregion
     }
 }

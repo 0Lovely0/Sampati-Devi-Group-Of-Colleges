@@ -312,7 +312,7 @@ namespace sampatiFinal.Server.Services.Services
                 ImgDes = gallery.ImgDes,
                 ImgSession = gallery.ImgSession,
                 UploadedBy = gallery.UploadedBy,
-               
+
                 Departments = gallery.GalleryDepartments
                     .Select(d => new DepartmentResponseDto
                     {
@@ -531,7 +531,7 @@ namespace sampatiFinal.Server.Services.Services
                 .FirstOrDefaultAsync(x => x.CatId == id);
         }
 
-        
+
 
         public async Task RemoveCategoryDepartments(ICollection<GalleryCategoryDepartment> mappings)
         {
@@ -663,7 +663,8 @@ namespace sampatiFinal.Server.Services.Services
                         DepartmentId = d.Department.DepartmentId,
                         DepartmentName = d.Department.DepartmentName,
                         Status = d.Department.Status
-                    }).ToList(),                BnnrCat = x.BnnrCat,
+                    }).ToList(),
+                BnnrCat = x.BnnrCat,
                 BnnrDes = x.BnnrDes,
                 BnnrImage = x.BnnrImage,
                 BnnrDate = x.BnnrDate ?? DateTime.Now,
@@ -1323,7 +1324,9 @@ namespace sampatiFinal.Server.Services.Services
             }).ToList();
         }
         #endregion
+
         #region Topper
+
         public async Task CreateTopperAsync(CreateTopperDto dto)
         {
             var imagePath = await FileHelper.SaveFile(
@@ -1336,19 +1339,16 @@ namespace sampatiFinal.Server.Services.Services
             var topper = new Topper
             {
                 Name = dto.Name,
-                Achievement = dto.Achievement,
-                FatherName = dto.FatherName,
-                MotherName = dto.MotherName,
-                Degree = dto.Degree,
-                CollegeName = dto.CollegeName,
-                SchoolDetails = dto.SchoolDetails,
-                Address = dto.Address,
-                PhoneNumber = dto.PhoneNumber,
-                Rank = dto.Rank,
+                YearSemester = dto.YearSemester,
+                CollegeRank = dto.CollegeRank,
+                UniversityRank = dto.UniversityRank,
+                Batch = dto.Batch,
+                Percentile = dto.Percentile,
                 ImagePath = imagePath
             };
 
-            topper.TopperDepartments = dto.DepartmentIds
+            // ✅ MANY TO MANY
+            topper.TopperDepartments = dto.DepartmentIds?
                 .Select(d => new TopperDepartment { DepartmentId = d })
                 .ToList();
 
@@ -1363,17 +1363,70 @@ namespace sampatiFinal.Server.Services.Services
             {
                 TopperId = t.TopperId,
                 Name = t.Name,
-                Achievement = t.Achievement,
+                YearSemester = t.YearSemester,
+                CollegeRank = t.CollegeRank,
+                UniversityRank = t.UniversityRank,
+                Batch = t.Batch,
+                Percentile = t.Percentile,
                 ImagePath = t.ImagePath,
-                Rank = t.Rank,
+
                 Departments = t.TopperDepartments
-            .Select(d => new DepartmentResponseDto
-            {
-                DepartmentId = d.Department.DepartmentId,
-                DepartmentName = d.Department.DepartmentName,
-                Status = d.Department.Status
-            }).ToList()
+                    .Select(d => new DepartmentResponseDto
+                    {
+                        DepartmentId = d.Department.DepartmentId,
+                        DepartmentName = d.Department.DepartmentName,
+                        Status = d.Department.Status
+                    }).ToList()
             }).ToList();
+        }
+
+        public async Task<TopperResponseDto> GetTopperByIdAsync(int id)
+        {
+            var t = await _repo.GetTopperByIdAsync(id);
+
+            if (t == null) throw new Exception("Topper not found");
+
+            return new TopperResponseDto
+            {
+                TopperId = t.TopperId,
+                Name = t.Name,
+                YearSemester = t.YearSemester,
+                CollegeRank = t.CollegeRank,
+                UniversityRank = t.UniversityRank,
+                Batch = t.Batch,
+                Percentile = t.Percentile,
+                ImagePath = t.ImagePath,
+
+                Departments = t.TopperDepartments
+                    .Select(d => new DepartmentResponseDto
+                    {
+                        DepartmentId = d.Department.DepartmentId,
+                        DepartmentName = d.Department.DepartmentName,
+                        Status = d.Department.Status
+                    }).ToList()
+            };
+        }
+
+        public async Task UpdateTopperAsync(UpdateTopperDto dto)
+        {
+            var topper = await _repo.GetTopperByIdAsync(dto.TopperId);
+            if (topper == null) throw new Exception("Topper not found");
+
+            topper.Name = dto.Name;
+            topper.YearSemester = dto.YearSemester;
+            topper.CollegeRank = dto.CollegeRank;
+            topper.UniversityRank = dto.UniversityRank;
+            topper.Batch = dto.Batch;
+            topper.Percentile = dto.Percentile;
+            // ✅ MANY TO MANY UPDATE
+            topper.TopperDepartments = dto.DepartmentIds?
+                .Select(d => new TopperDepartment
+                {
+                    TopperId = dto.TopperId,
+                    DepartmentId = d
+                }).ToList();
+
+            await _repo.UpdateTopperAsync(topper);
         }
 
         public async Task DeleteTopperAsync(int id)
@@ -1384,40 +1437,6 @@ namespace sampatiFinal.Server.Services.Services
             await _repo.DeleteTopperAsync(topper);
         }
 
-        public async Task<TopperResponseDto> GetTopperByIdAsync(int id)
-        {
-            var t = await _repo.GetTopperByIdAsync(id);
-
-            return new TopperResponseDto
-            {
-                TopperId = t.TopperId,
-                Name = t.Name,
-                Achievement = t.Achievement,
-                ImagePath = t.ImagePath,
-                Rank = t.Rank,
-                Departments = t.TopperDepartments
-            .Select(d => new DepartmentResponseDto
-            {
-                DepartmentId = d.Department.DepartmentId,
-                DepartmentName = d.Department.DepartmentName,
-                Status = d.Department.Status
-            }).ToList()
-            };
-        }
-
-        public async Task UpdateTopperAsync(UpdateTopperDto dto)
-        {
-            var topper = await _repo.GetTopperByIdAsync(dto.TopperId);
-
-            topper.Name = dto.Name;
-            topper.Rank = dto.Rank;
-
-            topper.TopperDepartments = dto.DepartmentIds
-                .Select(d => new TopperDepartment { DepartmentId = d, TopperId = dto.TopperId })
-                .ToList();
-
-            await _repo.UpdateTopperAsync(topper);
-        }
         #endregion
 
         #region committee
@@ -1652,5 +1671,104 @@ namespace sampatiFinal.Server.Services.Services
         }
         #endregion
 
+        #region Parmotion
+        public async Task CreatePlacementAsync(CreatePlacementDto dto)
+        {
+            var imagePath = await FileHelper.SaveFile(
+                dto.Image,
+                "uploads/placements",
+                new[] { ".jpg", ".jpeg", ".png" },
+                2 * 1024 * 1024
+            );
+
+            var placement = new Placement
+            {
+                StudentName = dto.StudentName,
+                Batch = dto.Batch,
+                PlacementName = dto.PlacementName,
+                Location = dto.Location,
+                ImagePath = imagePath
+            };
+
+            placement.PlacementDepartments = dto.DepartmentIds
+                .Select(d => new PlacementDepartment
+                {
+                    DepartmentId = d
+                })
+                .ToList();
+
+            await _repo.CreatePlacementAsync(placement);
+        }
+
+        public async Task<List<PlacementResponseDto>> GetAllPlacementsAsync()
+        {
+            var data = await _repo.GetAllPlacementsAsync();
+
+            return data.Select(p => new PlacementResponseDto
+            {
+                PlacementId = p.PlacementId,
+                StudentName = p.StudentName,
+                Batch = p.Batch,
+                PlacementName = p.PlacementName,
+                Location = p.Location,
+                ImagePath = p.ImagePath,
+
+                Departments = p.PlacementDepartments.Select(d => new DepartmentResponseDto
+                {
+                    DepartmentId = d.Department.DepartmentId,
+                    DepartmentName = d.Department.DepartmentName,
+                    Status = d.Department.Status
+                }).ToList()
+            }).ToList();
+        }
+
+        public async Task<PlacementResponseDto> GetPlacementByIdAsync(int id)
+        {
+            var p = await _repo.GetPlacementByIdAsync(id);
+
+            return new PlacementResponseDto
+            {
+                PlacementId = p.PlacementId,
+                StudentName = p.StudentName,
+                Batch = p.Batch,
+                PlacementName = p.PlacementName,
+                Location = p.Location,
+                ImagePath = p.ImagePath,
+
+                Departments = p.PlacementDepartments.Select(d => new DepartmentResponseDto
+                {
+                    DepartmentId = d.Department.DepartmentId,
+                    DepartmentName = d.Department.DepartmentName,
+                    Status = d.Department.Status
+                }).ToList()
+            };
+        }
+        public async Task UpdatePlacementAsync(UpdatePlacementDto dto)
+        {
+            var placement = await _repo.GetPlacementByIdAsync(dto.PlacementId);
+
+            placement.StudentName = dto.StudentName;
+            placement.Batch = dto.Batch;
+            placement.PlacementName = dto.PlacementName;
+            placement.Location = dto.Location;
+
+            placement.PlacementDepartments = dto.DepartmentIds
+                .Select(d => new PlacementDepartment
+                {
+                    PlacementId = dto.PlacementId,
+                    DepartmentId = d
+                })
+                .ToList();
+
+            await _repo.UpdatePlacementAsync(placement);
+        }
+        public async Task DeletePlacementAsync(int id)
+        {
+            var placement = await _repo.GetPlacementByIdAsync(id);
+            if (placement == null) throw new Exception("Placement not found");
+
+            await _repo.DeletePlacementAsync(placement);
+        }
+        #endregion
     }
 }

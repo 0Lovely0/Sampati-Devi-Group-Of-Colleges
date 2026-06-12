@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj": {}
+    "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\sampatiFinal.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj": {
+    "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\sampatiFinal.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+        "projectUniqueName": "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
         "projectName": "sampatiFinal.Server",
-        "projectPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
-        "packagesPath": "C:\\Users\\lovel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lovel\\OneDrive\\Desktop\\heysamapti\\sampatiFinal\\sampatiFinal.Server\\obj\\",
+        "projectPath": "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\sampatiFinal.Server.csproj",
+        "packagesPath": "C:\\Users\\sudha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sudha\\Desktop\\Sampati-Devi-Group-Of-Colleges\\sampatiFinal.Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\lovel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\sudha\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -108,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -10,36 +10,17 @@ namespace sampatiFinal.Server.Data.Entities
         [Required, StringLength(150)]
         public string Name { get; set; }
 
-        [Required]
-        public string Achievement { get; set; }
-
-        [Required, StringLength(150)]
-        public string FatherName { get; set; }
-
-        [Required, StringLength(150)]
-        public string MotherName { get; set; }
-
-        [Required, StringLength(200)]
-        public string Degree { get; set; }
-
-        [Required]
-        public string CollegeName { get; set; }
-
-        public string SchoolDetails { get; set; }
-
-        [Required]
-        public string Address { get; set; }
-
-        [Required, Phone]
-        public string PhoneNumber { get; set; }
+        public string YearSemester { get; set; }
+        public string CollegeRank { get; set; }
+        public string UniversityRank { get; set; }
+        public string Batch { get; set; }
+        public string Percentile { get; set; }
 
         public string ImagePath { get; set; }
 
-        [Required]
-        public int Rank { get; set; }
-
         public bool Status { get; set; } = true;
 
+        // ✅ MANY TO MANY (UNCHANGED)
         public ICollection<TopperDepartment> TopperDepartments { get; set; } = new List<TopperDepartment>();
     }
 }

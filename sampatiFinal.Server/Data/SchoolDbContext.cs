@@ -37,6 +37,8 @@ namespace sampatiFinal.Server.Data
         public DbSet<PositionMaster> PositionMasters { get; set; }
         public DbSet<Facility> Facilities { get; set; }
         public DbSet<FacilityMaster> FacilityMasters { get; set; }
+        public DbSet<Placement> Placements { get; set; }
+        public DbSet<PlacementDepartment> PlacementDepartments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BannerDepartment>()
@@ -97,6 +99,21 @@ namespace sampatiFinal.Server.Data
                 .HasOne(td => td.Department)
                 .WithMany()
                 .HasForeignKey(td => td.DepartmentId);
+
+            modelBuilder.Entity<PlacementDepartment>()
+    .HasKey(pd => new { pd.PlacementId, pd.DepartmentId });
+
+            modelBuilder.Entity<PlacementDepartment>()
+                .HasOne(pd => pd.Placement)
+                .WithMany(p => p.PlacementDepartments)
+                .HasForeignKey(pd => pd.PlacementId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PlacementDepartment>()
+                .HasOne(pd => pd.Department)
+                .WithMany(d => d.PlacementDepartments)
+                .HasForeignKey(pd => pd.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

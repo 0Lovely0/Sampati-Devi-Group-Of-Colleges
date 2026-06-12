@@ -599,7 +599,7 @@ namespace sampatiFinal.Server.Services.Repositories
         }
         #endregion
 
-        #region 
+        #region topper
         public async Task CreateTopperAsync(Topper topper)
         {
             await _context.Toppers.AddAsync(topper);
@@ -629,10 +629,9 @@ namespace sampatiFinal.Server.Services.Repositories
         public async Task<List<Topper>> GetAllToppersAsync()
         {
             return await _context.Toppers
-                .Include(t => t.TopperDepartments)
-                .ThenInclude(td => td.Department)
-                .OrderBy(t => t.Rank)
-                .ToListAsync();
+    .Include(t => t.TopperDepartments)
+    .ThenInclude(td => td.Department)
+    .ToListAsync();
         }
         #endregion
 
@@ -745,5 +744,43 @@ namespace sampatiFinal.Server.Services.Repositories
                 .ToListAsync();
         }
         #endregion
+
+        #region placement
+        public async Task CreatePlacementAsync(Placement placement)
+        {
+            await _context.Placements.AddAsync(placement);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePlacementAsync(Placement placement)
+        {
+            _context.Placements.Update(placement);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePlacementAsync(Placement placement)
+        {
+            _context.Placements.Remove(placement);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Placement> GetPlacementByIdAsync(int id)
+        {
+            return await _context.Placements
+                .Include(p => p.PlacementDepartments)
+                .ThenInclude(pd => pd.Department)
+                .FirstOrDefaultAsync(p => p.PlacementId == id);
+        }
+
+        public async Task<List<Placement>> GetAllPlacementsAsync()
+        {
+            return await _context.Placements
+                .Include(p => p.PlacementDepartments)
+                .ThenInclude(pd => pd.Department)
+                .ToListAsync();
+        }
+        #endregion
+
+
     }
 }

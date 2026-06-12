@@ -163,5 +163,13 @@ namespace sampatiFinal.Server.Services.Repositories
         Task<IEnumerable<FacilityMaster>> GetAllActiveFacilityMastersAsync();
 
         #endregion
+
+        #region IPlacementRepository
+        Task CreatePlacementAsync(Placement placement);
+        Task UpdatePlacementAsync(Placement placement);
+        Task DeletePlacementAsync(Placement placement);
+        Task<Placement> GetPlacementByIdAsync(int id);
+        Task<List<Placement>> GetAllPlacementsAsync();
+        #endregion
     }
 }
