@@ -42,7 +42,15 @@ const ManageGallery: React.FC = () => {
     imageFile: null as File | null,
     departmentIds: [] as number[],
   });
-
+  const [errors, setErrors] = useState({
+    imgMaincat: "",
+    imgCat: "",
+    imgDes: "",
+    imgSession: "",
+    uploadedBy: "",
+    imageFile: "",
+    departmentIds: "",
+  });
   const showToast = (msg: string, type: "success" | "error") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
@@ -77,7 +85,82 @@ const ManageGallery: React.FC = () => {
     }));
   };
 
+  const validate = (): boolean => {
+    const newErrors = {
+      imgMaincat: "",
+      imgCat: "",
+      imgDes: "",
+      imgSession: "",
+      uploadedBy: "",
+      imageFile: "",
+      departmentIds: "",
+    };
+
+    // MAIN CATEGORY
+    if (!formData.imgMaincat.trim()) {
+      newErrors.imgMaincat = "Main category is required";
+    } else if (formData.imgMaincat.length < 3) {
+      newErrors.imgMaincat = "Minimum 3 characters required";
+    } else if (formData.imgMaincat.length > 100) {
+      newErrors.imgMaincat = "Too long";
+    }
+
+    // CATEGORY
+    if (!formData.imgCat.trim()) {
+      newErrors.imgCat = "Category is required";
+    } else if (formData.imgCat.length < 3) {
+      newErrors.imgCat = "Minimum 3 characters required";
+    }
+
+    // DESCRIPTION
+    if (!formData.imgDes.trim()) {
+      newErrors.imgDes = "Description is required";
+    } else if (formData.imgDes.length < 10) {
+      newErrors.imgDes = "Minimum 10 characters required";
+    } else if (formData.imgDes.length > 1000) {
+      newErrors.imgDes = "Too long";
+    }
+
+    // SESSION
+    if (!formData.imgSession.trim()) {
+      newErrors.imgSession = "Session is required";
+    }
+
+    // UPLOADED BY
+    if (!formData.uploadedBy.trim()) {
+      newErrors.uploadedBy = "Uploader name is required";
+    }
+
+    // IMAGE
+    if (!editingGallery && !formData.imageFile) {
+      newErrors.imageFile = "Image is required";
+    }
+
+    if (formData.imageFile) {
+      const allowed = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+      if (!allowed.includes(formData.imageFile.type)) {
+        newErrors.imageFile = "Only JPG, PNG, WEBP allowed";
+      }
+
+      if (formData.imageFile.size > 2 * 1024 * 1024) {
+        newErrors.imageFile = "Max size is 2MB";
+      }
+    }
+
+    // DEPARTMENT VALIDATION
+    if (formData.departmentIds.length === 0) {
+      newErrors.departmentIds = "Select at least one department";
+    }
+
+    setErrors(newErrors);
+
+    return !Object.values(newErrors).some((e) => e !== "");
+  };
+
   const handleSave = async () => {
+    if (!validate()) return;
+
     const data = new FormData();
 
     // 1. Ensure the ID key matches your backend's expected parameter name
@@ -208,79 +291,79 @@ const ManageGallery: React.FC = () => {
 
       {/* Grids section */}
       <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-  {galleries.map((g) => (
-    <div
-      key={g.imgId}
-      className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-    >
-      {/* IMAGE */}
-      <div
-        className={`relative cursor-pointer overflow-hidden ${
-          isCompact ? "aspect-square" : "aspect-video"
-        }`}
-        onClick={() => setPreviewFile(`${API_BASE_URL}${g.imgPic}`)}
-      >
-        <img
-          src={`${API_BASE_URL}${g.imgPic}`}
-          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-          alt="gallery"
-        />
-
-        {/* hover overlay (keep only preview hint) */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
-          <span className="text-xs text-white opacity-0 transition group-hover:opacity-100">
-            Click to preview
-          </span>
-        </div>
-      </div>
-
-      {/* CONTENT */}
-      <div className="p-3">
-        <h3 className="truncate text-sm font-semibold text-slate-800">
-          {g.imgMaincat}
-        </h3>
-
-        <p className="text-xs text-slate-500">{g.imgCat}</p>
-
-        {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
-        <div className="mt-3 flex gap-2">
-          <button
-            onClick={() => {
-              setEditingGallery(g);
-              setFormData({
-                imgMaincat: g.imgMaincat,
-                imgCat: g.imgCat,
-                imgDes: g.imgDes,
-                imgSession: g.imgSession,
-                uploadedBy: g.uploadedBy,
-                imageFile: null,
-                departmentIds: g.departments.map((d) => d.departmentId),
-              });
-              setIsModalOpen(true);
-            }}
-            className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+        {galleries.map((g) => (
+          <div
+            key={g.imgId}
+            className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
-            <Pencil size={13} />
-            Edit
-          </button>
+            {/* IMAGE */}
+            <div
+              className={`relative cursor-pointer overflow-hidden ${
+                isCompact ? "aspect-square" : "aspect-video"
+              }`}
+              onClick={() => setPreviewFile(`${API_BASE_URL}${g.imgPic}`)}
+            >
+              <img
+                src={`${API_BASE_URL}${g.imgPic}`}
+                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                alt="gallery"
+              />
 
-          <button
-            onClick={async () => {
-              if (confirm("Delete?")) {
-                await deleteGallery(g.imgId);
-                fetchData();
-              }
-            }}
-            className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
-          >
-            <Trash2 size={13} />
-            Delete
-          </button>
-        </div>
+              {/* hover overlay (keep only preview hint) */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
+                <span className="text-xs text-white opacity-0 transition group-hover:opacity-100">
+                  Click to preview
+                </span>
+              </div>
+            </div>
+
+            {/* CONTENT */}
+            <div className="p-3">
+              <h3 className="truncate text-sm font-semibold text-slate-800">
+                {g.imgMaincat}
+              </h3>
+
+              <p className="text-xs text-slate-500">{g.imgCat}</p>
+
+              {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
+              <div className="mt-3 flex gap-2">
+                <button
+                  onClick={() => {
+                    setEditingGallery(g);
+                    setFormData({
+                      imgMaincat: g.imgMaincat,
+                      imgCat: g.imgCat,
+                      imgDes: g.imgDes,
+                      imgSession: g.imgSession,
+                      uploadedBy: g.uploadedBy,
+                      imageFile: null,
+                      departmentIds: g.departments.map((d) => d.departmentId),
+                    });
+                    setIsModalOpen(true);
+                  }}
+                  className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                >
+                  <Pencil size={13} />
+                  Edit
+                </button>
+
+                <button
+                  onClick={async () => {
+                    if (confirm("Delete?")) {
+                      await deleteGallery(g.imgId);
+                      fetchData();
+                    }
+                  }}
+                  className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                >
+                  <Trash2 size={13} />
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  ))}
-</div>
 
       {/* MODAL */}
       {isModalOpen && (
@@ -321,13 +404,21 @@ const ManageGallery: React.FC = () => {
               {/* BASIC INFO */}
               <div className="grid grid-cols-1 gap-4">
                 <input
-                  className="w-full p-3 border rounded-xl focus:border-indigo-500 outline-none"
-                  placeholder="Main Category"
+                  className={`w-full p-3 border rounded-xl ${
+                    errors.imgMaincat ? "border-red-500" : "border"
+                  }`}
+                   placeholder="Main Category"
                   value={formData.imgMaincat}
                   onChange={(e) =>
                     setFormData({ ...formData, imgMaincat: e.target.value })
                   }
                 />
+
+                {errors.imgMaincat && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.imgMaincat}
+                  </p>
+                )}
 
                 <input
                   className="w-full p-3 border rounded-xl focus:border-indigo-500 outline-none"
@@ -337,6 +428,9 @@ const ManageGallery: React.FC = () => {
                     setFormData({ ...formData, imgCat: e.target.value })
                   }
                 />
+                {errors.imgCat && (
+                  <p className="text-xs text-red-500">{errors.imgCat}</p>
+                )}
 
                 <textarea
                   className="w-full p-3 border rounded-xl focus:border-indigo-500 outline-none"
@@ -347,6 +441,9 @@ const ManageGallery: React.FC = () => {
                     setFormData({ ...formData, imgDes: e.target.value })
                   }
                 />
+                {errors.imgDes && (
+                  <p className="text-xs text-red-500">{errors.imgDes}</p>
+                )}
               </div>
 
               {/* META INFO */}
@@ -386,6 +483,11 @@ const ManageGallery: React.FC = () => {
                     })
                   }
                 />
+                {errors.imageFile && (
+                  <p className="text-xs text-red-500 mt-2">
+                    {errors.imageFile}
+                  </p>
+                )}
               </div>
 
               {/* DEPARTMENTS */}
@@ -410,6 +512,11 @@ const ManageGallery: React.FC = () => {
                     </button>
                   ))}
                 </div>
+                {errors.departmentIds && (
+                  <p className="text-xs text-red-500 mt-2">
+                    {errors.departmentIds}
+                  </p>
+                )}
               </div>
             </div>
 

@@ -5,13 +5,11 @@ import GallerySection from "../../components/main/GallerySection";
 import Hero from "../../components/main/Hero";
 import ImageCarousel from "../../components/main/ImageCarousel";
 import NoticeBoard from "../../components/main/NoticeBoard";
-import Principal from "../../components/main/PrincipalMessage";
 import ToppersSection from "../../components/main/ToppersSection";
 import VideoGallery from "../../components/main/VideoGallery";
 import WhyChooseUs from "../../components/main/WhyChooseUs";
 import NewsTicker from "../../components/main/NewsTicker";
 import Facilities from "../../components/main/Facilities";
-// import Details from "../../components/main/Details"
 export default function Home() {
   return (
     <div className="flex flex-col">
@@ -20,7 +18,7 @@ export default function Home() {
       {/* <Details/> */}
       <Hero />
         <DirectorsSection />
-      <Principal />
+      {/* <Principal /> */}
       <NoticeBoard/>
     
 

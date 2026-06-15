@@ -2,48 +2,52 @@ export const collegeInfo = {
   name: "Sampati Devi Group of Colleges",
   tagline: "Shaping Future Healthcare Professionals",
   established: "2010",
-  address: "Near City Hospital, Main Road, Himachal Pradesh, India",
-  phone: "+91 98765 43210",
-  email: "info@sampatidevicolleges.com",
+  address:"Sampati Devi Memorial Nursing And Veterinary College Bijni Mandi HP,175001",
+  phone: "+91 7807377091, +91 9418025164",
+  email: "sdmnursingcollege@gmail.com",
 };
 
 export const footerLinks = {
   about: [
     { label: "About Us", href: "/about" },
-    { label: "Principal Message", href: "/principal-message" },
-    { label: "Director Message", href: "/director-message" },
-    { label: "Vision & Mission", href: "/vision-mission" },
+    { label: "Principal Message", href: "/principaldesk" },
+    { label: "Director Message", href: "/directorpage" },
+    // { label: "Vision & Mission", href: "/vision-mission" },
     { label: "Contact", href: "/contact" },
   ],
 
   quick: [
-    { label: "Admissions", href: "/admissions" },
-    { label: "Apply Online", href: "/apply" },
+    // { label: "Admissions", href: "/admissions" },
+    { label: "Adoption Program", href: "/adoption" },
     { label: "Events", href: "/events" },
-    { label: "Gallery", href: "/gallery" },
-    { label: "Notice Board", href: "/notices" },
+    { label: "Gallery", href: "/gallerypage" },
+    { label: "Notice Board", href: "/noticeboardpage" },
   ],
 };
 
 export const departments = [
   {
     id: "nursing",
-    shortName: "Nursing",
+    shortName: "B.Sc. Nursing",
   },
   {
-    id: "pharmacy",
+    id: "postNursing",
+    shortName: "Post Basic B.Sc. Nursing",
+  },
+  {
+    id: "VeterinaryPharmacist",
+    shortName: "Veterinary Pharmacist",
+  },
+  {
+    id: "Pharmacy",
     shortName: "Pharmacy",
   },
   {
-    id: "paramedical",
-    shortName: "Paramedical",
+    id: "multipurposeHealthWorker",
+    shortName: "Multipurpose Health Worker",
   },
   {
-    id: "medical-lab",
-    shortName: "Medical Lab",
-  },
-  {
-    id: "physiotherapy",
-    shortName: "Physiotherapy",
+    id: "ScopeAdmissions",
+    shortName: "Scope Admissions",
   },
 ];

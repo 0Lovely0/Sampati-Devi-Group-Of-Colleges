@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, X, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Filter, ChevronDown } from "lucide-react";
 import Loader from "../../components/common/Loader";
 import {
   getAllToppers,
@@ -10,41 +10,77 @@ import {
 } from "../../services/toppersService";
 import { getDepartments, type Department } from "../../services/bannerService";
 
-const BASE_URL = "https://localhost:7197";
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
+
+/* ---------------- VALIDATION ---------------- */
+
+type Errors = Partial<Record<string, string>>;
+
+const validate = (form: any, isEdit: boolean): Errors => {
+  const errors: Errors = {};
+
+  if (!form.name?.trim()) errors.name = "Name is required";
+  if (!form.yearSemester?.trim())
+    errors.yearSemester = "Year/Semester is required";
+  if (!form.collegeRank?.trim())
+    errors.collegeRank = "College rank is required";
+  if (!form.universityRank?.trim())
+    errors.universityRank = "University rank is required";
+  if (!form.batch?.trim()) errors.batch = "Batch is required";
+  if (!form.percentile?.trim()) errors.percentile = "Percentile is required";
+
+  if (!form.departmentIds?.length)
+    errors.departmentIds = "Select at least one department";
+
+  // 🔥 FIXED LOGIC
+  if (!isEdit && !form.imageFile) {
+    errors.imageFile = "Image is required";
+  }
+
+  // 👉 NEW RULE (YOUR REQUIREMENT)
+  if (isEdit && form.imageFile === null) {
+    errors.imageFile = "Please upload new image";
+  }
+
+  return errors;
+};
+
+/* ---------------- COMPONENT ---------------- */
 
 export const ManageToppers: React.FC = () => {
   const [toppers, setToppers] = useState<Topper[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTopper, setEditingTopper] = useState<Topper | null>(null);
+
   const [submitting, setSubmitting] = useState(false);
-  const [toast, setToast] = useState<{
-    msg: string;
-    type: "success" | "error";
-  } | null>(null);
+  const [errors, setErrors] = useState<Errors>({});
+
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [departmentFilter, setDepartmentFilter] = useState<number | "all">(
+    "all",
+  );
 
   const initialForm = {
+    topperId: 0,
     name: "",
-    achievement: "",
-    rank: "",
-    degree: "",
-    address: "",
-    fatherName: "",
-    motherName: "",
-    collegeName: "",
-    phoneNumber: "",
-    schoolDetails: "",
+    yearSemester: "",
+    collegeRank: "",
+    universityRank: "",
+    batch: "",
+    percentile: "",
     imageFile: null as File | null,
     departmentIds: [] as number[],
   };
 
   const [formData, setFormData] = useState(initialForm);
 
-  const showToast = (msg: string, type: "success" | "error") => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
+  /* ---------------- FETCH ---------------- */
 
   const fetchData = async () => {
     try {
@@ -55,8 +91,6 @@ export const ManageToppers: React.FC = () => {
       ]);
       setToppers(topData || []);
       setDepartments(deptData || []);
-    } catch {
-      showToast("Failed to load data", "error");
     } finally {
       setLoading(false);
     }
@@ -66,399 +100,414 @@ export const ManageToppers: React.FC = () => {
     fetchData();
   }, []);
 
+  /* close filter */
+  useEffect(() => {
+    const handleClick = () => setFilterOpen(false);
+    if (filterOpen) window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, [filterOpen]);
+
+  /* ---------------- FORM ---------------- */
+
   const buildFormData = () => {
-  const data = new FormData();
+    const data = new FormData();
 
-  if (editingTopper) {
-    data.append("TopperId", String(editingTopper.topperId));
-  }
+    if (editingTopper) {
+      data.append("TopperId", String(editingTopper.topperId));
+    }
 
-  const fields = {
-    Name: formData.name,
-    Achievement: formData.achievement,
-    Rank: formData.rank,
-    Degree: formData.degree,
-    Address: formData.address,
-    FatherName: formData.fatherName,
-    MotherName: formData.motherName,
-    CollegeName: formData.collegeName,
-    PhoneNumber: formData.phoneNumber,
-    SchoolDetails: formData.schoolDetails,
+    data.append("Name", formData.name);
+    data.append("YearSemester", formData.yearSemester);
+    data.append("CollegeRank", formData.collegeRank);
+    data.append("UniversityRank", formData.universityRank);
+    data.append("Batch", formData.batch);
+    data.append("Percentile", formData.percentile);
+
+    formData.departmentIds.forEach((id) =>
+      data.append("DepartmentIds", String(id)),
+    );
+
+    if (formData.imageFile) {
+      data.append("Image", formData.imageFile);
+    }
+
+    return data;
   };
 
-  Object.entries(fields).forEach(([key, value]) => {
-    if (value?.toString().trim()) {
-      data.append(key, value.toString());
+  /* ---------------- SAVE ---------------- */
+
+  const handleSave = async () => {
+    const v = validate(formData, !!editingTopper);
+    setErrors(v);
+
+    if (Object.keys(v).length > 0) {
+      setErrors(v);
+      return;
     }
-  });
 
-  formData.departmentIds.forEach((id) => {
-    data.append("DepartmentIds", String(id));
-  });
-
-  if (formData.imageFile) {
-    data.append("Image", formData.imageFile);
-  }
-
-  return data;
-};
-
- const handleSave = async () => {
-  try {
     setSubmitting(true);
 
-    const data = buildFormData();
+    try {
+      const data = buildFormData();
 
-    const res = editingTopper
-      ? await updateTopper(data)
-      : await createTopper(data);
+      const res = editingTopper
+        ? await updateTopper(data)
+        : await createTopper(data);
 
-    if (!res) throw new Error("API failed");
+      if (!res) throw new Error();
 
-    showToast("Saved successfully", "success");
+      setIsModalOpen(false);
+      setEditingTopper(null);
+      setFormData(initialForm);
+      setErrors({});
+      fetchData();
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-    setIsModalOpen(false);
-    setEditingTopper(null);
-    setFormData(initialForm);
+  /* ---------------- DELETE ---------------- */
 
-    fetchData();
-  } catch (err) {
-    console.error("Save Error:", err);
-    showToast("Operation failed", "error");
-  } finally {
-    setSubmitting(false);
-  }
-};
-
- const handleDelete = async (id: number) => {
-  const confirmed = window.confirm(
-    "Are you sure you want to delete this topper?"
-  );
-
-  if (!confirmed) return;
-
-  try {
-    setSubmitting(true);
-
+  const handleDelete = async (id: number) => {
+    if (!confirm("Delete topper?")) return;
     await deleteTopper(id);
+    setToppers((p) => p.filter((t) => t.topperId !== id));
+  };
 
-    showToast("Deleted successfully", "success");
+  /* ---------------- EDIT ---------------- */
 
-    setToppers((prev) => prev.filter((t) => t.topperId !== id));
-  } catch (err) {
-    console.error("Delete Error:", err);
-    showToast("Delete failed", "error");
-  } finally {
-    setSubmitting(false);
-  }
-};
+  const openEdit = (t: Topper) => {
+    setEditingTopper(t);
+    setIsModalOpen(true);
 
- const openEdit = (t: Topper) => {
-  console.log("TOPPER OBJECT:", t);
-  setEditingTopper(t);
-  setIsModalOpen(true);
-
-  setTimeout(() => {
     setFormData({
+      topperId: t.topperId,
       name: t.name || "",
-      achievement: t.achievement || "",
-      rank: String(t.rank || ""),
-      degree: t.degree || "",
-      address: t.address || "",
-      fatherName: t.fatherName || "",
-      motherName: t.motherName || "",
-      collegeName: t.collegeName || "",
-      phoneNumber: t.phoneNumber || "",
-      schoolDetails: t.schoolDetails || "",
+      yearSemester: t.yearSemester || "",
+      collegeRank: t.collegeRank || "",
+      universityRank: t.universityRank || "",
+      batch: t.batch || "",
+      percentile: t.percentile || "",
       imageFile: null,
       departmentIds: t.departments?.map((d) => d.departmentId) || [],
     });
-  }, 0);
-};
+
+    setErrors({});
+  };
+
+  const inputClass = (key: keyof Errors) =>
+    `w-full mt-1 p-3 border rounded-xl text-sm outline-none transition ${
+      errors[key]
+        ? "border-red-500 focus:border-red-500"
+        : "border-slate-200 focus:border-indigo-500"
+    }`;
 
   if (loading) return <Loader text="Loading..." />;
 
-  return (
-    <div className="min-h-screen bg-slate-50 p-8">
-      {toast && (
-        <div
-          className={`fixed top-6 right-6 z-[200] px-5 py-3 rounded-xl text-white ${toast.type === "success" ? "bg-emerald-500" : "bg-red-500"}`}
-        >
-          {toast.msg}
-        </div>
-      )}
+  /* ---------------- UI ---------------- */
 
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-extrabold text-slate-900">
-          Manage Toppers
-        </h1>
+  return (
+    <div className="min-h-screen bg-slate-50 p-1">
+      {/* HEADER */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        {/* TITLE */}
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            Manage Toppers
+          </h1>
+
+          <p className="mt-1 text-sm text-slate-500">
+            Create and manage toppers
+          </p>
+        </div>
+
+        {/* ACTION BUTTON */}
         <button
           onClick={() => {
             setEditingTopper(null);
+            setFormData({
+              ...initialForm,
+              imageFile: null, // ✅ yaha reset
+            });
+            setFormData(initialForm);
             setIsModalOpen(true);
           }}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-xl flex items-center gap-2"
+          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
-          <Plus size={18} /> Add Topper
+          <span className="flex items-center gap-2">
+            <Plus size={16} />
+            Add Topper
+          </span>
         </button>
       </div>
 
-      {/* Grid section */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-        {toppers.map((t) => (
-          <div
-            key={t.topperId}
-            className="group bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+      {/* FILTER + COUNT */}
+      <div className="mb-6 flex items-center justify-between">
+        {/* FILTER BUTTON */}
+        <div className="relative">
+          <button
+            onClick={() => setFilterOpen(!filterOpen)}
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
           >
-            {/* IMAGE SECTION */}
-            <div className="relative overflow-hidden">
-              <img
-                src={
-                  t.imagePath.startsWith("http")
-                    ? t.imagePath
-                    : `${BASE_URL}/${t.imagePath}`
-                }
-                alt={t.name}
-                className="w-full h-32 object-contain transition duration-500 group-hover:scale-105"
-              />
+            <Filter size={14} />
+            Filter Department
+            <ChevronDown size={14} />
+          </button>
 
-              {/* RANK BADGE */}
-              <div className="absolute top-2 right-2 bg-indigo-600 text-white text-[10px] px-2 py-1 rounded-md">
-                Rank #{t.rank}
+          {/* DROPDOWN */}
+          {filterOpen && (
+            <div className="absolute left-0 mt-2 w-64 bg-white border rounded-xl shadow-lg z-20 overflow-hidden">
+              <button
+                onClick={() => {
+                  setDepartmentFilter("all");
+                  setFilterOpen(false);
+                }}
+                className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50"
+              >
+                All Toppers
+              </button>
+
+              {departments.map((d) => (
+                <button
+                  key={d.departmentId}
+                  onClick={() => {
+                    setDepartmentFilter(d.departmentId);
+                    setFilterOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50"
+                >
+                  {d.departmentName}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* COUNT BADGE */}
+        <div className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-medium">
+          {
+            toppers.filter((t) =>
+              departmentFilter === "all"
+                ? true
+                : t.departments?.some(
+                    (d) => d.departmentId === departmentFilter,
+                  ),
+            ).length
+          }{" "}
+          Toppers
+        </div>
+      </div>
+
+      {/* GRID */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+        {toppers
+          .filter((t) =>
+            departmentFilter === "all"
+              ? true
+              : t.departments?.some((d) => d.departmentId === departmentFilter),
+          )
+          .map((t) => (
+            <div
+              key={t.topperId}
+              className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            >
+              {/* IMAGE */}
+              <div className="flex justify-center pt-4">
+                <img
+                  src={
+                    t.imagePath?.startsWith("http")
+                      ? t.imagePath
+                      : `${API_BASE_URL}/${t.imagePath || ""}`
+                  }
+                  className="h-24 w-20 rounded-lg border border-slate-100 object-cover shadow-sm transition group-hover:scale-105"
+                  alt="Topper"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
               </div>
 
-              {/* HOVER ACTION OVERLAY */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
+              {/* CONTENT */}
+              <div className="space-y-0.5 p-2 text-center">
+                <h3 className="text-xs font-semibold leading-tight text-slate-800">
+                  {t.name}
+                </h3>
+
+                <p className="text-[11px] font-medium text-indigo-600">
+                  {t.collegeRank} / {t.universityRank}
+                </p>
+
+                <p className="text-[10px] uppercase tracking-wide text-slate-500">
+                  {t.yearSemester}
+                </p>
+              </div>
+
+              {/* ACTIONS */}
+              <div className="flex justify-center gap-2 px-2 pb-3">
                 <button
                   onClick={() => openEdit(t)}
-                  className="bg-white p-2 rounded-lg text-indigo-600 hover:scale-105 transition"
+                  className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
                 >
-                  <Pencil size={14} />
+                  <Pencil size={12} />
+                  Edit
                 </button>
 
                 <button
                   onClick={() => handleDelete(t.topperId)}
-                  className="bg-white p-2 rounded-lg text-red-600 hover:scale-105 transition"
+                  className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={12} />
+                  Delete
                 </button>
               </div>
             </div>
-
-            {/* CONTENT */}
-            <div className="p-3">
-              <h3 className="font-semibold text-slate-800 text-sm line-clamp-1">
-                {t.name}
-              </h3>
-
-              <p className="text-xs text-slate-500 line-clamp-2 mt-1">
-                {t.achievement}
-              </p>
-
-              {/* EXTRA INFO STRIP (OPTIONAL NICE TOUCH) */}
-              <div className="mt-2 flex items-center justify-between text-[10px] text-slate-500">
-                <span>{t.degree}</span>
-                <span>{t.collegeName}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
 
+      {/* MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[100] backdrop-blur-sm">
-          <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden">
-            {/* HEADER */}
-            <div className="flex items-center justify-between bg-gradient-to-r from-indigo-600 to-indigo-800 px-6 py-4 text-white">
-              <div>
-                <h2 className="text-lg font-bold">
-                  {editingTopper ? "Edit Topper" : "Add Topper"}
-                </h2>
-                <p className="text-xs text-indigo-100">
-                  Fill topper details carefully
-                </p>
-              </div>
-
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition"
-              >
-                <X size={18} />
-              </button>
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden">
+            <div className="bg-indigo-600 text-white px-6 py-4 flex justify-between">
+              <h2>{editingTopper ? "Edit Topper" : "Add Topper"}</h2>
+              <button onClick={() => setIsModalOpen(false)}>✕</button>
             </div>
 
-            {/* BODY */}
-            <div className="max-h-[75vh] overflow-y-auto p-6 space-y-4">
-              {/* GRID FORM */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  className="p-3 border rounded-xl text-sm focus:border-indigo-500 outline-none"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                />
-
-                <input
-                  className="p-3 border rounded-xl text-sm"
-                  placeholder="Achievement"
-                  value={formData.achievement}
-                  onChange={(e) =>
-                    setFormData({ ...formData, achievement: e.target.value })
-                  }
-                />
-
-                <input
-                  className="p-3 border rounded-xl text-sm"
-                  placeholder="Rank"
-                  value={formData.rank}
-                  onChange={(e) =>
-                    setFormData({ ...formData, rank: e.target.value })
-                  }
-                />
-
-                <input
-                  className="p-3 border rounded-xl text-sm"
-                  placeholder="Degree"
-                  value={formData.degree}
-                  onChange={(e) =>
-                    setFormData({ ...formData, degree: e.target.value })
-                  }
-                />
-
-                <input
-                  className="p-3 border rounded-xl text-sm"
-                  placeholder="Father Name"
-                  value={formData.fatherName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, fatherName: e.target.value })
-                  }
-                />
-
-                <input
-                  className="p-3 border rounded-xl text-sm"
-                  placeholder="Mother Name"
-                  value={formData.motherName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, motherName: e.target.value })
-                  }
-                />
-
-                <input
-                  className="p-3 border rounded-xl text-sm"
-                  placeholder="College Name"
-                  value={formData.collegeName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, collegeName: e.target.value })
-                  }
-                />
-
-                <input
-                  className="p-3 border rounded-xl text-sm"
-                  placeholder="Phone Number"
-                  value={formData.phoneNumber}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phoneNumber: e.target.value })
-                  }
-                />
-              </div>
-
-              {/* FULL WIDTH */}
+            <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
               <input
-                className="w-full p-3 border rounded-xl text-sm"
-                placeholder="Address"
-                value={formData.address}
+                className={inputClass("name")}
+                placeholder="Name"
+                value={formData.name}
                 onChange={(e) =>
-                  setFormData({ ...formData, address: e.target.value })
+                  setFormData({ ...formData, name: e.target.value })
                 }
               />
+              {errors.name && (
+                <p className="text-red-500 text-xs">{errors.name}</p>
+              )}
 
-              <textarea
-                className="w-full p-3 border rounded-xl text-sm"
-                rows={3}
-                placeholder="School Details"
-                value={formData.schoolDetails}
+              <input
+                className={inputClass("yearSemester")}
+                placeholder="Year/Semester"
+                value={formData.yearSemester}
                 onChange={(e) =>
-                  setFormData({ ...formData, schoolDetails: e.target.value })
+                  setFormData({ ...formData, yearSemester: e.target.value })
                 }
               />
+              {errors.yearSemester && (
+                <p className="text-red-500 text-xs">{errors.yearSemester}</p>
+              )}
 
-              {/* DEPARTMENTS (UPGRADED CHIPS UI) */}
+              <input
+                className={inputClass("collegeRank")}
+                placeholder="College Rank"
+                value={formData.collegeRank}
+                onChange={(e) =>
+                  setFormData({ ...formData, collegeRank: e.target.value })
+                }
+              />
+              {errors.collegeRank && (
+                <p className="text-red-500 text-xs">{errors.collegeRank}</p>
+              )}
+
+              <input
+                className={inputClass("universityRank")}
+                placeholder="University Rank"
+                value={formData.universityRank}
+                onChange={(e) =>
+                  setFormData({ ...formData, universityRank: e.target.value })
+                }
+              />
+              {errors.universityRank && (
+                <p className="text-red-500 text-xs">{errors.universityRank}</p>
+              )}
+
+              <input
+                className={inputClass("batch")}
+                placeholder="Batch"
+                value={formData.batch}
+                onChange={(e) =>
+                  setFormData({ ...formData, batch: e.target.value })
+                }
+              />
+              {errors.batch && (
+                <p className="text-red-500 text-xs">{errors.batch}</p>
+              )}
+
+              <input
+                className={inputClass("percentile")}
+                placeholder="Percentile"
+                value={formData.percentile}
+                onChange={(e) =>
+                  setFormData({ ...formData, percentile: e.target.value })
+                }
+              />
+              {errors.percentile && (
+                <p className="text-red-500 text-xs">{errors.percentile}</p>
+              )}
+
+              {/* departments */}
               <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Select Departments
-                </label>
-
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {departments.map((dept) => {
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {departments.map((d) => {
                     const selected = formData.departmentIds.includes(
-                      dept.departmentId,
+                      d.departmentId,
                     );
 
                     return (
                       <button
-                        key={dept.departmentId}
+                        key={d.departmentId}
                         type="button"
-                        onClick={() => {
+                        onClick={() =>
                           setFormData((prev) => ({
                             ...prev,
                             departmentIds: selected
                               ? prev.departmentIds.filter(
-                                  (id) => id !== dept.departmentId,
+                                  (id) => id !== d.departmentId,
                                 )
-                              : [...prev.departmentIds, dept.departmentId],
-                          }));
-                        }}
-                        className={`px-3 py-1 text-xs rounded-full border transition ${
+                              : [...prev.departmentIds, d.departmentId],
+                          }))
+                        }
+                        className={`px-3 py-1 text-xs rounded-full border ${
                           selected
-                            ? "bg-indigo-600 text-white border-indigo-600"
-                            : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
+                            ? "bg-indigo-600 text-white"
+                            : "bg-white text-slate-600"
                         }`}
                       >
-                        {dept.departmentName}
+                        {d.departmentName}
                       </button>
                     );
                   })}
                 </div>
+
+                {errors.departmentIds && (
+                  <p className="text-red-500 text-xs mt-2">
+                    {errors.departmentIds}
+                  </p>
+                )}
               </div>
 
-              {/* FILE UPLOAD (MODERN STYLE) */}
-              <label className="flex items-center justify-center gap-2 border-2 border-dashed rounded-xl p-4 cursor-pointer hover:bg-indigo-50 hover:border-indigo-400 transition">
-                <span className="text-sm text-slate-600">
-                  {formData.imageFile
-                    ? formData.imageFile.name
-                    : "Upload Topper Image"}
-                </span>
-
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      imageFile: e.target.files?.[0] || null,
-                    })
-                  }
-                />
-              </label>
+              {/* IMAGE */}
+              <input
+                key={editingTopper?.topperId || "new"} // 🔥 IMPORTANT FIX
+                type="file"
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    imageFile: e.target.files?.[0] || null,
+                  })
+                }
+              />
+              {errors.imageFile && (
+                <p className="text-red-500 text-xs mt-1">{errors.imageFile}</p>
+              )}
             </div>
 
-            {/* FOOTER */}
-            <div className="flex justify-end gap-3 border-t px-6 py-4">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 text-sm border rounded-xl hover:bg-slate-50"
-              >
-                Cancel
-              </button>
-
+            <div className="flex justify-end gap-3 p-4 border-t">
+              <button onClick={() => setIsModalOpen(false)}>Cancel</button>
               <button
                 onClick={handleSave}
-                disabled={submitting}
-                className="px-5 py-2 bg-indigo-600 text-white rounded-xl text-sm hover:bg-indigo-700 disabled:opacity-50"
+                className="bg-indigo-600 text-white px-4 py-2 rounded-xl"
               >
-                {submitting ? "Saving..." : "Save Topper"}
+                {submitting ? "Saving..." : "Save"}
               </button>
             </div>
           </div>

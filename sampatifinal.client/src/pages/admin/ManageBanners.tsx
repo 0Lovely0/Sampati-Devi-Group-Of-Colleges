@@ -258,7 +258,7 @@ const ManageBanners: React.FC = () => {
 
             setIsModalOpen(true);
           }}
-          className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
+          className="h-10 rounded-xl bg-indigo-950 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
           <span className="flex items-center gap-2">
             <Plus size={16} />
@@ -391,7 +391,7 @@ const ManageBanners: React.FC = () => {
 
                       setIsModalOpen(true);
                     }}
-                    className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                    className="flex items-center gap-1 rounded-lg bg-indigo-950 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-slate-700 transition"
                   >
                     <Pencil size={13} />
                     Edit
@@ -399,7 +399,7 @@ const ManageBanners: React.FC = () => {
 
                   <button
                     onClick={() => handleDelete(b.bnnrId)}
-                    className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                    className="flex items-center gap-1 rounded-lg bg-indigo-950 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-red-500 transition"
                   >
                     <Trash2 size={13} />
                     Delete
@@ -415,7 +415,7 @@ const ManageBanners: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-[0_25px_80px_-20px_rgba(0,0,0,0.35)]">
             {/* Header */}
-            <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 px-5 py-4 text-white">
+            <div className="bg-indigo-950 p-6 text-white">
               <button
                 onClick={() => {
                   setIsModalOpen(false);
@@ -604,7 +604,7 @@ const ManageBanners: React.FC = () => {
               <button
                 onClick={handleSave}
                 disabled={submitting}
-                className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 hover:scale-[1.02] transition-all disabled:opacity-50"
+                className="w-full rounded-xl bg-indigo-950 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 hover:scale-[1.02] transition-all disabled:opacity-50"
               >
                 {submitting ? "Saving..." : "Save Banner"}
               </button>

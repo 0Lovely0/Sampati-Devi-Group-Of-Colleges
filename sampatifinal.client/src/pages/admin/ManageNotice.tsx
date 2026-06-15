@@ -53,6 +53,14 @@ const ManageNotice: React.FC = () => {
     departmentIds: [] as number[],
   });
 
+  const [errors, setErrors] = useState({
+    notification_sub: "",
+    notification_des: "",
+    notification_cat: "",
+    file: "",
+    departmentIds: "",
+  });
+
   const showToast = (msg: string, type: "success" | "error") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
@@ -98,13 +106,137 @@ const ManageNotice: React.FC = () => {
     }
   };
 
-  const handleSave = async () => {
-    if (!formData.notification_sub.trim())
-      return showToast("Title required", "error");
+  const validateField = (
+    name: string,
+    value: string | number[] | File | null,
+  ) => {
+    let error = "";
 
-    if (formData.file && formData.file.size > 2 * 1024 * 1024) {
-      return showToast("File size must be 2 MB or less", "error");
+    switch (name) {
+      case "notification_sub":
+        if (!String(value).trim()) {
+          error = "Notice title is required";
+        } else if (String(value).trim().length > 200) {
+          error = "Title cannot exceed 200 characters";
+        }
+        break;
+
+      case "notification_cat":
+        if (!String(value).trim()) {
+          error = "Category is required";
+        }
+        break;
+
+      case "notification_des":
+        if (!String(value).trim()) {
+          error = "Description is required";
+        } else if (String(value).trim().length < 20) {
+          error = "Description must be at least 20 characters";
+        }
+        break;
+
+      case "departmentIds":
+        if ((value as number[]).length === 0) {
+          error = "Please select at least one department";
+        }
+        break;
+
+      case "file":
+        if (!editingNotice && !value) {
+          error = "Attachment is required";
+        }
+
+        if (value instanceof File) {
+          const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+            "application/pdf",
+          ];
+
+          if (!allowedTypes.includes(value.type)) {
+            error = "Only PDF, JPG, JPEG, PNG and WEBP files are allowed";
+          }
+
+          if (value.size > 2 * 1024 * 1024) {
+            error = "File size must not exceed 2 MB";
+          }
+        }
+
+        break;
     }
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
+
+    return error === "";
+  };
+
+  const handleSave = async () => {
+    const newErrors = {
+      notification_sub: "",
+      notification_des: "",
+      notification_cat: "",
+      file: "",
+      departmentIds: "",
+    };
+
+    let hasError = false;
+
+    if (!formData.notification_sub.trim()) {
+      newErrors.notification_sub = "Notice title is required";
+      hasError = true;
+    }
+
+    if (!formData.notification_cat.trim()) {
+      newErrors.notification_cat = "Category is required";
+      hasError = true;
+    }
+
+    if (!formData.notification_des.trim()) {
+      newErrors.notification_des = "Description is required";
+      hasError = true;
+    } else if (formData.notification_des.trim().length < 20) {
+      newErrors.notification_des = "Description must be at least 20 characters";
+      hasError = true;
+    }
+
+    if (formData.departmentIds.length === 0) {
+      newErrors.departmentIds = "Please select at least one department";
+      hasError = true;
+    }
+
+    if (!editingNotice && !formData.file) {
+      newErrors.file = "Attachment is required";
+      hasError = true;
+    }
+
+    if (formData.file) {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/webp",
+        "application/pdf",
+      ];
+
+      if (!allowedTypes.includes(formData.file.type)) {
+        newErrors.file = "Only PDF, JPG, JPEG, PNG and WEBP files are allowed";
+        hasError = true;
+      }
+
+      if (formData.file.size > 2 * 1024 * 1024) {
+        newErrors.file = "File size must not exceed 2 MB";
+        hasError = true;
+      }
+    }
+
+    setErrors(newErrors);
+
+    if (hasError) return;
 
     const data = new FormData();
     data.append("notification_sub", formData.notification_sub);
@@ -418,15 +550,27 @@ const ManageNotice: React.FC = () => {
 
                   <input
                     value={formData.notification_sub}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
                       setFormData({
                         ...formData,
-                        notification_sub: e.target.value,
-                      })
-                    }
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
-                    placeholder="Enter notice title"
+                        notification_sub: value,
+                      });
+
+                      validateField("notification_sub", value);
+                    }}
+                    className={`w-full rounded-xl px-3 py-2 text-sm focus:outline-none ${
+                      errors.notification_sub
+                        ? "border border-red-500"
+                        : "border border-slate-200 focus:border-indigo-500"
+                    }`}
                   />
+                  {errors.notification_sub && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.notification_sub}
+                    </p>
+                  )}
                 </div>
 
                 {/* Category */}
@@ -437,15 +581,29 @@ const ManageNotice: React.FC = () => {
 
                   <input
                     value={formData.notification_cat}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
                       setFormData({
                         ...formData,
-                        notification_cat: e.target.value,
-                      })
-                    }
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                        notification_cat: value,
+                      });
+
+                      validateField("notification_cat", value);
+                    }}
+                    className={`w-full rounded-xl px-3 py-2 text-sm focus:outline-none ${
+                      errors.notification_cat
+                        ? "border border-red-500"
+                        : "border border-slate-200 focus:border-indigo-500"
+                    }`}
                     placeholder="Category"
                   />
+
+                  {errors.notification_cat && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.notification_cat}
+                    </p>
+                  )}
                 </div>
 
                 {/* File */}
@@ -456,14 +614,45 @@ const ManageNotice: React.FC = () => {
 
                   <input
                     type="file"
-                    onChange={(e) =>
+                    accept=".pdf,.jpg,.jpeg,.png,.webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+
+                      validateField("file", file);
+
+                      if (!file) return;
+
+                      const allowedTypes = [
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                        "image/webp",
+                        "application/pdf",
+                      ];
+
+                      if (!allowedTypes.includes(file.type)) {
+                        return;
+                      }
+
+                      if (file.size > 2 * 1024 * 1024) {
+                        return;
+                      }
+
                       setFormData({
                         ...formData,
-                        file: e.target.files?.[0] || null,
-                      })
-                    }
-                    className="w-full rounded-xl border border-slate-200 p-2 text-xs"
+                        file,
+                      });
+                    }}
+                    className={`w-full rounded-xl p-2 text-xs ${
+                      errors.file
+                        ? "border border-red-500"
+                        : "border border-slate-200"
+                    }`}
                   />
+
+                  {errors.file && (
+                    <p className="mt-1 text-xs text-red-500">{errors.file}</p>
+                  )}
                 </div>
 
                 {/* Description */}
@@ -475,15 +664,29 @@ const ManageNotice: React.FC = () => {
                   <textarea
                     rows={4}
                     value={formData.notification_des}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
                       setFormData({
                         ...formData,
-                        notification_des: e.target.value,
-                      })
-                    }
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
+                        notification_des: value,
+                      });
+
+                      validateField("notification_des", value);
+                    }}
+                    className={`w-full rounded-xl px-3 py-2 text-sm focus:outline-none ${
+                      errors.notification_des
+                        ? "border border-red-500"
+                        : "border border-slate-200 focus:border-indigo-500"
+                    }`}
                     placeholder="Notice description"
                   />
+
+                  {errors.notification_des && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.notification_des}
+                    </p>
+                  )}
                 </div>
 
                 {/* Departments */}
@@ -492,7 +695,13 @@ const ManageNotice: React.FC = () => {
                     Select Departments
                   </label>
 
-                  <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+                  <div
+                    className={`grid grid-cols-2 gap-2 rounded-xl p-2 ${
+                      errors.departmentIds
+                        ? "border border-red-500"
+                        : "border border-transparent"
+                    } md:grid-cols-3`}
+                  >
                     {departments.map((d) => {
                       const selected = formData.departmentIds.includes(
                         d.departmentId,
@@ -514,6 +723,12 @@ const ManageNotice: React.FC = () => {
                       );
                     })}
                   </div>
+
+                  {errors.departmentIds && (
+                    <p className="mt-2 text-xs text-red-500">
+                      {errors.departmentIds}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

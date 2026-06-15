@@ -87,7 +87,118 @@
 
 // export default ImageCarousel;
 
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import { Autoplay, EffectFade, Pagination } from "swiper/modules";
+// import { ChevronLeft, ChevronRight } from "lucide-react";
+
+// import "swiper/css";
+// import "swiper/css/effect-fade";
+// import "swiper/css/pagination";
+
+// import Loader from "../../components/common/Loader";
+// import { getAllBanners, type Banner } from "../../services/bannerService";
+
+// const ImageCarousel = () => {
+//   const [swiper, setSwiper] = useState<any>(null);
+//   const [banners, setBanners] = useState<Banner[]>([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchBanners = async () => {
+//       try {
+//         setLoading(true);
+
+//         const data = await getAllBanners();
+
+//         const mainBanners = data.filter((banner) =>
+//           banner.departments?.some(
+//             (dept) => dept.departmentName.trim().toLowerCase() === "main",
+//           ),
+//         );
+
+//         setBanners(mainBanners);
+//       } catch (error) {
+//         console.error("Failed to load banners:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchBanners();
+//   }, []);
+
+//   // Use the environment variable defined in your .env file
+//   const API_BASE_URL =
+//     window.location.hostname === "localhost"
+//       ? "https://localhost:7197"
+//       : "https://sampatigroup.stdruraltech.org";
+
+//   // ✅ LOADER INSIDE BANNER AREA
+//   if (loading) {
+//     return (
+//       <div className="h-[50vh] md:h-[80vh] w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100">
+//         <Loader text="Loading Banner..." />
+//       </div>
+//     );
+//   }
+
+//   // ✅ EMPTY STATE (optional but important)
+//   if (!banners.length) {
+//     return (
+//       <div className="h-[50vh] md:h-[80vh] w-full flex items-center justify-center text-slate-500 bg-slate-50">
+//         No banners available
+//       </div>
+//     );
+//   }
+//   console.log("Banners:", banners);
+//   return (
+//     <div className="relative w-full">
+//       <Swiper
+//         onSwiper={setSwiper}
+//         modules={[Autoplay, EffectFade, Pagination]}
+//         effect="fade"
+//         loop={banners.length > 1}
+//         autoplay={{
+//           delay: 4000,
+//           disableOnInteraction: false,
+//         }}
+//         pagination={{ clickable: true }}
+//         className="h-[30vh] md:h-[80vh]"
+//       >
+//         {banners.map((banner) => (
+//           <SwiperSlide key={banner.bnnrId}>
+//             <img
+//               src={`${API_BASE_URL}/${banner.bnnrImage}`}
+//               alt={banner.bnnrCat}
+//               className="h-full w-full object-cover"
+//             />
+//           </SwiperSlide>
+//         ))}
+//       </Swiper>
+
+//       {/* Prev */}
+//       <button
+//         onClick={() => swiper?.slidePrev()}
+//         className="absolute left-2 sm:left-4 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
+//       >
+//         <ChevronLeft size={18} />
+//       </button>
+
+//       {/* Next */}
+//       <button
+//         onClick={() => swiper?.slideNext()}
+//         className="absolute right-2 sm:right-4 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
+//       >
+//         <ChevronRight size={18} />
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default ImageCarousel;
+
+import  { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -104,19 +215,18 @@ const ImageCarousel = () => {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const API_BASE_URL = window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
+
   useEffect(() => {
     const fetchBanners = async () => {
       try {
         setLoading(true);
-
         const data = await getAllBanners();
-
         const mainBanners = data.filter((banner) =>
-          banner.departments?.some(
-            (dept) => dept.departmentName.trim().toLowerCase() === "main",
-          ),
+          banner.departments?.some((dept) => dept.departmentName.trim().toLowerCase() === "main")
         );
-
         setBanners(mainBanners);
       } catch (error) {
         console.error("Failed to load banners:", error);
@@ -124,73 +234,61 @@ const ImageCarousel = () => {
         setLoading(false);
       }
     };
-
     fetchBanners();
   }, []);
 
-  // Use the environment variable defined in your .env file
-  const API_BASE_URL =
-    window.location.hostname === "localhost"
-      ? "https://localhost:7197"
-      : "https://sampatigroup.stdruraltech.org";
-
-  // ✅ LOADER INSIDE BANNER AREA
   if (loading) {
     return (
-      <div className="h-[50vh] md:h-[80vh] w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100">
-        <Loader text="Loading Banner..." />
+      <div className="h-[50vh] md:h-[80vh] w-full flex items-center justify-center bg-stone-50">
+        <Loader text="Loading visuals..." />
       </div>
     );
   }
 
-  // ✅ EMPTY STATE (optional but important)
-  if (!banners.length) {
-    return (
-      <div className="h-[50vh] md:h-[80vh] w-full flex items-center justify-center text-slate-500 bg-slate-50">
-        No banners available
-      </div>
-    );
-  }
-  console.log("Banners:", banners);
+  if (!banners.length) return null;
+
   return (
-    <div className="relative w-full">
+    <div className="relative w-full group">
       <Swiper
         onSwiper={setSwiper}
         modules={[Autoplay, EffectFade, Pagination]}
         effect="fade"
         loop={banners.length > 1}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        pagination={{ 
+          clickable: true,
+          bulletActiveClass: 'swiper-pagination-bullet-active !bg-amber-500' 
         }}
-        pagination={{ clickable: true }}
-        className="h-[30vh] md:h-[80vh]"
+        className="h-[30vh] md:h-[85vh] w-full"
       >
         {banners.map((banner) => (
           <SwiperSlide key={banner.bnnrId}>
-            <img
-              src={`${API_BASE_URL}/${banner.bnnrImage}`}
-              alt={banner.bnnrCat}
-              className="h-full w-full object-cover"
-            />
+            <div className="relative h-full w-full">
+              <img
+                src={`${API_BASE_URL}/${banner.bnnrImage}`}
+                alt={banner.bnnrCat}
+                className="h-full w-full object-cover"
+              />
+              {/* Subtle Dark Gradient Overlay for Contrast */}
+              {/* <div className="absolute inset-0 " /> */}
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Prev */}
+      {/* Navigation Buttons */}
       <button
         onClick={() => swiper?.slidePrev()}
-        className="absolute left-2 sm:left-4 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
+        className="absolute left-4 top-1/2 z-20 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-amber-600 backdrop-blur-md text-white border border-white/20 hover:bg-amber-500 hover:border-amber-500 transition-all opacity-0 group-hover:opacity-100 duration-300"
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft size={24} />
       </button>
 
-      {/* Next */}
       <button
         onClick={() => swiper?.slideNext()}
-        className="absolute right-2 sm:right-4 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-amber-600 text-white shadow-lg hover:bg-indigo-600 transition"
+        className="absolute right-4 top-1/2 z-20 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-amber-600 backdrop-blur-md text-white border border-white/20 hover:bg-amber-500 hover:border-amber-500 transition-all opacity-0 group-hover:opacity-100 duration-300"
       >
-        <ChevronRight size={18} />
+        <ChevronRight size={24} />
       </button>
     </div>
   );

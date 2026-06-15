@@ -69,7 +69,7 @@
 //         </p>
 //       </div>
 
-//       <div className="max-w-7xl mx-auto px-4 py-6">
+//       <div className="w-full mx-auto px-4 py-6">
 //         {/* Filter Buttons */}
 //         <div className="flex justify-center gap-2 mb-6 flex-wrap">
 //           {categories.map((cat) => (
@@ -155,20 +155,150 @@
 // };
 
 
+// import React, { useEffect, useState } from "react";
+// import { getAllGalleries, type Gallery } from "../../services/galleryService";
+// import Loader from "../../components/common/Loader"
+
+// export const GalleryPage: React.FC = () => {
+//   // const [filter, setFilter] = useState("All");
+//   const [galleryItems, setGalleryItems] = useState<Gallery[]>([]);
+//   const [selectedImg, setSelectedImg] = useState<Gallery | null>(null);
+//   const [loading, setLoading] = useState(true);
+
+//   const API_BASE_URL =
+//     window.location.hostname === "localhost"
+//       ? "https://localhost:7197"
+//       : "https://sampatigroup.stdruraltech.org";
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+//         const data = await getAllGalleries();
+//         setGalleryItems(data);
+//       } catch (err) {
+//         console.error(err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   const getImageUrl = (path?: string) => {
+//     if (!path) return "/placeholder.jpg";
+//     return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+//   };
+
+//   // ✅ ONLY "Main" department filter
+//   const mainOnlyItems = galleryItems.filter((item) =>
+//     item.departments?.some(
+//       (d) => d.departmentName?.trim().toLowerCase() === "main"
+//     )
+//   );
+
+//   return (
+//     <div className="bg-slate-50 min-h-screen">
+
+//       {/* Header */}
+//       <div className="bg-indigo-950 py-8 px-4 text-center">
+//         <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+//           College Gallery
+//         </h1>
+//         <p className="text-sm text-slate-300">
+//           Only Main Department Images
+//         </p>
+//       </div>
+
+//       <div className="w-full mx-auto px-2 py-2">
+
+//         {/* Loading */}
+//         {loading ? (
+//           <div className="h-64 flex items-center justify-center">
+//             <Loader text="Loading videos..." />
+//           </div>
+//         ) : (
+//           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+
+//             {mainOnlyItems.map((item) => (
+//               <div
+//                 key={item.imgId}
+//                 onClick={() => setSelectedImg(item)}
+//                 className="group relative h-46 overflow-hidden border border-slate-200 bg-white shadow-sm cursor-pointer rounded-xl"
+//               >
+//                 <img
+//                   src={getImageUrl(item.imgPic)}
+//                   alt={item.imgDes}
+//                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+//                 />
+
+//                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
+//                   <h3 className="text-white text-sm font-semibold">
+//                     {item.imgDes}
+//                   </h3>
+//                   <p className="text-slate-300 text-xs">
+//                     Main Department
+//                   </p>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Modal */}
+//       {selectedImg && (
+//         <div
+//           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+//           onClick={() => setSelectedImg(null)}
+//         >
+//           <div
+//             className="max-w-4xl w-full bg-white"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             <img
+//               src={getImageUrl(selectedImg.imgPic)}
+//               alt={selectedImg.imgDes}
+//               className="w-full max-h-[75vh] object-contain"
+//             />
+
+//             <div className="border-t border-slate-200 p-3 text-center">
+//               <p className="text-sm font-semibold text-slate-900">
+//                 {selectedImg.imgDes}
+//               </p>
+//               <p className="text-xs text-slate-500 mt-1">
+//                 Main Department
+//               </p>
+//             </div>
+
+//             <button
+//               onClick={() => setSelectedImg(null)}
+//               className="w-full border-t border-slate-200 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+//             >
+//               Close
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+
+
 import React, { useEffect, useState } from "react";
 import { getAllGalleries, type Gallery } from "../../services/galleryService";
-import Loader from "../../components/common/Loader"
+import Loader from "../../components/common/Loader";
 
 export const GalleryPage: React.FC = () => {
-  // const [filter, setFilter] = useState("All");
   const [galleryItems, setGalleryItems] = useState<Gallery[]>([]);
   const [selectedImg, setSelectedImg] = useState<Gallery | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE_URL =
-    window.location.hostname === "localhost"
-      ? "https://localhost:7197"
-      : "https://sampatigroup.stdruraltech.org";
+  const API_BASE_URL = window.location.hostname === "localhost" 
+    ? "https://localhost:7197" 
+    : "https://sampatigroup.stdruraltech.org";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -182,64 +312,42 @@ export const GalleryPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  const getImageUrl = (path?: string) => {
-    if (!path) return "/placeholder.jpg";
-    return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
-  };
+  const getImageUrl = (path?: string) => (!path ? "/placeholder.jpg" : `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`);
 
-  // ✅ ONLY "Main" department filter
-  const mainOnlyItems = galleryItems.filter((item) =>
-    item.departments?.some(
-      (d) => d.departmentName?.trim().toLowerCase() === "main"
-    )
+  const mainOnlyItems = galleryItems.filter((item) => 
+    item.departments?.some((d) => d.departmentName?.trim().toLowerCase() === "main")
   );
 
   return (
-    <div className="bg-slate-50 min-h-screen">
-
-      {/* Header */}
-      <div className="bg-indigo-950 py-8 px-4 text-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-          College Gallery
-        </h1>
-        <p className="text-sm text-slate-300">
-          Only Main Department Images
-        </p>
+    <div className="min-h-screen bg-stone-50 pb-20">
+      {/* HEADER */}
+      <div className="bg-indigo-950 py-20 px-4 text-center border-b border-slate-800">
+        <h1 className="text-4xl font-black text-white mb-4">College Gallery</h1>
+        <div className="h-1 w-20 bg-amber-500 mx-auto rounded-full" />
+        <p className="text-slate-400 mt-6 text-sm">Explore our collection of captured moments.</p>
       </div>
 
-      <div className="w-full mx-auto px-2 py-2">
-
-        {/* Loading */}
+      <div className="w-full mx-auto px-4 -mt-12">
         {loading ? (
-          <div className="h-64 flex items-center justify-center">
-            <Loader text="Loading videos..." />
-          </div>
+          <div className="h-64 flex items-center justify-center"><Loader text="Loading gallery..." /></div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {mainOnlyItems.map((item) => (
               <div
                 key={item.imgId}
                 onClick={() => setSelectedImg(item)}
-                className="group relative h-46 overflow-hidden border border-slate-200 bg-white shadow-sm cursor-pointer rounded-xl"
+                className="group relative aspect-square overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm cursor-pointer transition-all hover:-translate-y-2 hover:shadow-xl"
               >
                 <img
                   src={getImageUrl(item.imgPic)}
                   alt={item.imgDes}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
                 />
-
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
-                  <h3 className="text-white text-sm font-semibold">
-                    {item.imgDes}
-                  </h3>
-                  <p className="text-slate-300 text-xs">
-                    Main Department
-                  </p>
+                <div className="absolute inset-0 bg-indigo-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-[10px] font-black text-white uppercase tracking-widest">View Image</span>
                 </div>
               </div>
             ))}
@@ -247,37 +355,16 @@ export const GalleryPage: React.FC = () => {
         )}
       </div>
 
-      {/* Modal */}
+      {/* MODAL */}
       {selectedImg && (
-        <div
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedImg(null)}
-        >
-          <div
-            className="max-w-4xl w-full bg-white"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={getImageUrl(selectedImg.imgPic)}
-              alt={selectedImg.imgDes}
-              className="w-full max-h-[75vh] object-contain"
-            />
-
-            <div className="border-t border-slate-200 p-3 text-center">
-              <p className="text-sm font-semibold text-slate-900">
-                {selectedImg.imgDes}
-              </p>
-              <p className="text-xs text-slate-500 mt-1">
-                Main Department
-              </p>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-indigo-950/90 p-4 backdrop-blur-sm" onClick={() => setSelectedImg(null)}>
+          <div className="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setSelectedImg(null)} className="absolute top-4 right-4 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md px-4 py-2 text-[10px] font-black text-white rounded-full uppercase tracking-widest transition">Close</button>
+            <img src={getImageUrl(selectedImg.imgPic)} alt={selectedImg.imgDes} className="w-full max-h-[70vh] object-contain bg-stone-100" />
+            <div className="p-8">
+              <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Main Department</span>
+              <h3 className="text-xl font-black text-slate-950 mt-2">{selectedImg.imgDes}</h3>
             </div>
-
-            <button
-              onClick={() => setSelectedImg(null)}
-              className="w-full border-t border-slate-200 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            >
-              Close
-            </button>
           </div>
         </div>
       )}

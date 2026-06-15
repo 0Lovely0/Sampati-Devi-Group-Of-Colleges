@@ -1,46 +1,86 @@
 import api from "../api/axios";
-import type { Department } from "./bannerService";
+
+/* ---------------- TYPES ---------------- */
+
+export interface Department {
+  departmentId: number;
+  departmentName: string;
+  status: boolean;
+}
 
 export interface Topper {
   topperId: number;
   name: string;
-  achievement: string;
+  yearSemester: string;
+  collegeRank: string;
+  universityRank: string;
+  batch: string;
+  percentile: string;
   imagePath: string;
-  rank: number;
-  // --- ADD THESE NEW FIELDS ---
-  degree: string;
-  address: string;
-  fatherName: string;
-  motherName: string;
-  collegeName: string;
-  phoneNumber: string;
-  schoolDetails: string;
-  // ----------------------------
   departments: Department[];
 }
 
+export interface GetAllToppersResponse {
+  success: boolean;
+  count: number;
+  data: Topper[];
+}
+
+/* ---------------- GET ALL ---------------- */
+
 export const getAllToppers = async (): Promise<Topper[]> => {
-  const response = await api.get<{ data: Topper[] }>("/api/Admin/get-all-toppers");
-  return response.data.data;
+  const res = await api.get<GetAllToppersResponse>(
+    "/api/Admin/get-all-toppers"
+  );
+  return res.data.data;
 };
+
+/* ---------------- GET BY ID ---------------- */
 
 export const getTopperById = async (id: number): Promise<Topper> => {
-  const response = await api.get<{ data: Topper }>(`/api/Admin/get-topper-by-id/${id}`);
-  return response.data.data;
+  const res = await api.get<{ success: boolean; data: Topper }>(
+    `/api/Admin/get-topper-by-id/${id}`
+  );
+  return res.data.data;
 };
 
-export const createTopper = async (data: FormData) => {
-  return await api.post("/api/Admin/create-topper", data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+/* ---------------- DELETE ---------------- */
+
+export const deleteTopper = async (id: number): Promise<boolean> => {
+  const res = await api.delete<{ success: boolean }>(
+    `/api/Admin/delete-topper/${id}`
+  );
+  return res.data.success;
 };
 
-export const updateTopper = async (data: FormData) => {
-  return await api.put("/api/Admin/update-topper", data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+/* ---------------- CREATE (FORMDATA) ---------------- */
+
+export const createTopper = async (formData: FormData): Promise<boolean> => {
+  const res = await api.post<{ success: boolean }>(
+    "/api/Admin/create-topper",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return res.data.success;
 };
 
-export const deleteTopper = async (id: number) => {
-  return await api.delete(`/api/Admin/delete-topper/${id}`);
+/* ---------------- UPDATE (FORMDATA - IMPORTANT) ---------------- */
+
+export const updateTopper = async (formData: FormData): Promise<boolean> => {
+  const res = await api.put<{ success: boolean }>(
+    "/api/Admin/update-topper",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return res.data.success;
 };

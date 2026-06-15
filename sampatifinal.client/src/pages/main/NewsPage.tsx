@@ -73,7 +73,7 @@
 //     <div className="h-full w-full bg-[linear-gradient(to_right,#ffffff15_1px,transparent_1px),linear-gradient(to_bottom,#ffffff15_1px,transparent_1px)] bg-[size:40px_40px]" />
 //   </div>
 
-//   <div className="relative z-10 max-w-7xl mx-auto px-6 py-14">
+//   <div className="relative z-10 w-full mx-auto px-6 py-14">
 //     <div className="max-w-4xl mx-auto text-center">
 
 //       {/* <span className="inline-block border border-indigo-500 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-indigo-300">
@@ -120,7 +120,7 @@
 // </section>
 
 //       {/* CONTENT */}
-//       <section className="max-w-7xl mx-auto px-6 py-10">
+//       <section className="w-full mx-auto px-6 py-10">
 //         <div className="grid lg:grid-cols-12 gap-6">
 //           {/* LEFT SIDE */}
 //           <div className="lg:col-span-5">
@@ -231,6 +231,237 @@
 
 
 
+// import React, { useEffect, useState } from "react";
+// import { getAllNews, type News } from "../../services/newsService";
+// import Loader from "../../components/common/Loader";
+
+// export const NewsPage: React.FC = () => {
+//   const [newsData, setNewsData] = useState<News[]>([]);
+//   const [selectedNews, setSelectedNews] = useState<News | null>(null);
+//   const [loading, setLoading] = useState(false);
+
+//   // LIGHTBOX STATE
+//   const [lightboxOpen, setLightboxOpen] = useState(false);
+//   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+
+//   const API_BASE_URL =
+//     window.location.hostname === "localhost"
+//       ? "https://localhost:7197"
+//       : "https://sampatigroup.stdruraltech.org";
+
+
+//   const getFileUrl = (file?: string) => {
+//     if (!file) return "";
+//     return file.startsWith("http")
+//       ? file
+//       : `${API_BASE_URL}/${file}`;
+//   };
+
+//   const handleViewFile = () => {
+//     if (!selectedNews?.news_images) return;
+
+//     setLightboxUrl(getFileUrl(selectedNews.news_images));
+//     setLightboxOpen(true);
+//   };
+
+//   useEffect(() => {
+//     const fetchNews = async () => {
+//       try {
+//         setLoading(true);
+
+//         const data = await getAllNews();
+
+//         const sorted = data.sort(
+//           (a, b) =>
+//             new Date(b.news_date).getTime() -
+//             new Date(a.news_date).getTime()
+//         );
+
+//         setNewsData(sorted);
+
+//         if (sorted.length > 0) {
+//           setSelectedNews(sorted[0]);
+//         }
+//       } catch (error) {
+//         console.error("Failed to fetch news:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchNews();
+//   }, []);
+
+//  if (loading) {
+//   return (
+//     <div className="min-h-screen flex items-center justify-center">
+//       <Loader text="Loading news..." />
+//     </div>
+//   );
+// }
+
+//   if (!selectedNews) {
+//     return (
+//       <div className="min-h-screen flex items-center justify-center text-slate-600">
+//         No news available
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="bg-slate-50 min-h-screen">
+
+//       {/* HERO */}
+//       <section className="bg-indigo-950 relative overflow-hidden">
+//         <div className="absolute inset-0 opacity-10">
+//           <div className="h-full w-full bg-[linear-gradient(to_right,#ffffff15_1px,transparent_1px),linear-gradient(to_bottom,#ffffff15_1px,transparent_1px)] bg-[size:40px_40px]" />
+//         </div>
+
+//         <div className="relative z-10 w-full mx-auto px-6 py-14 text-center">
+//           <h1 className="text-3xl font-black text-white">
+//             College News & Updates
+//           </h1>
+
+//           <p className="mt-4 text-slate-300 text-sm max-w-2xl mx-auto">
+//             Stay informed about admissions, academics, events, and announcements.
+//           </p>
+//         </div>
+//       </section>
+
+//       {/* CONTENT */}
+//       <section className="w-full mx-auto px-6 py-10">
+//         <div className="grid lg:grid-cols-12 gap-6">
+
+//           {/* LEFT */}
+//           <div className="lg:col-span-5">
+//             <h2 className="text-xl font-bold mb-5">
+//               Recent Announcements
+//             </h2>
+
+//             <div className="space-y-3">
+//               {newsData.map((news) => {
+//                 const active = selectedNews.news_id === news.news_id;
+
+//                 return (
+//                   <button
+//                     key={news.news_id}
+//                     onClick={() => setSelectedNews(news)}
+//                     className={`w-full text-left border transition ${
+//                       active
+//                         ? "bg-indigo-950 border-indigo-950"
+//                         : "bg-white border-slate-200 hover:border-indigo-500 hover:translate-x-1"
+//                     }`}
+//                   >
+//                     <div className="p-4">
+//                       <div
+//                         className={`text-[11px] uppercase font-semibold mb-2 ${
+//                           active ? "text-amber-300" : "text-amber-600"
+//                         }`}
+//                       >
+//                         {news.news_cat}
+//                       </div>
+
+//                       <h3
+//                         className={`font-bold mb-2 ${
+//                           active ? "text-white" : "text-slate-900"
+//                         }`}
+//                       >
+//                         {news.news_subject}
+//                       </h3>
+
+//                       <p
+//                         className={`text-xs ${
+//                           active ? "text-slate-400" : "text-slate-500"
+//                         }`}
+//                       >
+//                         {new Date(news.news_date).toLocaleDateString()}
+//                       </p>
+//                     </div>
+//                   </button>
+//                 );
+//               })}
+//             </div>
+//           </div>
+
+//           {/* RIGHT */}
+//           <div className="lg:col-span-7">
+//             <div className="sticky top-32">
+//               <div className="bg-white border shadow-xl p-6">
+
+//                 <div className="flex gap-3 mb-5">
+//                   <span className="bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold uppercase">
+//                     {selectedNews.news_cat}
+//                   </span>
+
+//                   <span className="text-sm text-slate-500">
+//                     {new Date(selectedNews.news_date).toLocaleDateString()}
+//                   </span>
+//                 </div>
+
+//                 <h2 className="text-2xl font-black mb-5">
+//                   {selectedNews.news_subject}
+//                 </h2>
+
+//                 <div className="w-16 h-1 bg-amber-600 mb-5" />
+
+//                 <p className="text-slate-600 leading-relaxed mb-8">
+//                   {selectedNews.news_description}
+//                 </p>
+
+//                 {/* VIEW FILE BUTTON */}
+//                 <button
+//                   onClick={handleViewFile}
+//                   className="bg-amber-600 text-white px-5 py-2.5 text-sm font-semibold uppercase hover:bg-amber-700"
+//                 >
+//                   View Attached File
+//                 </button>
+
+//               </div>
+//             </div>
+//           </div>
+
+//         </div>
+//       </section>
+
+//       {/* LIGHTBOX MODAL */}
+//       {lightboxOpen && lightboxUrl && (
+//         <div
+//           className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+//           onClick={() => setLightboxOpen(false)}
+//         >
+//           <div
+//             className="relative max-w-5xl w-full p-4"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             {/* Close */}
+//             <button
+//               onClick={() => setLightboxOpen(false)}
+//               className="absolute right-6 top-6 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center font-bold"
+//             >
+//               ✕
+//             </button>
+
+//             {/* IMAGE or PDF */}
+//             {lightboxUrl.endsWith(".pdf") ? (
+//               <iframe
+//                 src={lightboxUrl}
+//                 className="w-full h-[80vh] rounded-xl bg-white"
+//               />
+//             ) : (
+//               <img
+//                 src={lightboxUrl}
+//                 className="w-full max-h-[85vh] object-contain rounded-xl"
+//               />
+//             )}
+//           </div>
+//         </div>
+//       )}
+
+//     </div>
+//   );
+// };
+
+
 import React, { useEffect, useState } from "react";
 import { getAllNews, type News } from "../../services/newsService";
 import Loader from "../../components/common/Loader";
@@ -239,21 +470,14 @@ export const NewsPage: React.FC = () => {
   const [newsData, setNewsData] = useState<News[]>([]);
   const [selectedNews, setSelectedNews] = useState<News | null>(null);
   const [loading, setLoading] = useState(false);
-
-  // LIGHTBOX STATE
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
-  const getFileUrl = (file?: string) => {
-    if (!file) return "";
-    return file.startsWith("http")
-      ? file
-      : `https://localhost:7197/${file}`;
-  };
+  const API_BASE_URL = window.location.hostname === "localhost" ? "https://localhost:7197" : "https://sampatigroup.stdruraltech.org";
+  const getFileUrl = (file?: string) => (!file ? "" : file.startsWith("http") ? file : `${API_BASE_URL}/${file}`);
 
   const handleViewFile = () => {
     if (!selectedNews?.news_images) return;
-
     setLightboxUrl(getFileUrl(selectedNews.news_images));
     setLightboxOpen(true);
   };
@@ -262,195 +486,78 @@ export const NewsPage: React.FC = () => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-
         const data = await getAllNews();
-
-        const sorted = data.sort(
-          (a, b) =>
-            new Date(b.news_date).getTime() -
-            new Date(a.news_date).getTime()
-        );
-
+        const sorted = data.sort((a, b) => new Date(b.news_date).getTime() - new Date(a.news_date).getTime());
         setNewsData(sorted);
-
-        if (sorted.length > 0) {
-          setSelectedNews(sorted[0]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch news:", error);
+        if (sorted.length > 0) setSelectedNews(sorted[0]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchNews();
   }, []);
 
- if (loading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Loader text="Loading news..." />
-    </div>
-  );
-}
+  if (loading) return <div className="h-screen flex items-center justify-center bg-stone-50"><Loader text="Loading news..." /></div>;
+  if (!selectedNews) return <div className="h-screen flex items-center justify-center bg-stone-50 text-slate-500">No news available</div>;
 
-  if (!selectedNews) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-slate-600">
-        No news available
+  return (
+    <div className="bg-stone-50 min-h-screen">
+      {/* HEADER */}
+      <div className="bg-indigo-950 py-20 px-4 text-center border-b border-slate-800">
+        <h1 className="text-4xl md:text-5xl font-black text-white">College News & Updates</h1>
+        <div className="h-1 w-20 bg-amber-500 mt-6 mx-auto rounded-full" />
+        <p className="text-slate-400 mt-6 text-sm">Stay informed about admissions, academics, events, and announcements.</p>
       </div>
-    );
-  }
 
-  return (
-    <div className="bg-slate-50 min-h-screen">
-
-      {/* HERO */}
-      <section className="bg-indigo-950 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="h-full w-full bg-[linear-gradient(to_right,#ffffff15_1px,transparent_1px),linear-gradient(to_bottom,#ffffff15_1px,transparent_1px)] bg-[size:40px_40px]" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 text-center">
-          <h1 className="text-3xl font-black text-white">
-            College News & Updates
-          </h1>
-
-          <p className="mt-4 text-slate-300 text-sm max-w-2xl mx-auto">
-            Stay informed about admissions, academics, events, and announcements.
-          </p>
-        </div>
-      </section>
-
-      {/* CONTENT */}
-      <section className="max-w-7xl mx-auto px-6 py-10">
-        <div className="grid lg:grid-cols-12 gap-6">
-
-          {/* LEFT */}
-          <div className="lg:col-span-5">
-            <h2 className="text-xl font-bold mb-5">
-              Recent Announcements
-            </h2>
-
-            <div className="space-y-3">
-              {newsData.map((news) => {
-                const active = selectedNews.news_id === news.news_id;
-
-                return (
-                  <button
-                    key={news.news_id}
-                    onClick={() => setSelectedNews(news)}
-                    className={`w-full text-left border transition ${
-                      active
-                        ? "bg-indigo-950 border-indigo-950"
-                        : "bg-white border-slate-200 hover:border-indigo-500 hover:translate-x-1"
-                    }`}
-                  >
-                    <div className="p-4">
-                      <div
-                        className={`text-[11px] uppercase font-semibold mb-2 ${
-                          active ? "text-amber-300" : "text-amber-600"
-                        }`}
-                      >
-                        {news.news_cat}
-                      </div>
-
-                      <h3
-                        className={`font-bold mb-2 ${
-                          active ? "text-white" : "text-slate-900"
-                        }`}
-                      >
-                        {news.news_subject}
-                      </h3>
-
-                      <p
-                        className={`text-xs ${
-                          active ? "text-slate-400" : "text-slate-500"
-                        }`}
-                      >
-                        {new Date(news.news_date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* RIGHT */}
-          <div className="lg:col-span-7">
-            <div className="sticky top-32">
-              <div className="bg-white border shadow-xl p-6">
-
-                <div className="flex gap-3 mb-5">
-                  <span className="bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold uppercase">
-                    {selectedNews.news_cat}
-                  </span>
-
-                  <span className="text-sm text-slate-500">
-                    {new Date(selectedNews.news_date).toLocaleDateString()}
-                  </span>
-                </div>
-
-                <h2 className="text-2xl font-black mb-5">
-                  {selectedNews.news_subject}
-                </h2>
-
-                <div className="w-16 h-1 bg-amber-600 mb-5" />
-
-                <p className="text-slate-600 leading-relaxed mb-8">
-                  {selectedNews.news_description}
-                </p>
-
-                {/* VIEW FILE BUTTON */}
-                <button
-                  onClick={handleViewFile}
-                  className="bg-amber-600 text-white px-5 py-2.5 text-sm font-semibold uppercase hover:bg-amber-700"
-                >
-                  View Attached File
+      <section className="w-full mx-auto px-4 py-12">
+        <div className="grid lg:grid-cols-12 gap-8">
+          
+          {/* LEFT: LIST */}
+          <div className="lg:col-span-4 space-y-4">
+            {newsData.map((news) => {
+              const active = selectedNews.news_id === news.news_id;
+              return (
+                <button key={news.news_id} onClick={() => setSelectedNews(news)} className={`w-full text-left p-6 rounded-2xl transition-all border ${active ? "bg-indigo-950 border-slate-950 shadow-lg" : "bg-white border-stone-200 hover:border-amber-500"}`}>
+                  <span className={`text-[10px] font-black uppercase tracking-widest ${active ? "text-amber-400" : "text-amber-600"}`}>{news.news_cat}</span>
+                  <h3 className={`font-black mt-2 mb-3 text-sm ${active ? "text-white" : "text-slate-950"}`}>{news.news_subject}</h3>
+                  <p className={`text-[10px] font-medium ${active ? "text-slate-400" : "text-stone-500"}`}>{new Date(news.news_date).toLocaleDateString()}</p>
                 </button>
-
-              </div>
-            </div>
+              );
+            })}
           </div>
 
+          {/* RIGHT: DETAILS */}
+          <div className="lg:col-span-8">
+            <div className="bg-white p-8 md:p-12 rounded-3xl border border-stone-200 shadow-sm sticky top-32">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="bg-amber-50 text-amber-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">{selectedNews.news_cat}</span>
+                <span className="text-xs font-medium text-stone-500">{new Date(selectedNews.news_date).toLocaleDateString()}</span>
+              </div>
+              <h2 className="text-3xl font-black text-slate-950 mb-6">{selectedNews.news_subject}</h2>
+              <div className="w-16 h-1 bg-amber-500 mb-8 rounded-full" />
+              <p className="text-stone-600 leading-relaxed text-sm md:text-base mb-10">{selectedNews.news_description}</p>
+              
+              <button onClick={handleViewFile} className="bg-indigo-950 text-white px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest hover:bg-amber-600 transition shadow-lg">
+                View Attachment
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* LIGHTBOX MODAL */}
+      {/* LIGHTBOX */}
       {lightboxOpen && lightboxUrl && (
-        <div
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
-          onClick={() => setLightboxOpen(false)}
-        >
-          <div
-            className="relative max-w-5xl w-full p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close */}
-            <button
-              onClick={() => setLightboxOpen(false)}
-              className="absolute right-6 top-6 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center font-bold"
-            >
-              ✕
-            </button>
-
-            {/* IMAGE or PDF */}
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={() => setLightboxOpen(false)}>
+          <div className="relative max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setLightboxOpen(false)} className="absolute -top-12 right-0 text-white font-bold text-xl">Close ✕</button>
             {lightboxUrl.endsWith(".pdf") ? (
-              <iframe
-                src={lightboxUrl}
-                className="w-full h-[80vh] rounded-xl bg-white"
-              />
+              <iframe src={lightboxUrl} className="w-full h-[80vh] rounded-2xl bg-white" />
             ) : (
-              <img
-                src={lightboxUrl}
-                className="w-full max-h-[85vh] object-contain rounded-xl"
-              />
+              <img src={lightboxUrl} className="w-full max-h-[85vh] object-contain rounded-2xl" />
             )}
           </div>
         </div>
       )}
-
     </div>
   );
 };

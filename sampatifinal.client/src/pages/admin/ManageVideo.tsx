@@ -26,6 +26,61 @@ const ManageVideos: React.FC = () => {
     type: "success" | "error";
   } | null>(null);
 
+  const [errors, setErrors] = useState({
+    videoTitle: "",
+    videoDescription: "",
+    videoUrl: "",
+    departmentIds: "",
+  });
+
+  const validateField = (
+    name: "videoTitle" | "videoDescription" | "videoUrl" | "departmentIds",
+    value: any,
+  ): boolean => {
+    let error = "";
+
+    switch (name) {
+      case "videoTitle": {
+        const val = String(value || "").trim();
+
+        if (!val) error = "Video title is required";
+        else if (val.length < 3) error = "Minimum 3 characters required";
+        else if (val.length > 150) error = "Maximum 150 characters allowed";
+        break;
+      }
+
+      case "videoDescription": {
+        const val = String(value || "").trim();
+
+        if (!val) error = "Description is required";
+        else if (val.length < 10) error = "Minimum 10 characters required";
+        else if (val.length > 2000) error = "Maximum 2000 characters allowed";
+        break;
+      }
+
+      case "videoUrl": {
+        const val = String(value || "").trim();
+
+        const youtubeRegex =
+          /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+
+        if (!val) error = "Video URL is required";
+        else if (!youtubeRegex.test(val)) error = "Enter valid YouTube URL";
+        break;
+      }
+
+      case "departmentIds": {
+        const val = Array.isArray(value) ? value : [];
+
+        if (val.length === 0) error = "Select at least one department";
+        break;
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+
   const getYouTubeThumbnail = (url: string) => {
     const regExp =
       /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -78,8 +133,17 @@ const ManageVideos: React.FC = () => {
   };
 
   const handleSave = async () => {
-    const data = new FormData();
+    const isTitleValid = validateField("videoTitle", formData.videoTitle);
+    const isDescValid = validateField(
+      "videoDescription",
+      formData.videoDescription,
+    );
+    const isUrlValid = validateField("videoUrl", formData.videoUrl);
+    const isDeptValid = validateField("departmentIds", formData.departmentIds);
 
+    if (!isTitleValid || !isDescValid || !isUrlValid || !isDeptValid) return;
+
+    const data = new FormData();
     // REQUIRED FIELDS (match backend DTO exactly)
     data.append("VideoTitle", formData.videoTitle?.trim() || "");
     data.append("VideoDescription", formData.videoDescription?.trim() || "");
@@ -200,51 +264,51 @@ const ManageVideos: React.FC = () => {
       </div>
 
       {/* Grids section */}
-<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-  {videos.map((v) => {
-    const thumbnail = getYouTubeThumbnail(v.videoUrl);
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+        {videos.map((v) => {
+          const thumbnail = getYouTubeThumbnail(v.videoUrl);
 
-    return (
-      <div
-        key={v.videoId}
-        className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-      >
-        {/* THUMBNAIL */}
-        <div className="relative aspect-video overflow-hidden cursor-pointer">
-          {thumbnail ? (
-            <img
-              src={thumbnail}
-              alt="Thumbnail"
-              className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-slate-400">
-              No Image
-            </div>
-          )}
+          return (
+            <div
+              key={v.videoId}
+              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            >
+              {/* THUMBNAIL */}
+              <div className="relative aspect-video overflow-hidden cursor-pointer">
+                {thumbnail ? (
+                  <img
+                    src={thumbnail}
+                    alt="Thumbnail"
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-slate-400">
+                    No Image
+                  </div>
+                )}
 
-          {/* overlay hint only */}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
-            <span className="text-xs text-white opacity-0 transition group-hover:opacity-100">
-              Watch Video
-            </span>
-          </div>
-        </div>
+                {/* overlay hint only */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
+                  <span className="text-xs text-white opacity-0 transition group-hover:opacity-100">
+                    Watch Video
+                  </span>
+                </div>
+              </div>
 
-        {/* CONTENT */}
-        <div className="p-3">
-          <h3 className="truncate text-sm font-semibold text-slate-800">
-            {v.videoTitle}
-          </h3>
+              {/* CONTENT */}
+              <div className="p-3">
+                <h3 className="truncate text-sm font-semibold text-slate-800">
+                  {v.videoTitle}
+                </h3>
 
-          <p className="mt-1 line-clamp-2 text-xs text-slate-500">
-            {v.videoDescription}
-          </p>
+                <p className="mt-1 line-clamp-2 text-xs text-slate-500">
+                  {v.videoDescription}
+                </p>
 
-          {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
-          <div className="mt-3 flex items-center justify-between">
-            {/* Watch Link */}
-            {/* <a
+                {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
+                <div className="mt-3 flex items-center justify-between">
+                  {/* Watch Link */}
+                  {/* <a
               href={v.videoUrl}
               target="_blank"
               rel="noreferrer"
@@ -253,46 +317,46 @@ const ManageVideos: React.FC = () => {
               Watch
             </a> */}
 
-            {/* Buttons */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => {
-                  setEditingVideo(v);
-                  setFormData({
-                    videoTitle: v.videoTitle,
-                    videoDescription: v.videoDescription,
-                    videoUrl: v.videoUrl,
-                    departmentIds: v.departments.map(
-                      (d) => d.departmentId,
-                    ),
-                  });
-                  setIsModalOpen(true);
-                }}
-                className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
-              >
-                <Pencil size={13} />
-                Edit
-              </button>
+                  {/* Buttons */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setEditingVideo(v);
+                        setFormData({
+                          videoTitle: v.videoTitle,
+                          videoDescription: v.videoDescription,
+                          videoUrl: v.videoUrl,
+                          departmentIds: v.departments.map(
+                            (d) => d.departmentId,
+                          ),
+                        });
+                        setIsModalOpen(true);
+                      }}
+                      className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                    >
+                      <Pencil size={13} />
+                      Edit
+                    </button>
 
-              <button
-                onClick={async () => {
-                  if (confirm("Delete this video?")) {
-                    await deleteVideo(v.videoId);
-                    fetchData();
-                  }
-                }}
-                className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
-              >
-                <Trash2 size={13} />
-                Delete
-              </button>
+                    <button
+                      onClick={async () => {
+                        if (confirm("Delete this video?")) {
+                          await deleteVideo(v.videoId);
+                          fetchData();
+                        }
+                      }}
+                      className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                    >
+                      <Trash2 size={13} />
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
 
       {/* Modal */}
       {isModalOpen && (
@@ -324,32 +388,46 @@ const ManageVideos: React.FC = () => {
                 className="w-full p-3 border rounded-xl focus:border-indigo-500 outline-none"
                 placeholder="Video Title"
                 value={formData.videoTitle}
-                onChange={(e) =>
-                  setFormData({ ...formData, videoTitle: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFormData({ ...formData, videoTitle: value });
+                  validateField("videoTitle", value);
+                }}
               />
-
+              {errors.videoTitle && (
+                <p className="text-xs text-red-500 mt-1">{errors.videoTitle}</p>
+              )}
               {/* URL */}
               <input
                 className="w-full p-3 border rounded-xl focus:border-indigo-500 outline-none"
                 placeholder="YouTube URL"
                 value={formData.videoUrl}
-                onChange={(e) =>
-                  setFormData({ ...formData, videoUrl: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFormData({ ...formData, videoUrl: value });
+                  validateField("videoUrl", value);
+                }}
               />
-
+              {errors.videoUrl && (
+                <p className="text-xs text-red-500 mt-1">{errors.videoUrl}</p>
+              )}
               {/* DESCRIPTION */}
               <textarea
                 className="w-full p-3 border rounded-xl focus:border-indigo-500 outline-none"
                 placeholder="Description"
                 rows={4}
                 value={formData.videoDescription}
-                onChange={(e) =>
-                  setFormData({ ...formData, videoDescription: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFormData({ ...formData, videoDescription: value });
+                  validateField("videoDescription", value);
+                }}
               />
-
+              {errors.videoDescription && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.videoDescription}
+                </p>
+              )}
               {/* DEPARTMENTS */}
               <div className="p-4 border rounded-xl bg-slate-50">
                 <p className="text-xs font-semibold text-slate-500 uppercase mb-3">
@@ -372,6 +450,11 @@ const ManageVideos: React.FC = () => {
                     </button>
                   ))}
                 </div>
+                {errors.departmentIds && (
+                  <p className="text-xs text-red-500 mt-2">
+                    {errors.departmentIds}
+                  </p>
+                )}
               </div>
             </div>
 

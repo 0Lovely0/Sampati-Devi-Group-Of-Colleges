@@ -2,17 +2,20 @@ import React from "react";
 
 const Loader: React.FC<{ text?: string }> = ({ text }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center gap-10">
+    <div className="h-full w-full flex flex-col items-center justify-center p-4">
+      {/* Container */}
+      <div className="flex flex-col items-center gap-8">
         
-        {/* Morphing Square Loader */}
-        <div className="relative w-30 h-30">
-          <div className="absolute inset-0 border-2 border-amber-600 animate-[spin_3s_linear_infinite]"></div>
-          <div className="absolute inset-2 border-2 border-indigo-600 rotate-45 animate-[pulse_2s_ease-in-out_infinite]"></div>
+        {/* Loader Icon */}
+        <div className="relative w-16 h-16">
+          {/* Outer Ring */}
+          <div className="absolute inset-0 border-[3px] border-stone-200 rounded-full" />
+          {/* Spinner */}
+          <div className="absolute inset-0 border-[3px] border-amber-500 rounded-full border-t-transparent animate-spin" />
         </div>
 
-        {/* Minimalist text */}
-        <p className="text-black font-mono tracking-[0.3em] uppercase text-xs">
+        {/* Text */}
+        <p className="text-slate-950 text-[10px] font-black uppercase tracking-[0.3em]">
           {text || "Loading..."}
         </p>
       </div>

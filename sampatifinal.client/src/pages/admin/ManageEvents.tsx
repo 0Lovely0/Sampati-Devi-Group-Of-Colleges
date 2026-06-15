@@ -49,6 +49,14 @@ const ManageEvents: React.FC = () => {
     departmentIds: [] as number[],
   });
 
+  const [errors, setErrors] = useState({
+    title: "",
+    description: "",
+    eventDate: "",
+    imageFile: "",
+    departmentIds: "",
+  });
+
   const showToast = (msg: string, type: "success" | "error") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
@@ -75,35 +83,136 @@ const ManageEvents: React.FC = () => {
   }, []);
 
   const toggleDepartment = (id: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      departmentIds: prev.departmentIds.includes(id)
+    setFormData((prev) => {
+      const updatedIds = prev.departmentIds.includes(id)
         ? prev.departmentIds.filter((d) => d !== id)
-        : [...prev.departmentIds, id],
+        : [...prev.departmentIds, id];
+
+      validateField("departmentIds", updatedIds);
+
+      return {
+        ...prev,
+        departmentIds: updatedIds,
+      };
+    });
+  };
+
+  const validateField = (
+    name: string,
+    value: string | number[] | File | null,
+  ) => {
+    let error = "";
+
+    switch (name) {
+      case "title":
+        if (!String(value).trim()) {
+          error = "Event title is required";
+        } else if (String(value).trim().length > 200) {
+          error = "Title cannot exceed 200 characters";
+        }
+        break;
+
+      case "description":
+        if (!String(value).trim()) {
+          error = "Description is required";
+        } else if (String(value).trim().length < 20) {
+          error = "Description must be at least 20 characters";
+        }
+        break;
+
+      case "eventDate":
+        if (!String(value).trim()) {
+          error = "Event date is required";
+        }
+        break;
+
+      case "departmentIds":
+        if ((value as number[]).length === 0) {
+          error = "Please select at least one department";
+        }
+        break;
+
+      case "imageFile":
+        if (!editingEvent && !value) {
+          error = "Event image is required";
+        }
+
+        if (value instanceof File) {
+          const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+          ];
+
+          if (!allowedTypes.includes(value.type)) {
+            error = "Only JPG, JPEG, PNG and WEBP files are allowed";
+          }
+
+          if (value.size > 2 * 1024 * 1024) {
+            error = "Image size must not exceed 2 MB";
+          }
+        }
+        break;
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
     }));
+
+    return error === "";
   };
 
   const handleSave = async () => {
+    const newErrors = {
+      title: "",
+      description: "",
+      eventDate: "",
+      imageFile: "",
+      departmentIds: "",
+    };
+
+    let hasError = false;
+
     if (!formData.title.trim()) {
-      return showToast("Event title required", "error");
+      newErrors.title = "Event title is required";
+      hasError = true;
     }
 
     if (!formData.description.trim()) {
-      return showToast("Description required", "error");
+      newErrors.description = "Description is required";
+      hasError = true;
+    } else if (formData.description.trim().length < 20) {
+      newErrors.description = "Description must be at least 20 characters";
+      hasError = true;
     }
 
     if (!formData.eventDate) {
-      return showToast("Event date required", "error");
+      newErrors.eventDate = "Event date is required";
+      hasError = true;
     }
 
     if (formData.departmentIds.length === 0) {
-      return showToast("Select at least one department", "error");
+      newErrors.departmentIds = "Please select at least one department";
+      hasError = true;
     }
 
-    if (formData.imageFile && formData.imageFile.size > 2 * 1024 * 1024) {
-      return showToast("Image must be 2 MB or less", "error");
+    if (!editingEvent && !formData.imageFile) {
+      newErrors.imageFile = "Event image is required";
+      hasError = true;
     }
 
+    if (formData.imageFile) {
+      if (formData.imageFile.size > 2 * 1024 * 1024) {
+        newErrors.imageFile = "Image size must not exceed 2 MB";
+        hasError = true;
+      }
+    }
+
+    setErrors(newErrors);
+
+    if (hasError) return;
     const data = new FormData();
 
     if (editingEvent) {
@@ -400,15 +509,26 @@ const ManageEvents: React.FC = () => {
                   </label>
                   <input
                     value={formData.title}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
                       setFormData({
                         ...formData,
-                        title: e.target.value,
-                      })
-                    }
+                        title: value,
+                      });
+
+                      validateField("title", value);
+                    }}
                     placeholder="Enter event title"
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-indigo-500"
+                    className={`w-full rounded-xl px-3 py-2 text-sm outline-none transition ${
+                      errors.title
+                        ? "border border-red-500"
+                        : "border border-slate-200 focus:border-indigo-500"
+                    }`}
                   />
+                  {errors.title && (
+                    <p className="mt-1 text-xs text-red-500">{errors.title}</p>
+                  )}
                 </div>
 
                 {/* Date */}
@@ -419,14 +539,27 @@ const ManageEvents: React.FC = () => {
                   <input
                     type="date"
                     value={formData.eventDate}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
                       setFormData({
                         ...formData,
-                        eventDate: e.target.value,
-                      })
-                    }
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-indigo-500"
+                        eventDate: value,
+                      });
+
+                      validateField("eventDate", value);
+                    }}
+                    className={`w-full rounded-xl px-3 py-2 text-sm outline-none transition ${
+                      errors.eventDate
+                        ? "border border-red-500"
+                        : "border border-slate-200 focus:border-indigo-500"
+                    }`}
                   />
+                  {errors.eventDate && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.eventDate}
+                    </p>
+                  )}
                 </div>
 
                 {/* Image */}
@@ -446,15 +579,26 @@ const ManageEvents: React.FC = () => {
                     <input
                       type="file"
                       className="hidden"
-                      accept="image/*"
+                      accept=".jpg,.jpeg,.png,.webp"
                       onChange={(e) => {
-                        const file = e.target.files?.[0];
+                        const file = e.target.files?.[0] || null;
+
+                        validateField("imageFile", file);
 
                         if (!file) return;
 
+                        const allowedTypes = [
+                          "image/jpeg",
+                          "image/jpg",
+                          "image/png",
+                          "image/webp",
+                        ];
+
+                        if (!allowedTypes.includes(file.type)) {
+                          return;
+                        }
+
                         if (file.size > 2 * 1024 * 1024) {
-                          showToast("Image must be 2 MB or less", "error");
-                          e.target.value = "";
                           return;
                         }
 
@@ -465,6 +609,11 @@ const ManageEvents: React.FC = () => {
                       }}
                     />
                   </label>
+                  {errors.imageFile && (
+                    <p className="mt-2 text-xs text-red-500">
+                      {errors.imageFile}
+                    </p>
+                  )}
                 </div>
 
                 {/* Description */}
@@ -476,15 +625,28 @@ const ManageEvents: React.FC = () => {
                   <textarea
                     rows={4}
                     value={formData.description}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
                       setFormData({
                         ...formData,
-                        description: e.target.value,
-                      })
-                    }
+                        description: value,
+                      });
+
+                      validateField("description", value);
+                    }}
                     placeholder="Enter event description"
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-indigo-500"
+                    className={`w-full rounded-xl px-3 py-2 text-sm outline-none transition ${
+                      errors.description
+                        ? "border border-red-500"
+                        : "border border-slate-200 focus:border-indigo-500"
+                    }`}
                   />
+                  {errors.description && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Departments */}
@@ -493,7 +655,13 @@ const ManageEvents: React.FC = () => {
                     Departments
                   </label>
 
-                  <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+                  <div
+                    className={`grid grid-cols-2 gap-2 rounded-xl p-2 ${
+                      errors.departmentIds
+                        ? "border border-red-500"
+                        : "border border-transparent"
+                    } md:grid-cols-3`}
+                  >
                     {departments.map((dept) => {
                       const selected = formData.departmentIds.includes(
                         dept.departmentId,
@@ -515,6 +683,12 @@ const ManageEvents: React.FC = () => {
                       );
                     })}
                   </div>
+
+                  {errors.departmentIds && (
+                    <p className="mt-2 text-xs text-red-500">
+                      {errors.departmentIds}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

@@ -15,6 +15,7 @@ export interface CreateAdminDto {
   adminMobile: string;
   adminUsername: string;
   adminPassword: string;
+  adminRole: string;
 }
 
 export interface ApiResponse<T> {

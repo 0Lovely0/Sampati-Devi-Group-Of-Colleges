@@ -29,7 +29,7 @@ const ManageNews: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCompact,] = useState(false);
+  const [isCompact] = useState(false);
   const [editingNews, setEditingNews] = useState<News | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<{
@@ -40,6 +40,23 @@ const ManageNews: React.FC = () => {
   const [departmentFilter, setDepartmentFilter] = useState<number | "all">(
     "all",
   );
+
+  const [errors, setErrors] = useState({
+    news_subject: "",
+    news_description: "",
+    news_type: "",
+    news_cat: "",
+    imageFile: "",
+    departmentIds: "",
+  });
+  // setErrors({
+  //   news_subject: "",
+  //   news_description: "",
+  //   news_type: "",
+  //   news_cat: "",
+  //   imageFile: "",
+  //   departmentIds: "",
+  // });
 
   const [formData, setFormData] = useState({
     news_subject: "",
@@ -76,26 +93,91 @@ const ManageNews: React.FC = () => {
   }, []);
 
   const handleSave = async () => {
+    const newErrors = {
+      news_subject: "",
+      news_description: "",
+      news_type: "",
+      news_cat: "",
+      imageFile: "",
+      departmentIds: "",
+    };
+
+    let hasError = false;
+
+    // Subject
     if (!formData.news_subject.trim()) {
-      return showToast("News subject is required", "error");
+      newErrors.news_subject = "News subject is required";
+      hasError = true;
+    } else if (formData.news_subject.trim().length > 200) {
+      newErrors.news_subject = "News subject cannot exceed 200 characters";
+      hasError = true;
     }
 
+    // Category
     if (!formData.news_cat.trim()) {
-      return showToast("News category is required", "error");
+      newErrors.news_cat = "News category is required";
+      hasError = true;
     }
 
+    // Type
+    if (!formData.news_type.trim()) {
+      newErrors.news_type = "News type is required";
+      hasError = true;
+    }
+
+    // Description
+    if (!formData.news_description.trim()) {
+      newErrors.news_description = "News description is required";
+      hasError = true;
+    } else if (formData.news_description.trim().length < 20) {
+      newErrors.news_description = "Description must be at least 20 characters";
+      hasError = true;
+    }
+
+    // Department
     if (formData.departmentIds.length === 0) {
-      return showToast("Please select at least one department", "error");
+      newErrors.departmentIds = "Please select at least one department";
+      hasError = true;
+    }
+
+    // Image Validation
+    if (!editingNews && !formData.imageFile) {
+      newErrors.imageFile = "News image is required";
+      hasError = true;
+    }
+
+    if (formData.imageFile) {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/webp",
+      ];
+
+      if (!allowedTypes.includes(formData.imageFile.type)) {
+        newErrors.imageFile = "Only JPG, JPEG, PNG and WEBP files are allowed";
+        hasError = true;
+      }
+
+      const maxSize = 2 * 1024 * 1024; // 2MB
+
+      if (formData.imageFile.size > maxSize) {
+        newErrors.imageFile = "Image size must not exceed 2 MB";
+        hasError = true;
+      }
+    }
+
+    setErrors(newErrors);
+
+    if (hasError) {
+      return;
     }
 
     const data = new FormData();
 
     data.append("news_subject", formData.news_subject.trim());
-
     data.append("news_description", formData.news_description.trim());
-
     data.append("news_type", formData.news_type.trim());
-
     data.append("news_cat", formData.news_cat.trim());
 
     if (formData.imageFile) {
@@ -127,6 +209,15 @@ const ManageNews: React.FC = () => {
         news_cat: "",
         imageFile: null,
         departmentIds: [],
+      });
+
+      setErrors({
+        news_subject: "",
+        news_description: "",
+        news_type: "",
+        news_cat: "",
+        imageFile: "",
+        departmentIds: "",
       });
 
       await fetchData();
@@ -183,7 +274,7 @@ const ManageNews: React.FC = () => {
               setEditingNews(null);
               setIsModalOpen(true);
             }}
-            className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02 w-full"
+            className="h-10 rounded-xl bg-indigo-950 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02 w-full"
           >
             <span className="flex items-center gap-2">
               <Plus size={16} />
@@ -359,7 +450,7 @@ const ManageNews: React.FC = () => {
                       });
                       setIsModalOpen(true);
                     }}
-                    className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                    className="flex items-center gap-1 rounded-lg bg-indigo-950 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-slate-700 transition"
                   >
                     <Pencil size={13} />
                     Edit
@@ -372,7 +463,7 @@ const ManageNews: React.FC = () => {
                         fetchData();
                       }
                     }}
-                    className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                    className="flex items-center gap-1 rounded-lg bg-indigo-950 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-red-500 transition"
                   >
                     <Trash2 size={13} />
                     Delete
@@ -388,7 +479,7 @@ const ManageNews: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
           <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-[0_25px_80px_rgba(0,0,0,0.25)]">
             {/* Header */}
-            <div className="bg-gradient-to-r from-indigo-600 via-indigo-700 to-indigo-900 px-6 py-5">
+            <div className="bg-indigo-950 px-6 py-5">
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute right-4 top-4 rounded-xl bg-white/10 p-2 text-white transition hover:bg-white/20"
@@ -422,8 +513,18 @@ const ManageNews: React.FC = () => {
                       })
                     }
                     placeholder="Enter news subject"
-                    className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                    className={`w-full rounded-2xl px-4 py-3 outline-none transition focus:ring-4 ${
+                      errors.news_subject
+                        ? "border border-red-500 focus:ring-red-100"
+                        : "border border-slate-200 focus:border-indigo-500 focus:ring-indigo-100"
+                    }`}
                   />
+
+                  {errors.news_subject && (
+                    <p className="mt-1 text-xs font-medium text-red-500">
+                      {errors.news_subject}
+                    </p>
+                  )}
                 </div>
 
                 {/* Category */}
@@ -442,6 +543,11 @@ const ManageNews: React.FC = () => {
                     placeholder="Latest News"
                     className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   />
+                  {errors.news_cat && (
+                    <p className="mt-1 text-xs font-medium text-red-500">
+                      {errors.news_cat}
+                    </p>
+                  )}
                 </div>
 
                 {/* Type */}
@@ -460,6 +566,11 @@ const ManageNews: React.FC = () => {
                     placeholder="General"
                     className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   />
+                  {errors.news_type && (
+                    <p className="mt-1 text-xs font-medium text-red-500">
+                      {errors.news_type}
+                    </p>
+                  )}
                 </div>
 
                 {/* Description */}
@@ -479,6 +590,11 @@ const ManageNews: React.FC = () => {
                     placeholder="Write news description..."
                     className="w-full resize-none rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   />
+                  {errors.news_description && (
+                    <p className="mt-1 text-xs font-medium text-red-500">
+                      {errors.news_description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Departments */}
@@ -533,6 +649,11 @@ const ManageNews: React.FC = () => {
                       );
                     })}
                   </div>
+                  {errors.departmentIds && (
+                    <p className="mt-2 text-xs font-medium text-red-500">
+                      {errors.departmentIds}
+                    </p>
+                  )}
 
                   {formData.departmentIds.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -569,13 +690,47 @@ const ManageNews: React.FC = () => {
 
                     <input
                       type="file"
+                      accept=".jpg,.jpeg,.png,.webp"
                       className="hidden"
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+
+                        if (!file) return;
+
+                        const allowedTypes = [
+                          "image/jpeg",
+                          "image/jpg",
+                          "image/png",
+                          "image/webp",
+                        ];
+
+                        if (!allowedTypes.includes(file.type)) {
+                          setErrors((prev) => ({
+                            ...prev,
+                            imageFile:
+                              "Only JPG, JPEG, PNG and WEBP files are allowed",
+                          }));
+                          return;
+                        }
+
+                        if (file.size > 2 * 1024 * 1024) {
+                          setErrors((prev) => ({
+                            ...prev,
+                            imageFile: "Image size must not exceed 2 MB",
+                          }));
+                          return;
+                        }
+
+                        setErrors((prev) => ({
+                          ...prev,
+                          imageFile: "",
+                        }));
+
                         setFormData({
                           ...formData,
-                          imageFile: e.target.files?.[0] || null,
-                        })
-                      }
+                          imageFile: file,
+                        });
+                      }}
                     />
                   </label>
 
@@ -583,6 +738,11 @@ const ManageNews: React.FC = () => {
                     <div className="mt-3 rounded-xl bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
                       {formData.imageFile.name}
                     </div>
+                  )}
+                  {errors.imageFile && (
+                    <p className="mt-2 text-xs font-medium text-red-500">
+                      {errors.imageFile}
+                    </p>
                   )}
                 </div>
               </div>
@@ -601,7 +761,7 @@ const ManageNews: React.FC = () => {
                 <button
                   onClick={handleSave}
                   disabled={submitting}
-                  className="rounded-xl bg-indigo-600 px-6 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
+                  className="rounded-xl bg-indigo-950 px-6 py-2.5 font-semibold text-white transition hover:bg-slate-700 disabled:opacity-50"
                 >
                   {submitting
                     ? "Saving..."
