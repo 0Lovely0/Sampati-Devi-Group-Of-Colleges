@@ -4,10 +4,10 @@ import { useParams } from "react-router-dom";
 import BscNursingToppersGallery from "../../departments/bsc-nursing/pages/toppers";
 
 // You can uncomment when ready
-// import PharmacyToppersGallery from "../../departments/pharmacy/pages/ToppersGallery";
-// import VeterinaryToppersGallery from "../../departments/veterinary-pharmacist/pages/ToppersGallery";
-// import PostBasicToppersGallery from "../../departments/post-basic-bsc-nursing/pages/ToppersGallery";
-// import MphwToppersGallery from "../../departments/multipurpose-health-worker/pages/ToppersGallery";
+import PharmacyToppersGallery from "../../departments/pharmacy/pages/toppers";
+import VeterinaryToppersGallery from "../../departments/veterinary-pharmacist/pages/toppers";
+import PostBasicToppersGallery from "../../departments/post-basic-bsc-nursing/pages/toppers";
+import MphwToppersGallery from "../../departments/multipurpose-health-worker/pages/toppers";
 
 export default function DepartmentToppers() {
   const { slug } = useParams();
@@ -16,17 +16,17 @@ export default function DepartmentToppers() {
     case "bsc-nursing":
       return <BscNursingToppersGallery />;
 
-    // case "pharmacy":
-    //   return <PharmacyToppersGallery />;
+    case "pharmacy":
+      return <PharmacyToppersGallery />;
 
-    // case "veterinary-pharmacist":
-    //   return <VeterinaryToppersGallery />;
+    case "veterinary-pharmacist":
+      return <VeterinaryToppersGallery />;
 
-    // case "post-basic-bsc-nursing":
-    //   return <PostBasicToppersGallery />;
+    case "post-basic-bsc-nursing":
+      return <PostBasicToppersGallery />;
 
-    // case "multipurpose-health-worker":
-    //   return <MphwToppersGallery />;
+    case "multipurpose-health-worker":
+      return <MphwToppersGallery />;
 
     default:
       return (

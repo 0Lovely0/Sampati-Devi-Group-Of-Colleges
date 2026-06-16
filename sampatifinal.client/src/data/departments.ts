@@ -46,15 +46,15 @@ export const departments = [
       accent: "#F97316",
     },
   },
-  {
-    name: "Scope Admissions",
-    slug: "scope-admissions",
-    theme: {
-      primary: "#BE123C",
-      secondary: "#FFE4E6",
-      accent: "#F43F5E",
-    },
-  },
+  // {
+  //   name: "Scope Admissions",
+  //   slug: "scope-admissions",
+  //   theme: {
+  //     primary: "#BE123C",
+  //     secondary: "#FFE4E6",
+  //     accent: "#F43F5E",
+  //   },
+  // },
 ];
 
 // data.ts
@@ -77,21 +77,58 @@ export const deptData: Record<string, DeptConfig> = {
     accentText: "text-teal-200",
     imageUrl: "/college.png",
   },
-  pharmacy: {
-    title: "Pharmacy Department",
+
+  "post-basic-bsc-nursing": {
+    title: "Post Basic B.Sc. Nursing",
+    subtitle: "Advanced Nursing Education for Professional Growth",
+    badge: "Advanced Nursing Dept",
+    bgClass: "bg-blue-700/80",
+    accentText: "text-blue-200",
+    imageUrl: "/images/post-basic-nursing.jpg",
+  },
+
+  "veterinary-pharmacist": {
+    title: "Veterinary Pharmacist",
+    subtitle: "Animal Healthcare & Pharmaceutical Expertise",
+    badge: "Vet Pharma Dept",
+    bgClass: "bg-green-700/80",
+    accentText: "text-green-200",
+    imageUrl: "/images/veterinary-pharmacist.jpg",
+  },
+
+  "pharmacy": {
+    title: "pharmacy",
     subtitle: "Innovating Health through Pharmaceutical Science",
     badge: "Pharmacy Dept",
     bgClass: "bg-orange-600/80",
     accentText: "text-orange-200",
     imageUrl: "/images/pharmacy-hero.jpg",
   },
-};
 
-export const defaultDeptData: DeptConfig = {
-  title: "Our Department",
-  subtitle: "Welcome to our academic excellence center.",
-  badge: "Academic Center",
-  bgClass: "bg-slate-900/80",
-  accentText: "text-slate-300",
-  imageUrl: "/images/default-hero.jpg",
+  "multipurpose-health-worker": {
+    title: "Multipurpose Health Worker",
+    subtitle: "Community Healthcare & Primary Health Services",
+    badge: "MPHW Dept",
+    bgClass: "bg-red-600/80",
+    accentText: "text-red-200",
+    imageUrl: "/images/mphw.jpg",
+  },
+
+  "scope-admissions": {
+    title: "Scope Admissions",
+    subtitle: "Guiding Students Toward Academic Opportunities",
+    badge: "Admissions Cell",
+    bgClass: "bg-purple-700/80",
+    accentText: "text-purple-200",
+    imageUrl: "/images/admissions.jpg",
+  },
+
+  main: {
+    title: "Main Department",
+    subtitle: "Central Administration & Academic Coordination",
+    badge: "Main Office",
+    bgClass: "bg-slate-800/80",
+    accentText: "text-slate-300",
+    imageUrl: "/images/main.jpg",
+  },
 };

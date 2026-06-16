@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 
 import BscNursingVideos from "../../departments/bsc-nursing/pages/videos";
 
-// import PharmacyVideos from "../../departments/pharmacy/pages/Videos";
-// import VeterinaryVideos from "../../departments/veterinary-pharmacist/pages/Videos";
-// import PostBasicVideos from "../../departments/post-basic-bsc-nursing/pages/Videos";
-// import MphwVideos from "../../departments/multipurpose-health-worker/pages/Videos";
+import PharmacyVideos from "../../departments/pharmacy/pages/video";
+import VeterinaryVideos from "../../departments/veterinary-pharmacist/pages/videos";
+import PostBasicVideos from "../../departments/post-basic-bsc-nursing/pages/videos";
+import MphwVideos from "../../departments/multipurpose-health-worker/pages/video";
 
 export default function DepartmentVideos() {
   const { slug } = useParams();
@@ -14,17 +14,17 @@ export default function DepartmentVideos() {
     case "bsc-nursing":
       return <BscNursingVideos />;
 
-    // case "pharmacy":
-    //   return <PharmacyVideos />;
+    case "pharmacy":
+      return <PharmacyVideos />;
 
-    // case "veterinary-pharmacist":
-    //   return <VeterinaryVideos />;
+    case "veterinary-pharmacist":
+      return <VeterinaryVideos />;
 
-    // case "post-basic-bsc-nursing":
-    //   return <PostBasicVideos />;
+    case "post-basic-bsc-nursing":
+      return <PostBasicVideos />;
 
-    // case "multipurpose-health-worker":
-    //   return <MphwVideos />;
+    case "multipurpose-health-worker":
+      return <MphwVideos />;
 
     default:
       return (

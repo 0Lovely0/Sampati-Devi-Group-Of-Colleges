@@ -90,7 +90,7 @@ const ImageCarousel = () => {
               <img
                 src={`${API_BASE_URL}/${banner.bnnrImage}`}
                 alt={banner.bnnrCat}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover top-5"
               />
 
               {/* Department Theme Overlay */}

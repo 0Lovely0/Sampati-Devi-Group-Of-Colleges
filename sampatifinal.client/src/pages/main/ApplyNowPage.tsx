@@ -149,7 +149,7 @@
 
 import React, { useState } from 'react';
 
-const COURSES = ["B.Sc Nursing", "GNM", "ANM", "Post Basic B.Sc Nursing"];
+const COURSES = ["B.Sc Nursing", "Post Basic B.Sc Nursing", "Veterinary Pharmacist", "Pharmacy","Multipurpose Health Worker", "Scope Admissions"];
 
 export const ApplyNowPage: React.FC = () => {
   const [formData, setFormData] = useState({

@@ -1,17 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { departments } from "../../data/departments";
 
 export default function ProgramHome() {
   const { slug } = useParams();
 
+  const normalizedSlug = (slug || "").toLowerCase().trim();
+
   const program = departments.find(
-    (item) => item.slug === slug
+    (item) => item.slug.toLowerCase() === normalizedSlug
   );
 
   if (!program) {
     return (
-      <div className="py-20 text-center">
-        Program not found
+      <div className="py-20 text-center text-red-500 font-semibold">
+        Program not found: {slug}
       </div>
     );
   }
@@ -33,24 +35,28 @@ export default function ProgramHome() {
           </h1>
 
           <p className="mt-6 text-lg md:text-xl max-w-3xl text-white/90">
-            Build a rewarding career in healthcare with
-            world-class education, practical training,
-            and professional excellence.
+            Build a rewarding career in healthcare with world-class education,
+            practical training, and professional excellence.
           </p>
 
           <div className="mt-8 flex gap-4">
-            <button className="px-6 py-3 bg-white text-slate-900 rounded-full font-semibold">
-              Apply Now
-            </button>
+            <Link to="/applynow">
+              <button className="px-6 py-3 bg-white text-slate-900 rounded-full font-semibold">
+                Apply Now
+              </button>
+            </Link>
 
-            <button className="px-6 py-3 border border-white rounded-full font-semibold">
+            <a
+              href="/brochures/BSc_Nursing_Brochure.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 border border-white rounded-full font-semibold inline-block"
+            >
               Download Brochure
-            </button>
+            </a>
           </div>
         </div>
       </section>
     </>
   );
 }
-
-

@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 
 import BscNursingEvents from "../../departments/bsc-nursing/pages/events";
 
-// import PharmacyEvents from "../../departments/pharmacy/pages/Events";
-// import VeterinaryEvents from "../../departments/veterinary-pharmacist/pages/Events";
-// import PostBasicEvents from "../../departments/post-basic-bsc-nursing/pages/Events";
-// import MphwEvents from "../../departments/multipurpose-health-worker/pages/Events";
+import PharmacyEvents from "../../departments/pharmacy/pages/events";
+import VeterinaryEvents from "../../departments/veterinary-pharmacist/pages/events";
+import PostBasicEvents from "../../departments/post-basic-bsc-nursing/pages/events";
+import MphwEvents from "../../departments/multipurpose-health-worker/pages/events";
 
 export default function DepartmentEvents() {
   const { slug } = useParams();
@@ -14,17 +14,17 @@ export default function DepartmentEvents() {
     case "bsc-nursing":
       return <BscNursingEvents />;
 
-    // case "pharmacy":
-    //   return <PharmacyEvents />;
+    case "pharmacy":
+      return <PharmacyEvents />;
 
-    // case "veterinary-pharmacist":
-    //   return <VeterinaryEvents />;
+    case "veterinary-pharmacist":
+      return <VeterinaryEvents />;
 
-    // case "post-basic-bsc-nursing":
-    //   return <PostBasicEvents />;
+    case "post-basic-bsc-nursing":
+      return <PostBasicEvents />;
 
-    // case "multipurpose-health-worker":
-    //   return <MphwEvents />;
+    case "multipurpose-health-worker":
+      return <MphwEvents />;
 
     default:
       return (

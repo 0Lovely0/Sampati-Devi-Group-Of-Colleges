@@ -21,7 +21,7 @@ export default function ProgramFooter() {
 
   return (
     <footer
-      className="mt-20 text-white relative overflow-hidden"
+      className=" text-white relative overflow-hidden"
       style={{
         background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
       }}

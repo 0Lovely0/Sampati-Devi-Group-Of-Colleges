@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 
 import BscNursingNews from "../../departments/bsc-nursing/pages/news";
 
-// import PharmacyNews from "../../departments/pharmacy/pages/News";
-// import VeterinaryNews from "../../departments/veterinary-pharmacist/pages/News";
-// import PostBasicNews from "../../departments/post-basic-bsc-nursing/pages/News";
-// import MphwNews from "../../departments/multipurpose-health-worker/pages/News";
+import PharmacyNews from "../../departments/pharmacy/pages/news";
+import VeterinaryNews from "../../departments/veterinary-pharmacist/pages/news";
+import PostBasicNews from "../../departments/post-basic-bsc-nursing/pages/news";
+import MphwNews from "../../departments/multipurpose-health-worker/pages/news";
 
 export default function DepartmentNews() {
   const { slug } = useParams();
@@ -14,17 +14,17 @@ export default function DepartmentNews() {
     case "bsc-nursing":
       return <BscNursingNews />;
 
-    // case "pharmacy":
-    //   return <PharmacyNews />;
+    case "pharmacy":
+      return <PharmacyNews />;
 
-    // case "veterinary-pharmacist":
-    //   return <VeterinaryNews />;
+    case "veterinary-pharmacist":
+      return <VeterinaryNews />;
 
-    // case "post-basic-bsc-nursing":
-    //   return <PostBasicNews />;
+    case "post-basic-bsc-nursing":
+      return <PostBasicNews />;
 
-    // case "multipurpose-health-worker":
-    //   return <MphwNews />;
+    case "multipurpose-health-worker":
+      return <MphwNews />;
 
     default:
       return (

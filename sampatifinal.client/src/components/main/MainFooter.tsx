@@ -256,7 +256,7 @@ export default function MainFooter() {
                 {section.links.map((link: any) => (
                   <li key={link.id || link.href}>
                     <Link
-                      to={section.isDept ? `/department/${link.id}` : link.href}
+                      to={section.isDept ? `/programs/${link.id}` : link.href}
                       className="text-sm hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"
                     >
                       {section.isDept ? link.shortName : link.label}

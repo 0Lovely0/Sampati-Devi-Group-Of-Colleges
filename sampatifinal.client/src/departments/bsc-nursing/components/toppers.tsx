@@ -300,7 +300,7 @@ const BscNursingToppersSection: React.FC = () => {
                 <div
                   className={`absolute inset-0 flex flex-col items-center justify-center text-center px-3 transition-all duration-300
                   ${
-                    activeId === item.topperId
+                    activeId === String(item.topperId)
                       ? "opacity-100"
                       : "opacity-0 group-hover:opacity-100"
                   }`}
