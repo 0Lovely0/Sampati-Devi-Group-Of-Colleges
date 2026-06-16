@@ -130,7 +130,7 @@ const ManageBanners: React.FC = () => {
     }
 
     if (formData.imageFile && formData.imageFile.size > 2 * 1024 * 1024) {
-      newErrors.imageFile = "Image size must be 2 MB or less";
+      newErrors.imageFile = "Image size must be 10 kb or less";
       hasError = true;
     }
 
@@ -514,10 +514,10 @@ const ManageBanners: React.FC = () => {
                   onChange={(e) => {
                     const file = e.target.files?.[0] || null;
 
-                    if (file && file.size > 2 * 1024 * 1024) {
+                 if (file && file.size > 10 * 1024) {
                       setErrors((prev) => ({
                         ...prev,
-                        imageFile: "Image size must be 2MB or less",
+                        imageFile: "Image size must be 10 KB or less",
                       }));
 
                       e.target.value = "";

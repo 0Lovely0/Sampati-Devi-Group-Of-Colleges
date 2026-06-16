@@ -159,8 +159,8 @@ const ManageNotice: React.FC = () => {
             error = "Only PDF, JPG, JPEG, PNG and WEBP files are allowed";
           }
 
-          if (value.size > 2 * 1024 * 1024) {
-            error = "File size must not exceed 2 MB";
+          if (value.size > 10 * 1024 ) {
+            error = "File size must not exceed 10 KB";
           }
         }
 
@@ -229,7 +229,7 @@ const ManageNotice: React.FC = () => {
       }
 
       if (formData.file.size > 2 * 1024 * 1024) {
-        newErrors.file = "File size must not exceed 2 MB";
+        newErrors.file = "File size must not exceed 10 KB";
         hasError = true;
       }
     }
@@ -634,7 +634,7 @@ const ManageNotice: React.FC = () => {
                         return;
                       }
 
-                      if (file.size > 2 * 1024 * 1024) {
+                       if (file && file.size > 10 * 1024) {
                         return;
                       }
 

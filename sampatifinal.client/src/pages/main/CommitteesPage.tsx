@@ -102,7 +102,6 @@
 
 // export default CommitteesPage;
 
-
 // import React, { useEffect, useState } from "react";
 // import {
 //   getCommitteeDropdown,
@@ -283,65 +282,109 @@
 
 // export default CommitteesPage;
 
-
 import React, { useEffect, useState } from "react";
-import { getCommitteeDropdown, getAllCommitteeMembers } from "../../services/committeeService";
+import {
+  getCommitteeDropdown,
+  getAllCommitteeMembers,
+} from "../../services/committeeService";
 import Loader from "../../components/common/Loader";
 
-type DropdownDto = { value: number; label: string; };
-type Member = { name: string; position: string; image: string; };
+type DropdownDto = { value: number; label: string };
 
-const API_BASE_URL = window.location.hostname === "localhost" ? "https://localhost:7197" : "https://sampatigroup.stdruraltech.org";
-const getImageUrl = (path?: string) => (!path ? "/placeholder.jpg" : `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`);
+type CommitteeMember = {
+  committeeMasterId: number;
+  memberName: string;
+  positionName: string;
+  memberImage: string;
+};
+
+type MemberView = {
+  name: string;
+  position: string;
+  image: string;
+};
+
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7197"
+    : "https://sampatigroup.stdruraltech.org";
+
+const getImageUrl = (path?: string) =>
+  !path
+    ? "/placeholder.jpg"
+    : `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 
 const CommitteesPage: React.FC = () => {
   const [committees, setCommittees] = useState<DropdownDto[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [members, setMembers] = useState<Member[]>([]);
+
+  const [allMembers, setAllMembers] = useState<CommitteeMember[]>([]);
+  const [members, setMembers] = useState<MemberView[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
+  // Load dropdown + all members once
   useEffect(() => {
-    const fetchDropdown = async () => {
+    const fetchInitialData = async () => {
       try {
-        const res = await getCommitteeDropdown();
-        setCommittees(res);
-        if (res.length > 0) setSelectedId(res[0].value);
+        setInitialLoading(true);
+
+        const [dropdownRes, membersRes] = await Promise.all([
+          getCommitteeDropdown(),
+          getAllCommitteeMembers(),
+        ]);
+
+        setCommittees(dropdownRes);
+        setAllMembers(membersRes);
+
+        if (dropdownRes.length > 0) {
+          setSelectedId(dropdownRes[0].value);
+        }
       } finally {
         setInitialLoading(false);
       }
     };
-    fetchDropdown();
+
+    fetchInitialData();
   }, []);
 
+  // Filter members whenever selection changes
   useEffect(() => {
-    const fetchMembers = async () => {
-      if (!selectedId) return;
-      try {
-        setLoading(true);
-        const res = await getAllCommitteeMembers();
-        const filtered = res.filter((x) => x.committeeMasterId === selectedId).map((x) => ({
-          name: x.memberName,
-          position: x.positionName,
-          image: x.memberImage,
-        }));
-        setMembers(filtered);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMembers();
-  }, [selectedId]);
+    if (!selectedId) return;
 
-  if (initialLoading) return <div className="h-screen flex items-center justify-center bg-stone-50"><Loader text="Loading Committees..." /></div>;
+    setLoading(true);
+
+    const filtered = allMembers
+      .filter((x) => x.committeeMasterId === selectedId)
+      .map((x) => ({
+        name: x.memberName,
+        position: x.positionName,
+        image: x.memberImage,
+      }));
+
+    setMembers(filtered);
+    setLoading(false);
+  }, [selectedId, allMembers]);
+
+  if (initialLoading)
+    return (
+      <div className="h-screen flex items-center justify-center bg-stone-50">
+        <Loader text="Loading Committees..." />
+      </div>
+    );
 
   return (
     <section className="bg-stone-50 pb-20">
       {/* HEADER */}
       <div className="bg-indigo-950 py-20 px-4 text-center border-b border-slate-800">
-        <h1 className="text-4xl md:text-5xl font-black text-white">College Committees</h1>
+        <h1 className="text-4xl md:text-5xl font-black text-white">
+          College Committees
+        </h1>
         <div className="h-1 w-20 bg-amber-500 mt-6 mx-auto rounded-full" />
-        <p className="text-slate-400 mt-6 text-sm">Explore our academic & administrative leadership teams.</p>
+        <p className="text-slate-400 mt-6 text-sm">
+          Explore our academic & administrative leadership teams.
+        </p>
       </div>
 
       <div className="w-full mx-auto px-4 -mt-12">
@@ -352,25 +395,46 @@ const CommitteesPage: React.FC = () => {
             onChange={(e) => setSelectedId(Number(e.target.value))}
             className="w-full sm:w-80 bg-white border border-stone-200 px-6 py-4 rounded-full shadow-lg text-sm font-black text-slate-950 focus:ring-2 focus:ring-amber-500 outline-none cursor-pointer"
           >
-            {committees.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+            {committees.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
           </select>
         </div>
 
         {/* GRID */}
         {loading ? (
-          <div className="flex justify-center py-20"><Loader text="Updating Members..." /></div>
+          <div className="flex justify-center py-20">
+            <Loader text="Updating Members..." />
+          </div>
+        ) : members.length === 0 ? (
+          <div className="text-center text-slate-500 py-20 font-medium">
+            No members found for this committee.
+          </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {members.map((m, i) => (
-              <div key={i} className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm transition hover:shadow-xl hover:-translate-y-2 group text-center">
+              <div
+                key={i}
+                className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm transition hover:shadow-xl hover:-translate-y-2 group text-center"
+              >
                 <img
                   src={getImageUrl(m.image)}
                   alt={m.name}
-                  className="w-24 h-24 mx-auto rounded-full object-cover border-4 border-stone-100 mb-4 group-hover:border-amber-500 transition"
-                  onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.jpg"; }}
+                  className="w-24 h-24 mx-auto rounded-full object-contain border-4 border-stone-100 mb-4 group-hover:border-amber-500 transition"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/placeholder.jpg";
+                  }}
                 />
-                <h3 className="text-sm font-black text-slate-950 mb-1">{m.name}</h3>
-                <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-3 py-1 rounded-full">{m.position}</span>
+
+                <h3 className="text-sm font-black text-slate-950 mb-1">
+                  {m.name}
+                </h3>
+
+                <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
+                  {m.position}
+                </span>
               </div>
             ))}
           </div>

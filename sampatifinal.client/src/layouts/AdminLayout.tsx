@@ -54,6 +54,7 @@ export default function AdminLayout() {
                 <SubNavItem to="/dashboard/events" icon={<Calendar size={16} />} label="Events" />
                 <SubNavItem to="/dashboard/toppers" icon={<GraduationCap size={16} />} label="Toppers" />
                 <SubNavItem to="/dashboard/placements" icon={<GraduationCap size={16} />} label="Placement" />
+                <SubNavItem to="/dashboard/committee" icon={<GraduationCap size={16} />} label="committee" />
                 <SubNavItem to="/dashboard/facility" icon={<GraduationCap size={16} />} label="Facilities" />
                 <SubNavItem to="/dashboard/gallery" icon={<Image size={16} />} label="Gallery" />
                 <SubNavItem to="/dashboard/video" icon={<Film size={16} />} label="Video" />

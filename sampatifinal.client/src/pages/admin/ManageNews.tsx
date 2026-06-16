@@ -162,7 +162,7 @@ const ManageNews: React.FC = () => {
       const maxSize = 2 * 1024 * 1024; // 2MB
 
       if (formData.imageFile.size > maxSize) {
-        newErrors.imageFile = "Image size must not exceed 2 MB";
+        newErrors.imageFile = "Image size must not exceed 10 KB";
         hasError = true;
       }
     }
@@ -713,10 +713,10 @@ const ManageNews: React.FC = () => {
                           return;
                         }
 
-                        if (file.size > 2 * 1024 * 1024) {
+                        if (file && file.size > 10 * 1024) {
                           setErrors((prev) => ({
                             ...prev,
-                            imageFile: "Image size must not exceed 2 MB",
+                            imageFile: "Image size must not exceed 10 KB",
                           }));
                           return;
                         }

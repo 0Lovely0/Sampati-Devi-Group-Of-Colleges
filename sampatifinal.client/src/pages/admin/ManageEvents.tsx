@@ -149,8 +149,8 @@ const ManageEvents: React.FC = () => {
             error = "Only JPG, JPEG, PNG and WEBP files are allowed";
           }
 
-          if (value.size > 2 * 1024 * 1024) {
-            error = "Image size must not exceed 2 MB";
+          if (value.size > 10 * 1024) {
+            error = "Image size must not exceed 10 KB";
           }
         }
         break;
@@ -204,8 +204,8 @@ const ManageEvents: React.FC = () => {
     }
 
     if (formData.imageFile) {
-      if (formData.imageFile.size > 2 * 1024 * 1024) {
-        newErrors.imageFile = "Image size must not exceed 2 MB";
+      if (formData.imageFile.size > 10 * 1024) {
+        newErrors.imageFile = "Image size must not exceed 10 KB";
         hasError = true;
       }
     }
@@ -573,7 +573,7 @@ const ManageEvents: React.FC = () => {
                     <span className="text-sm text-slate-600">
                       {formData.imageFile
                         ? formData.imageFile.name
-                        : "Upload Event Image (Max 2 MB)"}
+                        : "Upload Event Image (Max 10 KB)"}
                     </span>
 
                     <input
@@ -598,7 +598,7 @@ const ManageEvents: React.FC = () => {
                           return;
                         }
 
-                        if (file.size > 2 * 1024 * 1024) {
+                        if (file.size > 10 * 1024) {
                           return;
                         }
 

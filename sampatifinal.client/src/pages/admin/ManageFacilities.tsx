@@ -97,8 +97,8 @@ export const ManageFacilities: React.FC = () => {
           error = "Only JPG, PNG, WEBP allowed";
         }
 
-        if (value.size > 2 * 1024 * 1024) {
-          error = "Max size is 2MB";
+        if (value.size > 10 * 1024) {
+          error = "Max size is 10 KB";
         }
       }
     }
