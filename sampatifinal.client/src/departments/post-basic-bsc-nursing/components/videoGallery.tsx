@@ -56,13 +56,13 @@ const VideoGallery: React.FC = () => {
     <section className="bg-[#EFF6FF] pb-14">
       {/* HEADER */}
       <div className="bg-[#1E40AF] py-12 px-4 text-center">
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-6xl font-black text-white mb-3">
           Post Basic B.Sc Nursing Videos
         </h2>
 
         <div className="h-1 w-20 bg-[#3B82F6] mx-auto rounded-full" />
 
-        <p className="text-[#DBEAFE] mt-4 max-w-xl mx-auto text-xs md:text-sm">
+        <p className="text-[#DBEAFE] mt-4 max-w-2xl mx-auto text-xs md:text-lg">
           Explore nursing workshops, academic activities, seminars,
           clinical training sessions, and department highlights.
         </p>

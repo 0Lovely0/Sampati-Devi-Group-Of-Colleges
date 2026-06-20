@@ -71,7 +71,7 @@ const GallerySection: React.FC = () => {
           background: "linear-gradient(135deg,#15803D 0%,#22C55E 100%)",
         }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
           Veterinary Pharmacist Gallery
         </h2>
 
@@ -80,7 +80,7 @@ const GallerySection: React.FC = () => {
           style={{ backgroundColor: THEME.accent }}
         />
 
-        <p className="text-white/80 mt-4 max-w-xl mx-auto text-xs">
+        <p className="text-white/80 mt-4 max-w-2xl mx-auto text-lg">
           Explore moments from academic activities, clinical training,
           events, celebrations, and achievements of the Veterinary Pharmacist Department.
         </p>

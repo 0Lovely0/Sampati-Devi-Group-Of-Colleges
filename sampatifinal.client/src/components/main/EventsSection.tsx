@@ -485,9 +485,165 @@
 // export default EventsSection;
 
 
+// import React, { useEffect, useState } from "react";
+// import { Link } from "react-router-dom";
+// import { getAllEvents, type Event as ApiEvent } from "../../services/eventService";
+// import Loader from "../../components/common/Loader";
+
+// interface EventUI {
+//   id: number;
+//   date: string;
+//   title: string;
+//   image: string;
+// }
+
+// const API_BASE_URL =
+//   window.location.hostname === "localhost"
+//     ? "https://localhost:7197"
+//     : "https://sampatigroup.stdruraltech.org";
+
+// const EventsSection: React.FC = () => {
+//   const [events, setEvents] = useState<EventUI[]>([]);
+//   const [previewImage, setPreviewImage] = useState<EventUI | null>(null);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchEvents = async () => {
+//       try {
+//         setLoading(true);
+//         const data: ApiEvent[] = await getAllEvents();
+//         const mapped: EventUI[] = data.map((e) => ({
+//           id: e.eventId,
+//           title: e.title,
+//           image: e.imagePath?.startsWith("http")
+//             ? e.imagePath
+//             : `${API_BASE_URL}/${e.imagePath}`,
+//           date: new Date(e.eventDate)
+//             .toLocaleDateString("en-GB", {
+//               day: "2-digit",
+//               month: "short",
+//             })
+//             .toUpperCase(),
+//         }));
+//         setEvents(mapped);
+//       } catch (error) {
+//         console.error("Failed to load events:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchEvents();
+//   }, []);
+
+//   return (
+//     <section className="bg-stone-50 pb-14">
+//       {/* HEADER */}
+//       <div className="bg-indigo-950 py-12 px-4 text-center border-b border-slate-800">
+//         <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+//           Upcoming Events
+//         </h2>
+//         <div className="h-1 w-16 bg-amber-500 mx-auto rounded-full" />
+//         <p className="text-slate-400 mt-4 max-w-xl mx-auto text-xs">
+//           A snapshot of recent activities and institutional gatherings.
+//         </p>
+//       </div>
+
+//       {/* GRID */}
+//       <div className="w-full mx-auto px-4 -mt-10">
+//         {loading ? (
+//           <div className="h-56 flex items-center justify-center">
+//             <Loader text="Loading events..." />
+//           </div>
+//         ) : (
+//           <>
+//             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+//               {events.map((event) => (
+//                 <div
+//                   key={event.id}
+//                   onClick={() => setPreviewImage(event)}
+//                   className="group relative bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg"
+//                 >
+//                   <div className="h-32 overflow-hidden">
+//                     <img
+//                       src={event.image}
+//                       alt={event.title}
+//                       className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+//                     />
+//                   </div>
+
+//                   <div className="absolute top-3 left-3 bg-indigo-950 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow">
+//                     {event.date}
+//                   </div>
+
+//                   <div className="p-3 text-center">
+//                     <h3 className="text-xs font-black text-slate-950 truncate">
+//                       {event.title}
+//                     </h3>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+
+//             {/* ARCHIVE BUTTON */}
+//             <div className="mt-12 flex justify-center">
+//               <Link
+//                 to="/events"
+//                 className="bg-indigo-950 text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-amber-600 transition shadow-lg hover:shadow-amber-500/20"
+//               >
+//                 View Archive &rarr;
+//               </Link>
+//             </div>
+//           </>
+//         )}
+//       </div>
+
+//       {/* MODAL */}
+//       {previewImage && (
+//         <div
+//           className="fixed inset-0 z-[9999] flex items-center justify-center bg-indigo-950/95 p-4 backdrop-blur-sm"
+//           onClick={() => setPreviewImage(null)}
+//         >
+//           <div
+//             className="relative w-full max-w-3xl bg-white rounded-2xl overflow-hidden shadow-2xl"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             <button
+//               onClick={() => setPreviewImage(null)}
+//               className="absolute top-3 right-3 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md px-3 py-1 text-[9px] font-black text-white rounded-full uppercase tracking-widest transition"
+//             >
+//               Close
+//             </button>
+
+//             <img
+//               src={previewImage.image}
+//               alt={previewImage.title}
+//               className="w-full max-h-[50vh] object-cover bg-stone-100"
+//             />
+
+//             <div className="p-5">
+//               <span className="text-[9px] font-black text-amber-600 uppercase tracking-widest">
+//                 {previewImage.date}
+//               </span>
+//               <h3 className="text-xl font-black text-slate-950 mt-2">
+//                 {previewImage.title}
+//               </h3>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </section>
+//   );
+// };
+
+// export default EventsSection;
+
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllEvents, type Event as ApiEvent } from "../../services/eventService";
+import {
+  getAllEvents,
+  type Event as ApiEvent,
+} from "../../services/eventService";
 import Loader from "../../components/common/Loader";
 
 interface EventUI {
@@ -511,7 +667,9 @@ const EventsSection: React.FC = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
+
         const data: ApiEvent[] = await getAllEvents();
+
         const mapped: EventUI[] = data.map((e) => ({
           id: e.eventId,
           title: e.title,
@@ -525,6 +683,7 @@ const EventsSection: React.FC = () => {
             })
             .toUpperCase(),
         }));
+
         setEvents(mapped);
       } catch (error) {
         console.error("Failed to load events:", error);
@@ -532,51 +691,59 @@ const EventsSection: React.FC = () => {
         setLoading(false);
       }
     };
+
     fetchEvents();
   }, []);
 
   return (
-    <section className="bg-stone-50 pb-14">
+    <section className="bg-stone-50 pb-24">
       {/* HEADER */}
-      <div className="bg-indigo-950 py-12 px-4 text-center border-b border-slate-800">
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+      <div className="bg-indigo-950 py-20 px-6 text-center border-b border-slate-800">
+        <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
           Upcoming Events
         </h2>
-        <div className="h-1 w-16 bg-amber-500 mx-auto rounded-full" />
-        <p className="text-slate-400 mt-4 max-w-xl mx-auto text-xs">
-          A snapshot of recent activities and institutional gatherings.
+
+        <div className="h-1.5 w-24 bg-amber-500 mx-auto rounded-full" />
+
+        <p className="text-slate-400 mt-6 max-w-2xl mx-auto text-lg leading-relaxed">
+          A snapshot of recent activities, workshops, celebrations,
+          seminars, and institutional gatherings that shape the
+          vibrant learning environment at our college.
         </p>
       </div>
 
-      {/* GRID */}
-      <div className="w-full mx-auto px-4 -mt-10">
+      {/* EVENTS GRID */}
+      <div className="w-full mx-auto px-6 -mt-14">
         {loading ? (
-          <div className="h-56 flex items-center justify-center">
+          <div className="h-80 flex items-center justify-center">
             <Loader text="Loading events..." />
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {events.map((event) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+         {events.slice(0, 4).map((event) => (
                 <div
                   key={event.id}
                   onClick={() => setPreviewImage(event)}
-                  className="group relative bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg"
+                  className="group relative bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-sm cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
                 >
-                  <div className="h-32 overflow-hidden">
+                  {/* Image */}
+                  <div className="h-52 overflow-hidden">
                     <img
                       src={event.image}
                       alt={event.title}
-                      className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                     />
                   </div>
 
-                  <div className="absolute top-3 left-3 bg-indigo-950 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow">
+                  {/* Date Badge */}
+                  <div className="absolute top-4 left-4 bg-indigo-950 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
                     {event.date}
                   </div>
 
-                  <div className="p-3 text-center">
-                    <h3 className="text-xs font-black text-slate-950 truncate">
+                  {/* Content */}
+                  <div className="p-5 text-center">
+                    <h3 className="text-base font-black text-slate-950 line-clamp-2 min-h-[48px]">
                       {event.title}
                     </h3>
                   </div>
@@ -585,46 +752,50 @@ const EventsSection: React.FC = () => {
             </div>
 
             {/* ARCHIVE BUTTON */}
-            <div className="mt-12 flex justify-center">
+            <div className="mt-16 flex justify-center">
               <Link
                 to="/events"
-                className="bg-indigo-950 text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-amber-600 transition shadow-lg hover:shadow-amber-500/20"
+                className="bg-indigo-950 text-white px-8 py-4 rounded-full text-xs font-black uppercase tracking-widest hover:bg-amber-600 transition-all duration-300 shadow-xl hover:shadow-amber-500/30"
               >
-                View Archive &rarr;
+                View Events Archive →
               </Link>
             </div>
           </>
         )}
       </div>
 
-      {/* MODAL */}
+      {/* IMAGE MODAL */}
       {previewImage && (
         <div
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-indigo-950/95 p-4 backdrop-blur-sm"
           onClick={() => setPreviewImage(null)}
         >
           <div
-            className="relative w-full max-w-3xl bg-white rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-5xl bg-white rounded-3xl overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Close Button */}
             <button
               onClick={() => setPreviewImage(null)}
-              className="absolute top-3 right-3 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md px-3 py-1 text-[9px] font-black text-white rounded-full uppercase tracking-widest transition"
+              className="absolute top-4 right-4 z-10 bg-black/40 hover:bg-black/60 backdrop-blur-md px-4 py-2 text-[10px] font-black text-white rounded-full uppercase tracking-widest transition"
             >
               Close
             </button>
 
+            {/* Large Image */}
             <img
               src={previewImage.image}
               alt={previewImage.title}
-              className="w-full max-h-[50vh] object-cover bg-stone-100"
+              className="w-full max-h-[70vh] object-cover bg-stone-100"
             />
 
-            <div className="p-5">
-              <span className="text-[9px] font-black text-amber-600 uppercase tracking-widest">
+            {/* Details */}
+            <div className="p-8">
+              <span className="text-xs font-black text-amber-600 uppercase tracking-widest">
                 {previewImage.date}
               </span>
-              <h3 className="text-xl font-black text-slate-950 mt-2">
+
+              <h3 className="text-3xl font-black text-slate-950 mt-3">
                 {previewImage.title}
               </h3>
             </div>
@@ -636,3 +807,4 @@ const EventsSection: React.FC = () => {
 };
 
 export default EventsSection;
+

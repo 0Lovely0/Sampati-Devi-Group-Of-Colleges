@@ -128,7 +128,7 @@ export const MPHWNoticeBoardPage: React.FC = () => {
           MPHW Notices
         </h1>
 
-        <p className="text-white/80 max-w-2xl mx-auto">
+        <p className="text-white/80 max-w-2xl mx-auto text-lg">
           Access all academic circulars, training schedules, examination
           updates, fieldwork notices, community health program information,
           and official announcements for the Multipurpose Health Worker
@@ -234,8 +234,7 @@ export const MPHWNoticeBoardPage: React.FC = () => {
               {selectedNotice ? (
                 <>
                   <span
-                    style={{ color: MPHW_THEME.accent }}
-                    className="text-[10px] font-bold uppercase tracking-widest"
+                    className="text-[12px] font-bold uppercase tracking-widest text-white"
                   >
                     Multipurpose Health Worker Department
                   </span>
@@ -244,7 +243,7 @@ export const MPHWNoticeBoardPage: React.FC = () => {
                     {selectedNotice.notification_sub}
                   </h2>
 
-                  <p className="text-white/80 text-sm mt-6">
+                  <p className="text-white/80 text-lg mt-6">
                     {selectedNotice.notification_des}
                   </p>
 

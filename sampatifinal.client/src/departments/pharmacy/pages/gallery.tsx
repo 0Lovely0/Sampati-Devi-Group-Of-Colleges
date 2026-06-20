@@ -78,7 +78,7 @@ export const GalleryPage: React.FC = () => {
           style={{ backgroundColor: THEME.accent }}
         />
 
-        <p className="text-white/80 mt-6 text-sm max-w-2xl mx-auto">
+        <p className="text-white/80 mt-6 text-lg max-w-2xl mx-auto">
           Explore moments from academic activities, laboratory sessions,
           industrial visits, seminars, workshops, cultural events, and
           achievements of the Pharmacy Department.

@@ -22,7 +22,11 @@ type Errors = Partial<Record<string, string>>;
 const validate = (form: any, isEdit: boolean): Errors => {
   const errors: Errors = {};
 
-  if (!form.name?.trim()) errors.name = "Name is required";
+  if (!form.name?.trim()) {
+    errors.name = "Name is required";
+  } else if (form.name.trim().length < 3) {
+    errors.name = "Minimum 3 characters required";
+  }
   if (!form.yearSemester?.trim())
     errors.yearSemester = "Year/Semester is required";
   if (!form.collegeRank?.trim())
@@ -30,19 +34,32 @@ const validate = (form: any, isEdit: boolean): Errors => {
   if (!form.universityRank?.trim())
     errors.universityRank = "University rank is required";
   if (!form.batch?.trim()) errors.batch = "Batch is required";
-  if (!form.percentile?.trim()) errors.percentile = "Percentile is required";
+  if (!form.percentile?.trim()) {
+    errors.percentile = "Percentile is required";
+  } else if (isNaN(Number(form.percentile))) {
+    errors.percentile = "Percentile must be numeric";
+  }
 
   if (!form.departmentIds?.length)
     errors.departmentIds = "Select at least one department";
 
   // 🔥 FIXED LOGIC
+  // IMAGE REQUIRED
   if (!isEdit && !form.imageFile) {
     errors.imageFile = "Image is required";
   }
 
-  // 👉 NEW RULE (YOUR REQUIREMENT)
-  if (isEdit && form.imageFile === null) {
-    errors.imageFile = "Please upload new image";
+  // IMAGE VALIDATION
+  if (form.imageFile) {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(form.imageFile.type)) {
+      errors.imageFile = "Only JPG, PNG and WEBP files are allowed";
+    }
+
+    if (form.imageFile.size > 150 * 1024) {
+      errors.imageFile = "Image size must be 150 KB or less";
+    }
   }
 
   return errors;
@@ -209,34 +226,30 @@ export const ManageToppers: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 p-1">
       {/* HEADER */}
+      {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         {/* TITLE */}
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
-            Manage Toppers
+            Manage Placements
           </h1>
 
           <p className="mt-1 text-sm text-slate-500">
-            Create and manage toppers
+            Create and manage student placements
           </p>
         </div>
 
         {/* ACTION BUTTON */}
         <button
           onClick={() => {
-            setEditingTopper(null);
-            setFormData({
-              ...initialForm,
-              imageFile: null, // ✅ yaha reset
-            });
-            setFormData(initialForm);
+            setErrors({});
             setIsModalOpen(true);
           }}
           className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
         >
           <span className="flex items-center gap-2">
             <Plus size={16} />
-            Add Topper
+            Add Placement
           </span>
         </button>
       </div>
@@ -299,7 +312,7 @@ export const ManageToppers: React.FC = () => {
       </div>
 
       {/* GRID */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 items-stretch">
         {toppers
           .filter((t) =>
             departmentFilter === "all"
@@ -309,7 +322,7 @@ export const ManageToppers: React.FC = () => {
           .map((t) => (
             <div
               key={t.topperId}
-              className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
             >
               {/* IMAGE */}
               <div className="flex justify-center pt-4">
@@ -319,44 +332,47 @@ export const ManageToppers: React.FC = () => {
                       ? t.imagePath
                       : `${API_BASE_URL}/${t.imagePath || ""}`
                   }
-                  className="h-24 w-20 rounded-lg border border-slate-100 object-cover shadow-sm transition group-hover:scale-105"
+                  className="h-24 w-20 rounded-lg border border-slate-100 object-cover shadow-sm transition-transform duration-300 group-hover:scale-105"
                   alt="Topper"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
               </div>
 
               {/* CONTENT */}
-              <div className="space-y-0.5 p-2 text-center">
-                <h3 className="text-xs font-semibold leading-tight text-slate-800">
+              <div className="flex flex-1 flex-col p-3 text-center">
+                {/* NAME */}
+                <h3 className="min-h-[34px] line-clamp-2 text-xs font-semibold leading-tight text-slate-800">
                   {t.name}
                 </h3>
 
-                <p className="text-[11px] font-medium text-indigo-600">
+                {/* RANK */}
+                <p className="mt-1 min-h-[16px] text-[11px] font-medium text-indigo-600">
                   {t.collegeRank} / {t.universityRank}
                 </p>
 
-                <p className="text-[10px] uppercase tracking-wide text-slate-500">
+                {/* SEMESTER */}
+                <p className="mt-1 min-h-[14px] text-[10px] uppercase tracking-wide text-slate-500">
                   {t.yearSemester}
                 </p>
-              </div>
 
-              {/* ACTIONS */}
-              <div className="flex justify-center gap-2 px-2 pb-3">
-                <button
-                  onClick={() => openEdit(t)}
-                  className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
-                >
-                  <Pencil size={12} />
-                  Edit
-                </button>
+                {/* ACTIONS */}
+                <div className="mt-auto pt-3 flex justify-center gap-2">
+                  <button
+                    onClick={() => openEdit(t)}
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-200"
+                  >
+                    <Pencil size={12} />
+                    Edit
+                  </button>
 
-                <button
-                  onClick={() => handleDelete(t.topperId)}
-                  className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
-                >
-                  <Trash2 size={12} />
-                  Delete
-                </button>
+                  <button
+                    onClick={() => handleDelete(t.topperId)}
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-200"
+                  >
+                    <Trash2 size={12} />
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -487,14 +503,64 @@ export const ManageToppers: React.FC = () => {
 
               {/* IMAGE */}
               <input
-                key={editingTopper?.topperId || "new"} // 🔥 IMPORTANT FIX
+                key={editingTopper?.topperId || "new"}
                 type="file"
-                onChange={(e) =>
+                accept=".jpg,.jpeg,.png,.webp"
+                className={`w-full p-3 border rounded-xl ${
+                  errors.imageFile ? "border-red-500" : "border-slate-200"
+                }`}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+
+                  if (!file) return;
+
+                  const allowedTypes = [
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/png",
+                    "image/webp",
+                  ];
+
+                  if (!allowedTypes.includes(file.type)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      imageFile: "Only JPG, PNG and WEBP files are allowed",
+                    }));
+
+                    setFormData({
+                      ...formData,
+                      imageFile: null,
+                    });
+
+                    e.target.value = "";
+                    return;
+                  }
+
+                  if (file.size > 150 * 1024) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      imageFile: "Image size must be 150 KB or less",
+                    }));
+
+                    setFormData({
+                      ...formData,
+                      imageFile: null,
+                    });
+
+                    e.target.value = "";
+                    return;
+                  }
+
+                  setErrors((prev) => ({
+                    ...prev,
+                    imageFile: "",
+                  }));
+
                   setFormData({
                     ...formData,
-                    imageFile: e.target.files?.[0] || null,
-                  })
-                }
+                    imageFile: file,
+                  });
+                }}
               />
               {errors.imageFile && (
                 <p className="text-red-500 text-xs mt-1">{errors.imageFile}</p>

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import {
-  getAllToppers,
-  type Topper,
-} from "../../../services/toppersService";
+import { getAllToppers, type Topper } from "../../../services/toppersService";
 
 const API_BASE_URL =
   window.location.hostname === "localhost"
@@ -36,7 +33,7 @@ const MPHWToppersSection: React.FC = () => {
 
         const list = Array.isArray(res)
           ? res
-          : (res as { data?: Topper[] })?.data ?? [];
+          : ((res as { data?: Topper[] })?.data ?? []);
 
         setToppers(list);
       } catch (err) {
@@ -51,10 +48,8 @@ const MPHWToppersSection: React.FC = () => {
 
   const filteredToppers = toppers.filter((t: any) =>
     t?.departments?.some(
-      (d: any) =>
-        normalize(d?.departmentName) ===
-        normalize(TARGET_DEPARTMENT)
-    )
+      (d: any) => normalize(d?.departmentName) === normalize(TARGET_DEPARTMENT),
+    ),
   );
 
   const list = [...filteredToppers, ...filteredToppers];
@@ -82,7 +77,7 @@ const MPHWToppersSection: React.FC = () => {
           Excellence
         </span>
 
-        <h2 className="text-3xl md:text-4xl font-black text-white mt-4">
+        <h2 className="text-3xl md:text-5xl font-black text-white mt-4">
           MPHW Achievers
         </h2>
 
@@ -91,31 +86,36 @@ const MPHWToppersSection: React.FC = () => {
           style={{ backgroundColor: MPHW_THEME.accent }}
         />
 
-        <p className="mt-4 text-white/70 text-xs max-w-xl mx-auto">
-          Celebrating the outstanding performers, academic achievers,
-          community health leaders, and top-ranking students of the
-          Multipurpose Health Worker Department.
+        <p className="mt-4 text-white/70 text-lg max-w-2xl mx-auto">
+          Celebrating the outstanding performers, academic achievers, community
+          health leaders, and top-ranking students of the Multipurpose Health
+          Worker Department.
         </p>
       </div>
 
       {/* SCROLL */}
-      <div className="relative w-full overflow-hidden -mt-8">
+      {/* SCROLL SECTION */}
+      <div className="relative w-full -mt-18 overflow-hidden py-8">
         {loading ? (
-          <div
-            className="text-center text-sm py-10 font-medium"
-            style={{ color: MPHW_THEME.primary }}
-          >
-            Loading MPHW achievers...
+          <div className="w-screen flex items-center justify-center py-16">
+            <p
+              className="text-sm font-medium"
+              style={{ color: MPHW_THEME.primary }}
+            >
+              Loading MPHW achievers...
+            </p>
           </div>
         ) : filteredToppers.length === 0 ? (
-          <div
-            className="text-center text-sm py-10 font-medium"
-            style={{ color: MPHW_THEME.primary }}
-          >
-            No MPHW achievers found.
+          <div className="w-screen flex items-center justify-center py-16">
+            <p
+              className="text-sm font-medium"
+              style={{ color: MPHW_THEME.primary }}
+            >
+              No MPHW achievers found.
+            </p>
           </div>
         ) : (
-          <div className="flex gap-3 px-4 animate-[scroll_25s_linear_infinite] min-w-max">
+          <div className="flex w-max animate-[scroll_25s_linear_infinite] gap-6 px-4 mx-auto">
             {list.map((item, index) => (
               <div
                 key={`${item.topperId}-${index}`}
@@ -123,55 +123,64 @@ const MPHWToppersSection: React.FC = () => {
                   setActiveId(
                     activeId === String(item.topperId)
                       ? null
-                      : String(item.topperId)
+                      : String(item.topperId),
                   )
                 }
-                className="relative w-[160px] flex-shrink-0 rounded-xl overflow-hidden border bg-white shadow-sm group cursor-pointer"
-                style={{
-                  borderColor: MPHW_THEME.secondary,
-                }}
+                className="relative w-[180px] h-[240px] flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-500 group border border-white/10"
               >
                 {/* IMAGE */}
-                <div className="h-44 w-full overflow-hidden bg-stone-100">
+                <div className="absolute inset-0 bg-slate-900">
                   <img
                     src={`${API_BASE_URL}/${item.imagePath}`}
                     alt={item.name}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder-topper.jpg";
+                    }}
                   />
                 </div>
 
-                {/* NAME */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                  <h3 className="text-xs font-black text-white truncate">
+                {/* NAME PLATE */}
+                <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                  <h3 className="text-sm font-semibold text-white tracking-wide">
                     {item.name}
                   </h3>
                 </div>
 
-                {/* DETAILS */}
+                {/* PREMIUM OVERLAY */}
                 <div
-                  className={`absolute inset-0 flex flex-col items-center justify-center text-center px-3 transition-all duration-300 ${
-                    activeId === String(item.topperId)
-                      ? "opacity-100"
-                      : "opacity-0 group-hover:opacity-100"
-                  }`}
+                  className={`absolute inset-0 backdrop-blur-md flex flex-col justify-center items-center text-center p-6 transition-all duration-500 ease-out
+            ${
+              activeId === String(item.topperId)
+                ? "opacity-100"
+                : "opacity-0 md:group-hover:opacity-100"
+            }`}
                   style={{
-                    backgroundColor: "rgba(234,88,12,0.95)",
+                    backgroundColor: "rgba(234,88,12,0.82)",
                   }}
                 >
-                  <p
-                    className="text-[10px] font-bold uppercase tracking-widest"
-                    style={{ color: "#FED7AA" }}
-                  >
-                    Rank: {item.collegeRank}
-                  </p>
+                  <div className="space-y-3">
+                    <div
+                      className="inline-flex items-center px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider"
+                      style={{
+                        color: "#FED7AA",
+                        borderColor: "rgba(255,255,255,0.15)",
+                        backgroundColor: "rgba(255,255,255,0.05)",
+                      }}
+                    >
+                      Rank #{item.collegeRank}
+                    </div>
 
-                  <p className="text-[10px] text-white/80 mt-2">
-                    {item.yearSemester}
-                  </p>
+                    <div className="text-xs text-white font-medium">
+                      {item.yearSemester}
+                    </div>
 
-                  <p className="text-[10px] text-white/70">
-                    {item.batch}
-                  </p>
+                    <div className="text-[10px] text-white/70">
+                      {item.batch}
+                    </div>
+                  </div>
+
+                  <div className="absolute inset-2 border border-white/10 rounded-xl pointer-events-none" />
                 </div>
               </div>
             ))}
@@ -196,15 +205,15 @@ const MPHWToppersSection: React.FC = () => {
       {/* ANIMATION */}
       <style>
         {`
-          @keyframes scroll {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-50%);
-            }
-          }
-        `}
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-50% - 12px));
+      }
+    }
+  `}
       </style>
     </section>
   );

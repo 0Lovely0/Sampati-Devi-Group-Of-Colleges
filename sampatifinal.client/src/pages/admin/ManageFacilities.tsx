@@ -97,8 +97,8 @@ export const ManageFacilities: React.FC = () => {
           error = "Only JPG, PNG, WEBP allowed";
         }
 
-        if (value.size > 10 * 1024) {
-          error = "Max size is 10 KB";
+        if (value.size > 150 * 1024) {
+          error = "Max size is 150 KB";
         }
       }
     }
@@ -256,11 +256,11 @@ export const ManageFacilities: React.FC = () => {
       </div>
 
       {/* Grid section */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 items-stretch">
         {facilities.map((f) => (
           <div
             key={f.facilityId}
-            className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
             {/* IMAGE */}
             <div className="relative overflow-hidden">
@@ -279,20 +279,22 @@ export const ManageFacilities: React.FC = () => {
             </div>
 
             {/* CONTENT */}
-            <div className="p-3">
-              <h3 className="line-clamp-1 text-sm font-semibold text-slate-800">
+            <div className="flex flex-1 flex-col p-3">
+              {/* HEADING */}
+              <h3 className="min-h-[40px] line-clamp-2 text-sm font-semibold text-slate-800">
                 {f.descriptionHeading}
               </h3>
 
-              <p className="mt-1 line-clamp-2 text-xs text-slate-500">
+              {/* DESCRIPTION */}
+              <p className="mt-1 min-h-[36px] line-clamp-2 text-xs text-slate-500">
                 {f.description}
               </p>
 
-              {/* ALWAYS VISIBLE ACTIONS (LIKE BANNER STYLE) */}
-              <div className="mt-3 flex gap-2">
+              {/* ACTIONS */}
+              <div className="mt-auto pt-3 flex gap-2">
                 <button
                   onClick={() => openEdit(f)}
-                  className="flex items-center justify-center gap-1 rounded-lg bg-indigo-100 px-3 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                  className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-indigo-100 px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-200"
                 >
                   <Pencil size={13} />
                   Edit
@@ -300,7 +302,7 @@ export const ManageFacilities: React.FC = () => {
 
                 <button
                   onClick={() => handleDelete(f.facilityId)}
-                  className="flex items-center justify-center gap-1 rounded-lg bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                  className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-200"
                 >
                   <Trash2 size={13} />
                   Delete

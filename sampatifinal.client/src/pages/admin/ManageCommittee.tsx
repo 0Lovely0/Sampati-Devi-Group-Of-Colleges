@@ -28,13 +28,19 @@ export const ManageCommittee: React.FC = () => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
-    committeeMasterId: 1,
-    positionMasterId: 1,
-    memberName: "",
-    displayOrder: 1,
-    imageFile: null as File | null,
-  });
+ const [formData, setFormData] = useState<{
+  committeeMasterId: number;
+  positionMasterId: number;
+  memberName: string;
+  displayOrder: number;
+  imageFile: File | null;
+}>({
+  committeeMasterId: 0,
+  positionMasterId: 0,
+  memberName: "",
+  displayOrder: 1,
+  imageFile: null,
+});
 
   useEffect(() => {
     fetchInitialData();
@@ -58,7 +64,62 @@ export const ManageCommittee: React.FC = () => {
     }
   };
 
+  const [errors, setErrors] = useState({
+    committeeMasterId: "",
+    positionMasterId: "",
+    memberName: "",
+    imageFile: "",
+  });
+
+  const validateForm = () => {
+    const newErrors = {
+      committeeMasterId: "",
+      positionMasterId: "",
+      memberName: "",
+      imageFile: "",
+    };
+
+    let isValid = true;
+
+    if (!formData.committeeMasterId) {
+      newErrors.committeeMasterId = "Committee is required";
+      isValid = false;
+    }
+
+    if (!formData.positionMasterId) {
+      newErrors.positionMasterId = "Position is required";
+      isValid = false;
+    }
+
+    if (!formData.memberName.trim()) {
+      newErrors.memberName = "Member name is required";
+      isValid = false;
+    }
+
+    // Image Required
+    if (!formData.imageFile && !editingId) {
+      newErrors.imageFile = "Image is required";
+      isValid = false;
+    }
+
+    // Max 10 KB validation
+    if (formData.imageFile) {
+      const maxSize = 150 * 1024; // 10 KB
+
+      if (formData.imageFile.size > maxSize) {
+        newErrors.imageFile = "Image size must be 150 KB or less";
+        isValid = false;
+      }
+    }
+
+    setErrors(newErrors);
+
+    return isValid;
+  };
+
   const handleSave = async () => {
+    if (!validateForm()) return;
+
     setSubmitting(true);
     const data = new FormData();
 
@@ -102,14 +163,20 @@ export const ManageCommittee: React.FC = () => {
       });
     } else {
       setEditingId(null);
-      setFormData({
-        committeeMasterId: 1,
-        positionMasterId: 1,
-        memberName: "",
-        displayOrder: 1,
-        imageFile: null,
-      });
+     setFormData({
+  committeeMasterId: 0,
+  positionMasterId: 0,
+  memberName: "",
+  displayOrder: 1,
+  imageFile: null,
+});
     }
+    setErrors({
+  committeeMasterId: "",
+  positionMasterId: "",
+  memberName: "",
+  imageFile: "",
+});
     setIsModalOpen(true);
   };
 
@@ -294,6 +361,7 @@ export const ManageCommittee: React.FC = () => {
                   Committee
                 </label>
                 <select
+                
                   className="w-full mt-1 p-3 border rounded-xl text-sm focus:border-indigo-500 outline-none"
                   value={formData.committeeMasterId}
                   onChange={(e) =>
@@ -303,12 +371,19 @@ export const ManageCommittee: React.FC = () => {
                     })
                   }
                 >
+                  <option value={0}>Select Committee</option>
+                 
                   {committees.map((c) => (
                     <option key={c.value} value={c.value}>
                       {c.label}
                     </option>
                   ))}
                 </select>
+                 {errors.committeeMasterId && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.committeeMasterId}
+                    </p>
+                  )}
               </div>
 
               {/* POSITION */}
@@ -316,6 +391,7 @@ export const ManageCommittee: React.FC = () => {
                 <label className="text-xs font-medium text-slate-600">
                   Position
                 </label>
+                
                 <select
                   className="w-full mt-1 p-3 border rounded-xl text-sm focus:border-indigo-500 outline-none"
                   value={formData.positionMasterId}
@@ -326,12 +402,19 @@ export const ManageCommittee: React.FC = () => {
                     })
                   }
                 >
+                  <option value={0}>Select Position</option>
+                  
                   {positions.map((p) => (
                     <option key={p.value} value={p.value}>
                       {p.label}
                     </option>
                   ))}
                 </select>
+                {errors.positionMasterId && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.positionMasterId}
+                    </p>
+                  )}
               </div>
 
               {/* NAME */}
@@ -347,6 +430,11 @@ export const ManageCommittee: React.FC = () => {
                     setFormData({ ...formData, memberName: e.target.value })
                   }
                 />
+                {errors.memberName && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.memberName}
+                  </p>
+                )}
               </div>
 
               {/* IMAGE UPLOAD */}
@@ -364,14 +452,39 @@ export const ManageCommittee: React.FC = () => {
 
                   <input
                     type="file"
+                    accept="image/*"
                     className="hidden"
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+
+                      if (!file) return;
+
+                      if (file.size > 150 * 1024) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          imageFile: "Image size must be 150 KB or less",
+                        }));
+
+                        e.target.value = "";
+                        return;
+                      }
+
+                      setErrors((prev) => ({
+                        ...prev,
+                        imageFile: "",
+                      }));
+
                       setFormData({
                         ...formData,
-                        imageFile: e.target.files?.[0] || null,
-                      })
-                    }
+                        imageFile: file,
+                      });
+                    }}
                   />
+                  {errors.imageFile && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.imageFile}
+                    </p>
+                  )}
                 </label>
               </div>
             </div>

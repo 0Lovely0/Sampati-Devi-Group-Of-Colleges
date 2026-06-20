@@ -84,7 +84,7 @@ export const VideoGalleryPage: React.FC = () => {
           style={{ backgroundColor: MPHW_THEME.accent }}
         />
 
-        <p className="text-white/80 mt-6 max-w-2xl mx-auto text-sm md:text-base">
+        <p className="text-white/80 mt-6 max-w-2xl mx-auto text-sm md:text-lg">
           Explore field training activities, community health programs,
           awareness campaigns, workshops, seminars, practical demonstrations,
           outreach initiatives, and highlights from the Multipurpose Health

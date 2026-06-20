@@ -77,7 +77,7 @@ const ImageCarousel = () => {
           bulletActiveClass:
             "swiper-pagination-bullet-active !bg-[#3B82F6]",
         }}
-        className="h-[35vh] md:h-[85vh] w-full"
+        className="h-[35vh] md:h-[55vh] w-full"
       >
         {banners.map((banner) => (
           <SwiperSlide key={banner.bnnrId}>
@@ -85,7 +85,7 @@ const ImageCarousel = () => {
               <img
                 src={`${API_BASE_URL}/${banner.bnnrImage}`}
                 alt={banner.bnnrCat}
-                className="h-full w-full object-cover top-5"
+                className="h-full w-full object-full top-5"
               />
             </div>
           </SwiperSlide>

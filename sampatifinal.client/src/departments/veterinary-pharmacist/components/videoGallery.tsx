@@ -65,13 +65,13 @@ const VideoGallery: React.FC = () => {
           background: "linear-gradient(135deg,#15803D 0%,#22C55E 100%)",
         }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
           Veterinary Pharmacist Videos
         </h2>
 
         <div className="h-1 w-20 bg-[#22C55E] mx-auto rounded-full" />
 
-        <p className="text-green-100 mt-4 max-w-xl mx-auto text-xs md:text-sm">
+        <p className="text-green-100 mt-4 max-w-2xl mx-auto text-xs md:text-lg">
           Explore veterinary workshops, academic activities, seminars,
           clinical training sessions, and department highlights.
         </p>

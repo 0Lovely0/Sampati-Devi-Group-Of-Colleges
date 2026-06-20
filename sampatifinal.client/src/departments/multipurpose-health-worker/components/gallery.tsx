@@ -71,7 +71,7 @@ const GallerySection: React.FC = () => {
           background: `linear-gradient(135deg, ${MPHW_THEME.primary} 0%, ${MPHW_THEME.accent} 100%)`,
         }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
           MPHW Gallery
         </h2>
 
@@ -80,7 +80,7 @@ const GallerySection: React.FC = () => {
           style={{ backgroundColor: MPHW_THEME.accent }}
         />
 
-        <p className="text-white/80 mt-4 max-w-xl mx-auto text-xs">
+        <p className="text-white/80 mt-4 max-w-2xl mx-auto text-lg">
           Explore moments from field training activities, community health
           programs, health awareness campaigns, workshops, seminars,
           practical sessions, outreach initiatives, and achievements of the

@@ -85,7 +85,7 @@ const NoticeBoard: React.FC = () => {
                       Notice Board
                     </h2>
 
-                    <p className="text-[10px] uppercase tracking-widest text-teal-100 font-bold">
+                    <p className="text-[15px] uppercase tracking-widest text-teal-100 font-bold">
                       B.Sc Nursing
                     </p>
                   </div>
@@ -131,7 +131,7 @@ const NoticeBoard: React.FC = () => {
           <div className="lg:col-span-8">
             <div className="h-[500px] bg-white p-6 sm:p-8 rounded-3xl border border-teal-100 shadow-sm flex flex-col">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-black text-[#0F766E]">
+                <h3 className="text-2xl font-black text-[#0F766E]">
                   Latest Updates
                 </h3>
 
@@ -153,7 +153,7 @@ const NoticeBoard: React.FC = () => {
                         className="flex items-center gap-4 p-4 rounded-xl border border-stone-100 hover:border-[#14B8A6] hover:bg-[#CCFBF1] transition-all duration-300"
                       >
                         <span
-                          className="shrink-0 text-[10px] font-bold px-3 py-1 rounded-lg"
+                          className="shrink-0 text-[15px] font-bold px-3 py-1 rounded-lg"
                           style={{
                             color: "#0F766E",
                             backgroundColor: "#CCFBF1",
@@ -164,7 +164,7 @@ const NoticeBoard: React.FC = () => {
                           )}
                         </span>
 
-                        <p className="text-sm font-medium text-slate-700 line-clamp-1">
+                        <p className="text-lg font-medium text-slate-700 line-clamp-1">
                           {notice.notification_sub}
                         </p>
                       </div>

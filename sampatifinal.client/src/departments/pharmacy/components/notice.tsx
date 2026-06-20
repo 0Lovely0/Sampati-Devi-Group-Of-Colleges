@@ -83,22 +83,22 @@ const NoticeBoard: React.FC = () => {
                   </div>
 
                   <div>
-                    <h2 className="text-xl font-black text-white">
+                    <h2 className="text-2xl font-black text-white">
                       Notice Board
                     </h2>
 
-                    <p className="text-[10px] uppercase tracking-widest text-purple-100 font-bold">
+                    <p className="text-[12px] uppercase tracking-widest text-purple-100 font-bold">
                       Pharmacy Department
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-purple-100 font-bold text-xs uppercase tracking-widest mb-6">
+                <div className="flex items-center gap-2 text-purple-100 font-bold text-lg uppercase tracking-widest mb-6">
                   <Sparkles size={14} />
                   Real-time Updates
                 </div>
 
-                <p className="text-purple-50 text-sm leading-relaxed">
+                <p className="text-purple-50 text-lg leading-relaxed">
                   Access all academic circulars, examination updates,
                   admissions information, internship opportunities, and
                   official announcements for the Pharmacy department.
@@ -110,14 +110,14 @@ const NoticeBoard: React.FC = () => {
                   <h3 className="text-2xl font-black text-white">
                     {notices.length}
                   </h3>
-                  <p className="text-[9px] uppercase tracking-widest text-purple-100 mt-1">
+                  <p className="text-[12px] uppercase tracking-widest text-purple-100 mt-1">
                     Active
                   </p>
                 </div>
 
                 <div className="rounded-2xl bg-white/10 p-4 text-center border border-white/10">
                   <h3 className="text-2xl font-black text-white">Live</h3>
-                  <p className="text-[9px] uppercase tracking-widest text-purple-100 mt-1">
+                  <p className="text-[12px] uppercase tracking-widest text-purple-100 mt-1">
                     Status
                   </p>
                 </div>
@@ -129,11 +129,11 @@ const NoticeBoard: React.FC = () => {
           <div className="lg:col-span-8">
             <div className="h-[500px] bg-white p-6 sm:p-8 rounded-3xl border border-purple-100 shadow-sm flex flex-col">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-black text-[#7C3AED]">
+                <h3 className="text-2xl font-black text-[#7C3AED]">
                   Latest Updates
                 </h3>
 
-                <span className="text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#EDE9FE] text-[#7C3AED]">
+                <span className="text-[12px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#EDE9FE] text-[#7C3AED]">
                   Auto Scrolling
                 </span>
               </div>
@@ -151,7 +151,7 @@ const NoticeBoard: React.FC = () => {
                         className="flex items-center gap-4 p-4 rounded-xl border border-stone-100 hover:border-[#A855F7] hover:bg-[#F5F3FF] transition-all duration-300"
                       >
                         <span
-                          className="shrink-0 text-[10px] font-bold px-3 py-1 rounded-lg"
+                          className="shrink-0 text-[12px] font-bold px-3 py-1 rounded-lg"
                           style={{
                             color: "#7C3AED",
                             backgroundColor: "#EDE9FE",
@@ -160,7 +160,7 @@ const NoticeBoard: React.FC = () => {
                           {formatDate(notice.notification_date)}
                         </span>
 
-                        <p className="text-sm font-medium text-slate-700 line-clamp-1">
+                        <p className="text-lg font-medium text-slate-700 line-clamp-1">
                           {notice.notification_sub}
                         </p>
                       </div>

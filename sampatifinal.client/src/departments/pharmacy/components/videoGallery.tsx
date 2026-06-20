@@ -65,13 +65,13 @@ const VideoGallery: React.FC = () => {
           background: "linear-gradient(135deg,#7C3AED 0%,#A855F7 100%)",
         }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
           Pharmacy Videos
         </h2>
 
         <div className="h-1 w-20 bg-[#A855F7] mx-auto rounded-full" />
 
-        <p className="text-purple-100 mt-4 max-w-xl mx-auto text-xs md:text-sm">
+        <p className="text-purple-100 mt-4 max-w-2xl mx-auto text-xs md:text-lg">
           Explore pharmacy workshops, laboratory demonstrations, industrial
           visits, seminars, academic activities, research presentations, and
           department highlights.

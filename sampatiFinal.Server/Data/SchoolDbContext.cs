@@ -17,10 +17,8 @@ namespace sampatiFinal.Server.Data
         public DbSet<Gallery> Gallery { get; set; }
         public DbSet<GalleryCategoryDepartment> GalleryCategoryDepartments { get; set; }
         public DbSet<GalleryDepartment> GalleryDepartment { get; set; }
-
         public DbSet<GalleryCategory> GalleryCategories { get; set; }
         public DbSet<Department> department { get; set; }
-
         public DbSet<StaffMaster> staff_master { get; set; }
         public DbSet<Notification> notification { get; set; }
         public DbSet<NewsMaster> NewsMasters { get; set; }
@@ -39,6 +37,15 @@ namespace sampatiFinal.Server.Data
         public DbSet<FacilityMaster> FacilityMasters { get; set; }
         public DbSet<Placement> Placements { get; set; }
         public DbSet<PlacementDepartment> PlacementDepartments { get; set; }
+
+        public DbSet<AdmissionEnquiry> AdmissionEnquiry { get; set; }
+        public DbSet<AdmissionEnquiryDepartment> AdmissionEnquiryDepartment { get; set; }
+
+        public DbSet<StudentMaster> StudentMasters { get; set; }
+        public DbSet<DonationInquiry> DonationInquiries { get; set; }
+        public DbSet<ApplyNow> ApplyNows { get; set; }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BannerDepartment>()
@@ -62,8 +69,9 @@ namespace sampatiFinal.Server.Data
                 .HasOne(gd => gd.Department)
                 .WithMany(d => d.GalleryDepartments)
                 .HasForeignKey(gd => gd.DepartmentId);
+
             modelBuilder.Entity<VideoDepartment>()
-        .HasKey(vd => new { vd.VideoId, vd.DepartmentId });
+            .HasKey(vd => new { vd.VideoId, vd.DepartmentId });
 
             modelBuilder.Entity<VideoDepartment>()
                 .HasOne(vd => vd.Video)
@@ -76,7 +84,7 @@ namespace sampatiFinal.Server.Data
                 .HasForeignKey(vd => vd.DepartmentId);
 
             modelBuilder.Entity<EventDepartment>()
-        .HasKey(ed => new { ed.EventId, ed.DepartmentId });
+            .HasKey(ed => new { ed.EventId, ed.DepartmentId });
 
             modelBuilder.Entity<EventDepartment>()
                 .HasOne(ed => ed.Event)
@@ -87,8 +95,9 @@ namespace sampatiFinal.Server.Data
                 .HasOne(ed => ed.Department)
                 .WithMany()
                 .HasForeignKey(ed => ed.DepartmentId);
+
             modelBuilder.Entity<TopperDepartment>()
-        .HasKey(td => new { td.TopperId, td.DepartmentId });
+            .HasKey(td => new { td.TopperId, td.DepartmentId });
 
             modelBuilder.Entity<TopperDepartment>()
                 .HasOne(td => td.Topper)
@@ -101,7 +110,7 @@ namespace sampatiFinal.Server.Data
                 .HasForeignKey(td => td.DepartmentId);
 
             modelBuilder.Entity<PlacementDepartment>()
-    .HasKey(pd => new { pd.PlacementId, pd.DepartmentId });
+            .HasKey(pd => new { pd.PlacementId, pd.DepartmentId });
 
             modelBuilder.Entity<PlacementDepartment>()
                 .HasOne(pd => pd.Placement)
@@ -114,6 +123,42 @@ namespace sampatiFinal.Server.Data
                 .WithMany(d => d.PlacementDepartments)
                 .HasForeignKey(pd => pd.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AdmissionEnquiryDepartment>()
+.HasKey(x => new { x.AdmissionEnquiryId, x.DepartmentId });
+
+            modelBuilder.Entity<AdmissionEnquiryDepartment>()
+                .HasOne(x => x.AdmissionEnquiry)
+                .WithMany(x => x.AdmissionEnquiryDepartments)
+                .HasForeignKey(x => x.AdmissionEnquiryId);
+
+
+
+            modelBuilder.Entity<StudentMaster>()
+            .ToTable("student_master");
+
+            modelBuilder.Entity<StudentMaster>()
+                .HasKey(x => x.StudentId);
+
+            modelBuilder.Entity<DonationInquiry>()
+           .ToTable("donation_inquiry");
+
+            modelBuilder.Entity<DonationInquiry>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<ApplyNow>()
+            .ToTable("apply_now_inquiries");
+
+            modelBuilder.Entity<ApplyNow>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<ContactMessage>()
+                 .ToTable("contact_messages");
+
+            modelBuilder.Entity<ContactMessage>()
+                .HasKey(x => x.Id);
+
+
         }
     }
 }

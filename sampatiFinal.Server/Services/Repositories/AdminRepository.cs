@@ -599,25 +599,22 @@ namespace sampatiFinal.Server.Services.Repositories
         }
         #endregion
 
-        #region topper
+       #region Topper
         public async Task CreateTopperAsync(Topper topper)
-        {
-            await _context.Toppers.AddAsync(topper);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateTopperAsync(Topper topper)
+{
+    await _context.Toppers.AddAsync(topper);
+        await _context.SaveChangesAsync();
+}
+public async Task UpdateTopperAsync(Topper topper)
         {
             _context.Toppers.Update(topper);
             await _context.SaveChangesAsync();
         }
-
         public async Task DeleteTopperAsync(Topper topper)
         {
             _context.Toppers.Remove(topper);
             await _context.SaveChangesAsync();
         }
-
         public async Task<Topper> GetTopperByIdAsync(int id)
         {
             return await _context.Toppers
@@ -625,15 +622,15 @@ namespace sampatiFinal.Server.Services.Repositories
                 .ThenInclude(td => td.Department)
                 .FirstOrDefaultAsync(t => t.TopperId == id);
         }
-
         public async Task<List<Topper>> GetAllToppersAsync()
         {
             return await _context.Toppers
-    .Include(t => t.TopperDepartments)
-    .ThenInclude(td => td.Department)
-    .ToListAsync();
+            .Include(t => t.TopperDepartments)
+            .ThenInclude(td => td.Department)
+            .ToListAsync();
         }
         #endregion
+ 
 
         #region committee
         public async Task<IEnumerable<CommitteeMember>> GetAllCommitteeMembersAsync()
@@ -780,6 +777,123 @@ namespace sampatiFinal.Server.Services.Repositories
                 .ToListAsync();
         }
         #endregion
+
+        #region AdmissionEnquiry
+        public async Task<List<AdmissionEnquiry>> GetAllAdmissionEnquiriesAsync()
+        {
+            return await _context.AdmissionEnquiry
+                .Include(x => x.AdmissionEnquiryDepartments)
+                .ThenInclude(x => x.Department)
+                .ToListAsync();
+        }
+
+        public async Task<AdmissionEnquiry?> GetAdmissionEnquiryByIdAsync(int id)
+        {
+            return await _context.AdmissionEnquiry
+                .Include(x => x.AdmissionEnquiryDepartments)
+                .ThenInclude(x => x.Department)
+                .FirstOrDefaultAsync(x => x.AdmissionEnquiryId == id);
+        }
+
+        public async Task AddAdmissionEnquiryAsync(AdmissionEnquiry enquiry)
+        {
+            await _context.AdmissionEnquiry.AddAsync(enquiry);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAdmissionEnquiryAsync(AdmissionEnquiry enquiry)
+        {
+            _context.AdmissionEnquiry.Update(enquiry);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAdmissionEnquiryAsync(AdmissionEnquiry enquiry)
+        {
+            _context.AdmissionEnquiry.Remove(enquiry);
+            await _context.SaveChangesAsync();
+        }
+
+        #endregion
+
+
+        #region Student Adoption
+
+        public async Task CreateStudentAsync(StudentMaster student)
+        {
+            await _context.StudentMasters.AddAsync(student);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<StudentMaster>> GetAllStudentsAsync() =>
+            await _context.StudentMasters
+                .OrderByDescending(x => x.StudentId)
+                .ToListAsync();
+
+        public async Task<StudentMaster?> GetStudentByIdAsync(int id) =>
+            await _context.StudentMasters
+                .FirstOrDefaultAsync(x => x.StudentId == id);
+
+        public async Task UpdateStudentAsync(StudentMaster student)
+        {
+            _context.StudentMasters.Update(student);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteStudentAsync(StudentMaster student)
+        {
+            _context.StudentMasters.Remove(student);
+            await _context.SaveChangesAsync();
+        }
+        public async Task CreateDonationInquiryAsync(DonationInquiry inquiry)
+        {
+            await _context.DonationInquiries.AddAsync(inquiry);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<DonationInquiry>> GetDonationInquiriesAsync()
+        {
+            return await _context.DonationInquiries
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+        }
+        #endregion
+
+        #region Apply Now
+        public async Task CreateApplyNowAsync(ApplyNow applyNow)
+        {
+            await _context.ApplyNows.AddAsync(applyNow);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<List<ApplyNow>> GetApplyNowListAsync() =>
+            await _context.ApplyNows
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+        public async Task<List<ApplyNow>> GetApplyNowByTypeAsync(string formType) =>
+            await _context.ApplyNows
+                .Where(x => x.FormType == formType)
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+        public async Task<ApplyNow?> GetApplyNowByIdAsync(int id) =>
+            await _context.ApplyNows
+                .FirstOrDefaultAsync(x => x.Id == id);
+        public async Task DeleteApplyNowAsync(ApplyNow applyNow)
+        {
+            _context.ApplyNows.Remove(applyNow);
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+        #region Contact Us
+        public async Task CreateContactMessageAsync(ContactMessage message)
+        {
+            await _context.ContactMessages.AddAsync(message);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<List<ContactMessage>> GetAllContactMessagesAsync() =>
+            await _context.ContactMessages
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
+       #endregion
 
 
     }

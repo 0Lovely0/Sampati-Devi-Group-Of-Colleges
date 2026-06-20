@@ -121,7 +121,7 @@ export const NewsPage: React.FC = () => {
           style={{ backgroundColor: MPHW_THEME.accent }}
         />
 
-        <p className="text-white/80 mt-6 text-sm md:text-base max-w-2xl mx-auto">
+        <p className="text-white/80 mt-6 text-sm md:text-lg max-w-2xl mx-auto">
           Stay updated with the latest announcements, training programs,
           examinations, workshops, seminars, community health initiatives,
           outreach activities, and Multipurpose Health Worker Department
@@ -155,7 +155,7 @@ export const NewsPage: React.FC = () => {
                   }}
                 >
                   <span
-                    className={`text-[10px] font-black uppercase tracking-widest ${
+                    className={`text-[12px] font-black uppercase tracking-widest ${
                       active ? "text-white/90" : ""
                     }`}
                     style={{
@@ -168,7 +168,7 @@ export const NewsPage: React.FC = () => {
                   </span>
 
                   <h3
-                    className={`font-black mt-2 mb-3 text-sm ${
+                    className={`font-black mt-2 mb-3 text-lg ${
                       active ? "text-white" : "text-slate-900"
                     }`}
                   >
@@ -176,7 +176,7 @@ export const NewsPage: React.FC = () => {
                   </h3>
 
                   <p
-                    className={`text-[10px] font-medium ${
+                    className={`text-[12px] font-medium ${
                       active ? "text-white/80" : "text-slate-500"
                     }`}
                   >
@@ -195,7 +195,7 @@ export const NewsPage: React.FC = () => {
             >
               <div className="flex items-center gap-4 mb-6 flex-wrap">
                 <span
-                  className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest"
+                  className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest"
                   style={{
                     backgroundColor: MPHW_THEME.secondary,
                     color: MPHW_THEME.primary,
@@ -204,7 +204,7 @@ export const NewsPage: React.FC = () => {
                   {selectedNews.news_cat}
                 </span>
 
-                <span className="text-xs font-medium text-slate-500">
+                <span className="text-lg font-medium text-slate-500">
                   {new Date(selectedNews.news_date).toLocaleDateString()}
                 </span>
               </div>
@@ -218,7 +218,7 @@ export const NewsPage: React.FC = () => {
                 style={{ backgroundColor: MPHW_THEME.accent }}
               />
 
-              <p className="text-slate-600 leading-relaxed text-sm md:text-base mb-10">
+              <p className="text-slate-600 leading-relaxed text-lg md:text-base mb-10">
                 {selectedNews.news_description}
               </p>
 

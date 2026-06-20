@@ -159,10 +159,10 @@ const ManageNews: React.FC = () => {
         hasError = true;
       }
 
-      const maxSize = 2 * 1024 * 1024; // 2MB
+      const maxSize = 150 * 1024;
 
       if (formData.imageFile.size > maxSize) {
-        newErrors.imageFile = "Image size must not exceed 10 KB";
+        newErrors.imageFile = "Image size must not exceed 150 KB";
         hasError = true;
       }
     }
@@ -274,7 +274,7 @@ const ManageNews: React.FC = () => {
               setEditingNews(null);
               setIsModalOpen(true);
             }}
-            className="h-10 rounded-xl bg-indigo-950 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02 w-full"
+            className="h-10 rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02 w-full"
           >
             <span className="flex items-center gap-2">
               <Plus size={16} />
@@ -373,7 +373,7 @@ const ManageNews: React.FC = () => {
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 items-stretch">
         {news
           .filter(
             (n) =>
@@ -383,10 +383,14 @@ const ManageNews: React.FC = () => {
           .map((n) => (
             <div
               key={n.news_id}
-              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               {/* IMAGE */}
-              <div className={`overflow-hidden ${isCompact ? "h-24" : "h-32"}`}>
+              <div
+                className={`overflow-hidden flex-shrink-0 ${
+                  isCompact ? "h-24" : "h-32"
+                }`}
+              >
                 <img
                   src={`${API_BASE_URL}/${n.news_images}`}
                   alt={n.news_subject}
@@ -395,16 +399,20 @@ const ManageNews: React.FC = () => {
               </div>
 
               {/* CONTENT */}
-              <div className="p-3">
+              <div className="flex flex-1 flex-col p-3">
                 {/* CATEGORY */}
-                <span className="mb-2 inline-block rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-700">
-                  {n.news_cat}
-                </span>
+                <div className="mb-2">
+                  <span className="inline-block rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-700">
+                    {n.news_cat}
+                  </span>
+                </div>
 
                 {/* TITLE */}
                 <h3
                   className={`font-semibold text-slate-900 ${
-                    isCompact ? "line-clamp-1 text-xs" : "line-clamp-2 text-sm"
+                    isCompact
+                      ? "line-clamp-1 text-xs min-h-[16px]"
+                      : "line-clamp-2 text-sm min-h-[40px]"
                   }`}
                 >
                   {n.news_subject}
@@ -412,13 +420,13 @@ const ManageNews: React.FC = () => {
 
                 {/* DESCRIPTION */}
                 {!isCompact && (
-                  <p className="mt-1 line-clamp-2 text-[11px] text-slate-500">
+                  <p className="mt-1 min-h-[34px] line-clamp-2 text-[11px] text-slate-500">
                     {n.news_description}
                   </p>
                 )}
 
                 {/* DEPARTMENTS */}
-                <div className="mt-2 flex flex-wrap gap-1">
+                <div className="mt-2 min-h-[28px] flex flex-wrap gap-1">
                   {n.departments.slice(0, 2).map((dept) => (
                     <span
                       key={dept.departmentId}
@@ -435,8 +443,8 @@ const ManageNews: React.FC = () => {
                   )}
                 </div>
 
-                {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
-                <div className="mt-3 flex gap-2">
+                {/* ACTIONS */}
+                <div className="mt-auto pt-3 flex gap-2">
                   <button
                     onClick={() => {
                       setEditingNews(n);
@@ -450,7 +458,7 @@ const ManageNews: React.FC = () => {
                       });
                       setIsModalOpen(true);
                     }}
-                    className="flex items-center gap-1 rounded-lg bg-indigo-950 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-slate-700 transition"
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-200"
                   >
                     <Pencil size={13} />
                     Edit
@@ -463,7 +471,7 @@ const ManageNews: React.FC = () => {
                         fetchData();
                       }
                     }}
-                    className="flex items-center gap-1 rounded-lg bg-indigo-950 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-red-500 transition"
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-200"
                   >
                     <Trash2 size={13} />
                     Delete
@@ -473,13 +481,12 @@ const ManageNews: React.FC = () => {
             </div>
           ))}
       </div>
-
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
           <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-[0_25px_80px_rgba(0,0,0,0.25)]">
             {/* Header */}
-            <div className="bg-indigo-950 px-6 py-5">
+            <div className="bg-indigo-600 px-6 py-5">
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute right-4 top-4 rounded-xl bg-white/10 p-2 text-white transition hover:bg-white/20"
@@ -713,10 +720,10 @@ const ManageNews: React.FC = () => {
                           return;
                         }
 
-                        if (file && file.size > 10 * 1024) {
+                        if (file && file.size > 150 * 1024) {
                           setErrors((prev) => ({
                             ...prev,
-                            imageFile: "Image size must not exceed 10 KB",
+                            imageFile: "Image size must not exceed 150 KB",
                           }));
                           return;
                         }
@@ -761,7 +768,7 @@ const ManageNews: React.FC = () => {
                 <button
                   onClick={handleSave}
                   disabled={submitting}
-                  className="rounded-xl bg-indigo-950 px-6 py-2.5 font-semibold text-white transition hover:bg-slate-700 disabled:opacity-50"
+                  className="rounded-xl bg-indigo-600 px-6 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
                 >
                   {submitting
                     ? "Saving..."

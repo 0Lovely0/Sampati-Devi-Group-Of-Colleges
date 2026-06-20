@@ -49,11 +49,24 @@ export const getPlacementById = async (
   return res.data.data;
 };
 
+/* ---------------- SAFE FORM BUILDER ---------------- */
+
+// const appendFormData = (form: FormData, key: string, value: any) => {
+//   if (value !== undefined && value !== null) {
+//     form.append(key, value);
+//   }
+// };
+
 /* ---------------- CREATE ---------------- */
 
 export const createPlacement = async (
   formData: FormData
 ): Promise<boolean> => {
+  // 🔥 SAFETY CHECK (prevents silent backend failure)
+  if (!formData.get("Image")) {
+    throw new Error("Image is required before sending request");
+  }
+
   const res = await api.post<{ success: boolean }>(
     "/api/Admin/create-placement",
     formData,
@@ -72,6 +85,7 @@ export const createPlacement = async (
 export const updatePlacement = async (
   formData: FormData
 ): Promise<boolean> => {
+  // ⚠️ DO NOT block image here (backend decides requirement)
   const res = await api.put<{ success: boolean }>(
     "/api/Admin/update-placement",
     formData,

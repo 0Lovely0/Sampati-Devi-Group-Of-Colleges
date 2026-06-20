@@ -50,7 +50,7 @@ const NewsTicker: React.FC = () => {
       >
         {/* LEFT LABEL */}
         <div
-          className="h-full px-4 flex items-center gap-2 shrink-0 text-[10px] font-black uppercase tracking-[0.15em]"
+          className="h-full px-4 flex items-center gap-2 shrink-0 text-[10px] font-black uppercase tracking-[0.15em] text-lg"
           style={{
             backgroundColor: "#14B8A6",
             color: "#FFFFFF",
@@ -100,7 +100,7 @@ const NewsTicker: React.FC = () => {
                     }}
                   />
 
-                  <span className="font-medium hover:text-[#CCFBF1] transition-colors">
+                  <span className="font-medium text-lg hover:text-[#CCFBF1] transition-colors">
                     {item.news_subject}
                   </span>
                 </div>

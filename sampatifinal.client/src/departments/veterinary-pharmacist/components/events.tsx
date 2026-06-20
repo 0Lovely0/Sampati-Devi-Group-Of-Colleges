@@ -81,7 +81,7 @@ const EventsSection: React.FC = () => {
           borderColor: "#22C55E",
         }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
           Veterinary Pharmacist Events
         </h2>
 
@@ -90,7 +90,7 @@ const EventsSection: React.FC = () => {
           style={{ backgroundColor: "#22C55E" }}
         />
 
-        <p className="text-green-100 mt-4 max-w-xl mx-auto text-xs">
+        <p className="text-green-100 mt-4 max-w-2xl mx-auto text-lg">
           Workshops, academic activities, celebrations and events from
           the Veterinary Pharmacist Department.
         </p>
@@ -104,8 +104,8 @@ const EventsSection: React.FC = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {events.map((event) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+             {events.slice(0, 4).map((event) => (
                 <div
                   key={event.id}
                   onClick={() => setPreviewImage(event)}

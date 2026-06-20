@@ -381,36 +381,36 @@ const NoticeBoard: React.FC = () => {
                     <Bell size={24} />
                   </div>
                   <div>
-                    <h2 className="text-xl font-black text-white">
+                    <h2 className="text-2xl font-black text-white">
                       Notice Board
                     </h2>
-                    <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">
+                    <p className="text-[15px] uppercase tracking-widest text-slate-400 font-bold">
                       Live System
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-amber-500 font-bold text-xs uppercase tracking-widest mb-6">
+                <div className="flex items-center gap-2 text-amber-500 font-bold text-xl uppercase tracking-widest mb-6">
                   <Sparkles size={14} /> Real-time Updates
                 </div>
 
-                <p className="text-slate-300 text-sm leading-relaxed">
+                <p className="text-slate-300 text-lg leading-relaxed">
                   Access all academic circulars and announcements instantly.
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-2xl bg-white/5 p-4 text-center border border-white/5">
-                  <h3 className="text-2xl font-black text-white">
+                  <h3 className="text-3xl font-black text-white">
                     {notices.length}
                   </h3>
-                  <p className="text-[9px] uppercase tracking-widest text-slate-400 mt-1">
+                  <p className="text-[12px] uppercase tracking-widest text-slate-400 mt-1">
                     Active
                   </p>
                 </div>
                 <div className="rounded-2xl bg-white/5 p-4 text-center border border-white/5">
-                  <h3 className="text-2xl font-black text-white">Live</h3>
-                  <p className="text-[9px] uppercase tracking-widest text-slate-400 mt-1">
+                  <h3 className="text-3xl font-black text-white">Live</h3>
+                  <p className="text-[12px] uppercase tracking-widest text-slate-400 mt-1">
                     Status
                   </p>
                 </div>
@@ -423,10 +423,10 @@ const NoticeBoard: React.FC = () => {
             <div className="h-[500px] bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-sm flex flex-col">
 
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-black text-slate-900">
+                <h3 className="text-3xl font-black text-slate-900">
                   Latest Updates
                 </h3>
-                <span className="text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-stone-100 text-slate-600">
+                <span className="text-[12px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-stone-100 text-slate-600">
                   Auto Scrolling
                 </span>
               </div>
@@ -443,10 +443,10 @@ const NoticeBoard: React.FC = () => {
                         key={`${notice.notification_date}-${notice.notification_sub}-${index}`}
                         className="flex items-center gap-4 p-4 rounded-xl border border-stone-100 hover:border-amber-200 hover:bg-amber-50/50 transition"
                       >
-                        <span className="shrink-0 text-[10px] font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-lg">
+                        <span className="shrink-0 text-[15px] font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-lg">
                           {formatDate(notice.notification_date)}
                         </span>
-                        <p className="text-sm font-medium text-slate-700 line-clamp-1">
+                        <p className="text-lg font-medium text-slate-700 line-clamp-1">
                           {notice.notification_sub}
                         </p>
                       </div>
@@ -460,7 +460,7 @@ const NoticeBoard: React.FC = () => {
 
               <Link
                 to="/noticeboardpage"
-                className="mt-4 w-full flex items-center justify-center gap-2 bg-indigo-950 py-3 rounded-xl text-sm font-bold text-white hover:bg-indigo-950 transition"
+                className="mt-4 w-full flex items-center justify-center gap-2 bg-indigo-950 py-3 rounded-xl text-lg font-bold text-white hover:bg-indigo-950 transition"
               >
                 View All Official Notices <ArrowRight size={16} />
               </Link>

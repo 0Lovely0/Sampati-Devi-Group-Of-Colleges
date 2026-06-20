@@ -325,9 +325,9 @@ export const GalleryPage: React.FC = () => {
     <div className="min-h-screen bg-stone-50 pb-20">
       {/* HEADER */}
       <div className="bg-indigo-950 py-20 px-4 text-center border-b border-slate-800">
-        <h1 className="text-4xl font-black text-white mb-4">College Gallery</h1>
+        <h1 className="text-6xl font-black text-white mb-4">College Gallery</h1>
         <div className="h-1 w-20 bg-amber-500 mx-auto rounded-full" />
-        <p className="text-slate-400 mt-6 text-sm">Explore our collection of captured moments.</p>
+        <p className="text-slate-400 mt-6 text-lg">Explore our collection of captured moments.</p>
       </div>
 
       <div className="w-full mx-auto px-4 -mt-12">

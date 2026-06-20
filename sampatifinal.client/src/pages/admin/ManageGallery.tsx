@@ -143,8 +143,8 @@ const ManageGallery: React.FC = () => {
         newErrors.imageFile = "Only JPG, PNG, WEBP allowed";
       }
 
-      if (formData.imageFile.size > 2 * 1024 * 1024) {
-        newErrors.imageFile = "Max size is 2MB";
+      if (formData.imageFile.size > 150 * 1024) {
+        newErrors.imageFile = "Image size must be 150 KB or less";
       }
     }
 
@@ -234,6 +234,27 @@ const ManageGallery: React.FC = () => {
         <button
           onClick={() => {
             setEditingGallery(null);
+
+            setErrors({
+              imgMaincat: "",
+              imgCat: "",
+              imgDes: "",
+              imgSession: "",
+              uploadedBy: "",
+              imageFile: "",
+              departmentIds: "",
+            });
+
+            setFormData({
+              imgMaincat: "",
+              imgCat: "",
+              imgDes: "",
+              imgSession: "",
+              uploadedBy: "",
+              imageFile: null,
+              departmentIds: [],
+            });
+
             setIsModalOpen(true);
           }}
           className="h-10 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:scale-[1.02]"
@@ -330,6 +351,17 @@ const ManageGallery: React.FC = () => {
                 <button
                   onClick={() => {
                     setEditingGallery(g);
+
+                    setErrors({
+                      imgMaincat: "",
+                      imgCat: "",
+                      imgDes: "",
+                      imgSession: "",
+                      uploadedBy: "",
+                      imageFile: "",
+                      departmentIds: "",
+                    });
+
                     setFormData({
                       imgMaincat: g.imgMaincat,
                       imgCat: g.imgCat,
@@ -339,6 +371,7 @@ const ManageGallery: React.FC = () => {
                       imageFile: null,
                       departmentIds: g.departments.map((d) => d.departmentId),
                     });
+
                     setIsModalOpen(true);
                   }}
                   className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
@@ -407,7 +440,7 @@ const ManageGallery: React.FC = () => {
                   className={`w-full p-3 border rounded-xl ${
                     errors.imgMaincat ? "border-red-500" : "border"
                   }`}
-                   placeholder="Main Category"
+                  placeholder="Main Category"
                   value={formData.imgMaincat}
                   onChange={(e) =>
                     setFormData({ ...formData, imgMaincat: e.target.value })
@@ -456,6 +489,9 @@ const ManageGallery: React.FC = () => {
                     setFormData({ ...formData, imgSession: e.target.value })
                   }
                 />
+                {errors.imgSession && (
+                  <p className="text-xs text-red-500">{errors.imgSession}</p>
+                )}
 
                 <input
                   className="w-full p-3 border rounded-xl focus:border-indigo-500 outline-none"
@@ -465,6 +501,9 @@ const ManageGallery: React.FC = () => {
                     setFormData({ ...formData, uploadedBy: e.target.value })
                   }
                 />
+                {errors.uploadedBy && (
+                  <p className="text-xs text-red-500">{errors.uploadedBy}</p>
+                )}
               </div>
 
               {/* IMAGE UPLOAD */}
@@ -475,13 +514,50 @@ const ManageGallery: React.FC = () => {
 
                 <input
                   type="file"
+                  accept=".jpg,.jpeg,.png,.webp"
                   className="w-full p-2 border rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+
+                    if (!file) return;
+
+                    const allowedTypes = [
+                      "image/jpeg",
+                      "image/jpg",
+                      "image/png",
+                      "image/webp",
+                    ];
+
+                    if (!allowedTypes.includes(file.type)) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        imageFile: "Only JPG, PNG and WEBP files are allowed",
+                      }));
+
+                      e.target.value = "";
+                      return;
+                    }
+
+                    if (file.size > 150 * 1024) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        imageFile: "Image size must be 150 KB or less",
+                      }));
+
+                      e.target.value = "";
+                      return;
+                    }
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      imageFile: "",
+                    }));
+
                     setFormData({
                       ...formData,
-                      imageFile: e.target.files?.[0] || null,
-                    })
-                  }
+                      imageFile: file,
+                    });
+                  }}
                 />
                 {errors.imageFile && (
                   <p className="text-xs text-red-500 mt-2">

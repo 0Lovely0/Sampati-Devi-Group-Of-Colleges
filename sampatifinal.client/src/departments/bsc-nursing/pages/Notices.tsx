@@ -193,7 +193,7 @@ export const NoticeBoardPage: React.FC = () => {
                       {notice.notification_cat}
                     </span>
 
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                    <div className="flex items-center gap-1.5 text-[15px] text-slate-500">
                       <Calendar size={12} />
                       {formatDate(notice.notification_date)}
                     </div>
@@ -238,7 +238,7 @@ export const NoticeBoardPage: React.FC = () => {
                   </div>
 
                   <div className="border-t border-white/20 pt-6">
-                    <p className="text-white/80 text-sm leading-relaxed mb-8">
+                    <p className="text-white text-[15px] leading-relaxed mb-8">
                       {selectedNotice.notification_des}
                     </p>
                   </div>

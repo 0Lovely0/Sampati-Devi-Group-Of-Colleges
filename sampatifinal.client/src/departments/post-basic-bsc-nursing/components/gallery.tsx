@@ -65,7 +65,7 @@ const GallerySection: React.FC = () => {
         className="py-12 px-4 text-center"
         style={{ backgroundColor: THEME.primary }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-6xl font-black text-white mb-3">
           Post Basic B.Sc Nursing Gallery
         </h2>
 
@@ -74,7 +74,7 @@ const GallerySection: React.FC = () => {
           style={{ backgroundColor: THEME.accent }}
         />
 
-        <p className="text-white/80 mt-4 max-w-xl mx-auto text-xs">
+        <p className="text-white/80 mt-4 max-w-2xl mx-auto text-lg">
           Explore moments from academic activities, clinical training,
           events, celebrations, and achievements of the Post Basic B.Sc Nursing Department.
         </p>

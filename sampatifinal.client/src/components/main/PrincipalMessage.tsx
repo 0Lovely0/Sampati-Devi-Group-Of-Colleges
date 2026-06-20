@@ -24,7 +24,7 @@ const PrincipalMessage: React.FC = () => {
 
             {/* CONTENT */}
             <div className="flex-1 text-center md:text-left">
-              <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">
+              <span className="inline-block text-[15px] font-bold uppercase tracking-[0.2em] text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">
                 Message From Principal
               </span>
 

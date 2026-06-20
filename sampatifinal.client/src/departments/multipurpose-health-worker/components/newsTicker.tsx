@@ -62,7 +62,7 @@ const NewsTicker: React.FC = () => {
       >
         {/* LEFT LABEL */}
         <div
-          className="h-full px-4 flex items-center gap-2 shrink-0 text-[10px] font-black uppercase tracking-[0.15em]"
+          className="h-full px-4 flex items-center gap-2 shrink-0 text-[12px] font-black uppercase tracking-[0.15em]"
           style={{
             backgroundColor: MPHW_THEME.accent,
             color: "#FFFFFF",
@@ -119,7 +119,7 @@ const NewsTicker: React.FC = () => {
                   />
 
                   <span
-                    className="font-medium transition-colors"
+                    className="font-medium transition-colors text-[15px]"
                     style={{ color: "#FFFFFF" }}
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.color =

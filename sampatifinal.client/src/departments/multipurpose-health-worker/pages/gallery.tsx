@@ -78,7 +78,7 @@ export const GalleryPage: React.FC = () => {
           style={{ backgroundColor: MPHW_THEME.accent }}
         />
 
-        <p className="text-white/80 mt-6 text-sm max-w-2xl mx-auto">
+        <p className="text-white/80 mt-6 text-lg max-w-3xl mx-auto">
           Explore moments from field training activities, community health
           programs, health awareness campaigns, workshops, seminars,
           practical sessions, outreach initiatives, and achievements of the

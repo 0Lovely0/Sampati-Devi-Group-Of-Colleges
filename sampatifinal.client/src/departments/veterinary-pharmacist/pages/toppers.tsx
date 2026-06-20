@@ -51,8 +51,8 @@ export const VeterinaryPharmacistToppersGallery: React.FC = () => {
     t?.departments?.some(
       (d: any) =>
         Number(d?.departmentId) === VET_PHARMACY_ID ||
-        d?.departmentName?.toLowerCase()?.trim() === "veterinary pharmacist"
-    )
+        d?.departmentName?.toLowerCase()?.trim() === "veterinary pharmacist",
+    ),
   );
 
   return (
@@ -68,7 +68,7 @@ export const VeterinaryPharmacistToppersGallery: React.FC = () => {
           borderColor: theme.primary,
         }}
       >
-        <h1 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h1 className="text-3xl md:text-5xl font-black text-white mb-3">
           Veterinary Pharmacist Toppers Gallery
         </h1>
 
@@ -77,7 +77,7 @@ export const VeterinaryPharmacistToppersGallery: React.FC = () => {
           style={{ backgroundColor: theme.accent }}
         />
 
-        <p className="text-white/70 mt-4 max-w-xl mx-auto text-xs">
+        <p className="text-white/70 mt-4 max-w-xl mx-auto text-lg">
           Celebrating excellence in Veterinary Pharmacist department.
         </p>
       </div>
@@ -98,36 +98,34 @@ export const VeterinaryPharmacistToppersGallery: React.FC = () => {
               <div
                 key={t.topperId}
                 onClick={() => setSelected(t)}
-                className="group bg-white rounded-xl border overflow-hidden shadow-sm cursor-pointer transition-all hover:-translate-y-1 hover:shadow-md"
+                className="group relative bg-white p-3 rounded-2xl border border-stone-100 shadow-sm cursor-pointer transition-all duration-300 hover:shadow-xl hover:border-indigo-100 hover:-translate-y-1"
               >
                 {/* IMAGE */}
-                <div className="h-44 overflow-hidden bg-stone-100">
+                <div className="aspect-square w-full overflow-hidden rounded-xl bg-stone-100 mb-3">
                   <img
                     src={getImageUrl(t.imagePath)}
                     alt={t.name}
-                    className="w-full h-full object-contain group-hover:scale-105 transition duration-700"
+                    className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
 
                 {/* TEXT */}
-                <div className="p-3 text-center">
-                  <h3 className="text-xs font-black text-slate-950 truncate">
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-slate-900 truncate px-1">
                     {t.name}
                   </h3>
 
-                  <p
-                    className="text-[9px] font-bold uppercase tracking-widest mt-1"
-                    style={{ color: theme.accent }}
-                  >
-                    Rank: {t.collegeRank}
-                  </p>
+                  <div className="mt-1.5 inline-block px-2 py-0.5 rounded-md bg-amber-50 border border-amber-100">
+                    <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">
+                      Rank {t.collegeRank}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
-
       {/* MODAL */}
       {selected && (
         <div

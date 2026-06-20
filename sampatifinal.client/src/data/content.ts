@@ -13,7 +13,7 @@ export const footerLinks = {
     { label: "Principal Message", href: "/principaldesk" },
     { label: "Director Message", href: "/directorpage" },
     // { label: "Vision & Mission", href: "/vision-mission" },
-    { label: "Contact", href: "/contact" },
+    { label: "Contact", href: "/applynow" },
   ],
 
   quick: [

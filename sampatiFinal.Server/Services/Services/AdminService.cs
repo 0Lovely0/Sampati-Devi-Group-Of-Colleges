@@ -1035,7 +1035,6 @@ namespace sampatiFinal.Server.Services.Services
 
         #endregion
 
-
         #region News
 
         public async Task<List<NewsResponseDto>> GetAllNews()
@@ -1332,7 +1331,7 @@ namespace sampatiFinal.Server.Services.Services
             var imagePath = await FileHelper.SaveFile(
                 dto.Image,
                 "uploads/toppers",
-                new[] { ".jpg", ".jpeg", ".png" },
+                new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif" },
                 2 * 1024 * 1024
             );
 
@@ -1347,10 +1346,10 @@ namespace sampatiFinal.Server.Services.Services
                 ImagePath = imagePath
             };
 
-            // ✅ MANY TO MANY
-            topper.TopperDepartments = dto.DepartmentIds?
-                .Select(d => new TopperDepartment { DepartmentId = d })
-                .ToList();
+       // ✅ MANY TO MANY
+          topper.TopperDepartments = dto.DepartmentIds?
+           .Select(d => new TopperDepartment { DepartmentId = d })
+           .ToList();
 
             await _repo.CreateTopperAsync(topper);
         }
@@ -1411,6 +1410,19 @@ namespace sampatiFinal.Server.Services.Services
         {
             var topper = await _repo.GetTopperByIdAsync(dto.TopperId);
             if (topper == null) throw new Exception("Topper not found");
+            string? updatedImagePath = topper.ImagePath;
+
+            // ✅ Image Update Logic (same as Committee)if (dto.Image != null)
+            {
+                DeleteImageFileIfExists(topper.ImagePath);
+
+                updatedImagePath = await FileHelper.SaveFile(
+                    dto.Image,
+                    ImageUploadFolder,
+                    AllowedImageExtensions,
+                    MaxImageSizeInBytes
+                );
+            }
 
             topper.Name = dto.Name;
             topper.YearSemester = dto.YearSemester;
@@ -1418,13 +1430,13 @@ namespace sampatiFinal.Server.Services.Services
             topper.UniversityRank = dto.UniversityRank;
             topper.Batch = dto.Batch;
             topper.Percentile = dto.Percentile;
-            // ✅ MANY TO MANY UPDATE
+            topper.ImagePath = updatedImagePath; 
             topper.TopperDepartments = dto.DepartmentIds?
-                .Select(d => new TopperDepartment
-                {
-                    TopperId = dto.TopperId,
-                    DepartmentId = d
-                }).ToList();
+           .Select(d => new TopperDepartment
+            {
+                TopperId = dto.TopperId,
+                DepartmentId = d
+            }).ToList();
 
             await _repo.UpdateTopperAsync(topper);
         }
@@ -1438,6 +1450,7 @@ namespace sampatiFinal.Server.Services.Services
         }
 
         #endregion
+
 
         #region committee
         public async Task<IEnumerable<CommitteeMemberResponseDto>> GetAllCommitteeMembersAsync()
@@ -1573,7 +1586,6 @@ namespace sampatiFinal.Server.Services.Services
             IsActive = committeeMember.IsActive
         };
         #endregion
-
 
         #region Facility
         public async Task<IEnumerable<Facility>> GetAllFacilitiesAsync()
@@ -1770,5 +1782,361 @@ namespace sampatiFinal.Server.Services.Services
             await _repo.DeletePlacementAsync(placement);
         }
         #endregion
+
+        #region AdmissionEnquiry
+        public async Task<List<AdmissionEnquiryResponseDto>> GetAllAdmissionEnquiriesAsync()
+        {
+            var data = await _repo.GetAllAdmissionEnquiriesAsync();
+
+            return data.Select(x => new AdmissionEnquiryResponseDto
+            {
+                AdmissionEnquiryId = x.AdmissionEnquiryId,
+                StudentName = x.StudentName,
+                FatherName = x.FatherName,
+                MobileNumber = x.MobileNumber,
+                Email = x.Email,
+                StudyMode = x.StudyMode.ToString(),
+                Departments = x.AdmissionEnquiryDepartments
+                    .Select(d => d.Department.DepartmentName)
+                    .ToList()
+            }).ToList();
+        }
+
+        public async Task CreateAdmissionEnquiryAsync(CreateAdmissionEnquiryDto dto)
+        {
+            var enquiry = new AdmissionEnquiry
+            {
+                StudentName = dto.StudentName,
+                FatherName = dto.FatherName,
+                MobileNumber = dto.MobileNumber,
+                Email = dto.Email,
+                StudyMode = dto.StudyMode
+            };
+
+            enquiry.AdmissionEnquiryDepartments = dto.DepartmentIds
+                .Select(id => new AdmissionEnquiryDepartment
+                {
+                    DepartmentId = id
+                }).ToList();
+
+            await _repo.AddAdmissionEnquiryAsync(enquiry);
+        }
+
+        public async Task UpdateAdmissionEnquiryAsync(UpdateAdmissionEnquiryDto dto)
+        {
+            var enquiry = await _repo.GetAdmissionEnquiryByIdAsync(dto.AdmissionEnquiryId);
+
+            if (enquiry == null)
+                throw new Exception("Admission Enquiry Not Found");
+
+            enquiry.StudentName = dto.StudentName;
+            enquiry.FatherName = dto.FatherName;
+            enquiry.MobileNumber = dto.MobileNumber;
+            enquiry.Email = dto.Email;
+            enquiry.StudyMode = dto.StudyMode;
+
+            enquiry.AdmissionEnquiryDepartments.Clear();
+
+            foreach (var departmentId in dto.DepartmentIds)
+            {
+                enquiry.AdmissionEnquiryDepartments.Add(
+                    new AdmissionEnquiryDepartment
+                    {
+                        AdmissionEnquiryId = enquiry.AdmissionEnquiryId,
+                        DepartmentId = departmentId
+                    });
+            }
+
+            await _repo.UpdateAdmissionEnquiryAsync(enquiry);
+        }
+
+        public async Task DeleteAdmissionEnquiryAsync(int id)
+        {
+            var enquiry = await _repo.GetAdmissionEnquiryByIdAsync(id);
+
+            if (enquiry == null)
+                throw new Exception("Admission Enquiry Not Found");
+
+            await _repo.DeleteAdmissionEnquiryAsync(enquiry);
+        }
+
+        public async Task<AdmissionEnquiryResponseDto?> GetAdmissionEnquiryByIdAsync(int id)
+        {
+            var x = await _repo.GetAdmissionEnquiryByIdAsync(id);
+
+            if (x == null)
+                return null;
+
+            return new AdmissionEnquiryResponseDto
+            {
+                AdmissionEnquiryId = x.AdmissionEnquiryId,
+                StudentName = x.StudentName,
+                FatherName = x.FatherName,
+                MobileNumber = x.MobileNumber,
+                Email = x.Email,
+                StudyMode = x.StudyMode.ToString(),
+                Departments = x.AdmissionEnquiryDepartments
+                    .Select(d => d.Department.DepartmentName)
+                    .ToList()
+            };
+        }
+        #endregion
+
+
+        #region Student Adoption
+
+        public async Task CreateStudentAsync(CreateStudentDto dto)
+        {
+            string imagePath = null;
+
+            if (dto.Photo != null)
+            {
+                imagePath = await FileHelper.SaveFile(
+                    dto.Photo,
+                    "uploads/students",
+                    new[] { ".jpg", ".jpeg", ".png", ".webp" },
+                    2 * 1024 * 1024
+                );
+            }
+
+            var student = new StudentMaster
+            {
+                StudentName = dto.StudentName,
+                Course = dto.Course,
+                Description = dto.Description,
+                PhotoUrl = imagePath,
+                IsActive = true,
+                CreatedDate = DateTime.Now
+            };
+
+            await _repo.CreateStudentAsync(student);
+        }
+        public async Task<List<StudentResponseDto>> GetAllStudentsAsync()
+        {
+            var students = await _repo.GetAllStudentsAsync();
+
+            return students.Select(x => new StudentResponseDto
+            {
+                StudentId = x.StudentId,
+                StudentName = x.StudentName,
+                Course = x.Course,
+                Description = x.Description,
+                PhotoUrl = x.PhotoUrl
+            }).ToList();
+        }
+        public async Task<StudentResponseDto?> GetStudentByIdAsync(int id)
+        {
+            var student = await _repo.GetStudentByIdAsync(id);
+
+            if (student == null)
+                return null;
+
+            return new StudentResponseDto
+            {
+                StudentId = student.StudentId,
+                StudentName = student.StudentName,
+                Course = student.Course,
+                Description = student.Description,
+                PhotoUrl = student.PhotoUrl
+            };
+        }
+        public async Task<bool> UpdateStudentAsync(int id, CreateStudentDto dto)
+        {
+            var student = await _repo.GetStudentByIdAsync(id);
+
+            if (student == null)
+                return false;
+
+            if (dto.Photo != null)
+            {
+                student.PhotoUrl = await FileHelper.SaveFile(
+                    dto.Photo,
+                    "uploads/students",
+                    new[] { ".jpg", ".jpeg", ".png", ".webp" },
+                    2 * 1024 * 1024
+                );
+            }
+
+            student.StudentName = dto.StudentName;
+            student.Course = dto.Course;
+            student.Description = dto.Description;
+
+            await _repo.UpdateStudentAsync(student);
+            return true;
+        }
+        public async Task<bool> DeleteStudentAsync(int id)
+        {
+            var student = await _repo.GetStudentByIdAsync(id);
+
+            if (student == null)
+                return false;
+
+            await _repo.DeleteStudentAsync(student);
+            return true;
+        }
+        public async Task CreateDonationInquiryAsync(CreateDonationInquiryDto dto)
+        {
+            var student = await _repo.GetStudentByIdAsync(dto.StudentId);
+
+            if (student == null)
+                throw new Exception("Student not found");
+
+            var inquiry = new DonationInquiry
+            {
+                HonorableName = dto.HonorableName,
+                Phone = dto.Phone,
+                Email = dto.Email,
+                MeetingDate = dto.MeetingDate,
+                MeetingTime = dto.MeetingTime,
+                AdoptionFor = dto.AdoptionFor,
+                StudentId = dto.StudentId,
+                StudentName = student.StudentName,
+                CreatedOn = DateTime.Now
+            };
+
+            await _repo.CreateDonationInquiryAsync(inquiry);
+        }
+        public async Task<List<CreateDonationInquiryDto>> GetDonationInquiriesAsync()
+        {
+            var data = await _repo.GetDonationInquiriesAsync();
+
+            return data.Select(x => new CreateDonationInquiryDto
+            {
+                InquiryId = x.Id,
+                HonorableName = x.HonorableName,
+                Phone = x.Phone,
+                Email = x.Email,
+                MeetingDate = x.MeetingDate,
+                MeetingTime = x.MeetingTime,
+                AdoptionFor = x.AdoptionFor,
+                StudentId = x.StudentId,
+                StudentName = x.StudentName
+            }).ToList();
+        }
+
+        #endregion
+
+        #region Apply Now
+
+        public async Task CreateApplyNowAsync(ApplyNowDto dto)
+        {
+            var applyNow = new ApplyNow
+            {
+                FormType = dto.FormType,
+                Name = dto.Name,
+                FatherName = dto.FatherName,
+                MobileNumber = dto.MobileNumber,
+                Email = dto.Email,
+                Course = dto.Course,
+                EducationLevel = dto.EducationLevel,
+                PreferredMode = dto.PreferredMode,
+                CreatedDate = DateTime.Now
+            };
+
+            await _repo.CreateApplyNowAsync(applyNow);
+        }
+
+        public async Task<List<ApplyNowDto>> GetApplyNowListAsync()
+        {
+            var data = await _repo.GetApplyNowListAsync();
+
+            return data.Select(x => new ApplyNowDto
+            {
+                Id = x.Id,
+                FormType = x.FormType,
+                Name = x.Name,
+                FatherName = x.FatherName,
+                MobileNumber = x.MobileNumber,
+                Email = x.Email,
+                Course = x.Course,
+                EducationLevel = x.EducationLevel,
+                PreferredMode = x.PreferredMode
+            }).ToList();
+        }
+
+        public async Task<List<ApplyNowDto>> GetApplyNowByTypeAsync(string formType)
+        {
+            var data = await _repo.GetApplyNowByTypeAsync(formType);
+
+            return data.Select(x => new ApplyNowDto
+            {
+                Id = x.Id,
+                FormType = x.FormType,
+                Name = x.Name,
+                FatherName = x.FatherName,
+                MobileNumber = x.MobileNumber,
+                Email = x.Email,
+                Course = x.Course,
+                EducationLevel = x.EducationLevel,
+                PreferredMode = x.PreferredMode
+            }).ToList();
+        }
+
+        public async Task<ApplyNowDto?> GetApplyNowDetailAsync(int id)
+        {
+            var data = await _repo.GetApplyNowByIdAsync(id);
+
+            if (data == null)
+                return null;
+
+            return new ApplyNowDto
+            {
+                Id = data.Id,
+                FormType = data.FormType,
+                Name = data.Name,
+                FatherName = data.FatherName,
+                MobileNumber = data.MobileNumber,
+                Email = data.Email,
+                Course = data.Course,
+                EducationLevel = data.EducationLevel,
+                PreferredMode = data.PreferredMode
+            };
+        }
+
+        public async Task DeleteApplyNowAsync(int id)
+        {
+            var data = await _repo.GetApplyNowByIdAsync(id);
+
+            if (data == null)
+                throw new Exception("Record not found");
+
+            await _repo.DeleteApplyNowAsync(data);
+        }
+
+        #endregion
+
+        #region Contact Us
+
+        public async Task CreateContactMessageAsync(ContactMessageDto dto)
+        {
+            var message = new ContactMessage
+            {
+                Name = dto.Name,
+                Email = dto.Email,
+                Subject = dto.Subject,
+                Message = dto.Message,
+                CreatedDate = DateTime.Now
+            };
+
+            await _repo.CreateContactMessageAsync(message);
+        }
+
+        public async Task<List<ContactMessageDto>> GetAllContactMessagesAsync()
+        {
+            var data = await _repo.GetAllContactMessagesAsync();
+
+            return data.Select(x => new ContactMessageDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Email = x.Email,
+                Subject = x.Subject,
+                Message = x.Message,
+                CreatedDate = x.CreatedDate
+            }).ToList();
+        }
+
+        #endregion
+
     }
 }

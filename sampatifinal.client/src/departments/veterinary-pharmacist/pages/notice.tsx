@@ -123,7 +123,7 @@ export const VeterinaryNoticeBoardPage: React.FC = () => {
           Veterinary Notices
         </h1>
 
-        <p className="text-white/80 max-w-2xl mx-auto">
+        <p className="text-white/80 max-w-2xl mx-auto text-lg">
           Stay updated with veterinary announcements, examinations,
           schedules, circulars, and academic updates.
         </p>
@@ -228,7 +228,7 @@ export const VeterinaryNoticeBoardPage: React.FC = () => {
                     {selectedNotice.notification_sub}
                   </h2>
 
-                  <p className="text-white/80 text-sm mt-6">
+                  <p className="text-white/80 text-lg mt-6">
                     {selectedNotice.notification_des}
                   </p>
 

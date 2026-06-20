@@ -76,7 +76,6 @@ namespace sampatiFinal.Server.Services.Services
 
         #endregion
 
-
         #region Notification
 
         Task<List<NotificationResponseDto>> GetAllNotificationAsync();
@@ -87,8 +86,6 @@ namespace sampatiFinal.Server.Services.Services
         Task<bool> DeleteNotificationAsync(long id);
 
         #endregion
-
-
 
         Task<object> CreateStaff(CreateStaffDto model, string createdBy);
 
@@ -111,19 +108,20 @@ namespace sampatiFinal.Server.Services.Services
         #endregion
 
         #region Events
-            Task CreateEvent(CreateEventDto dto);
-            Task UpdateEvent(UpdateEventDto dto);
-            Task DeleteEvent(int id);
-            Task<EventResponseDto> GetEventById(int id);
-            Task<List<EventResponseDto>> GetAllEvents();
+        Task CreateEvent(CreateEventDto dto);
+        Task UpdateEvent(UpdateEventDto dto);
+        Task DeleteEvent(int id);
+        Task<EventResponseDto> GetEventById(int id);
+        Task<List<EventResponseDto>> GetAllEvents();
         #endregion
 
-        #region topper
+        #region Topper
         Task CreateTopperAsync(CreateTopperDto dto);
         Task UpdateTopperAsync(UpdateTopperDto dto);
         Task DeleteTopperAsync(int id);
         Task<List<TopperResponseDto>> GetAllToppersAsync();
         Task<TopperResponseDto> GetTopperByIdAsync(int id);
+
         #endregion
 
         #region committee
@@ -146,12 +144,48 @@ namespace sampatiFinal.Server.Services.Services
 
         #endregion
 
-        #region
+        #region Placement
         Task CreatePlacementAsync(CreatePlacementDto dto);
         Task UpdatePlacementAsync(UpdatePlacementDto dto);
         Task DeletePlacementAsync(int id);
         Task<List<PlacementResponseDto>> GetAllPlacementsAsync();
         Task<PlacementResponseDto> GetPlacementByIdAsync(int id);
         #endregion
+
+        #region AdmissionEnquiry
+        Task<List<AdmissionEnquiryResponseDto>> GetAllAdmissionEnquiriesAsync();
+        Task<AdmissionEnquiryResponseDto> GetAdmissionEnquiryByIdAsync(int id);
+        Task CreateAdmissionEnquiryAsync(CreateAdmissionEnquiryDto dto);
+        Task UpdateAdmissionEnquiryAsync(UpdateAdmissionEnquiryDto dto);
+        Task DeleteAdmissionEnquiryAsync(int id);
+        #endregion
+
+
+        #region Student Adoption
+        Task CreateStudentAsync(CreateStudentDto dto);
+        Task<List<StudentResponseDto>> GetAllStudentsAsync();
+        Task<StudentResponseDto?> GetStudentByIdAsync(int id);
+        Task<bool> UpdateStudentAsync(int id, CreateStudentDto dto);
+        Task<bool> DeleteStudentAsync(int id);
+        Task CreateDonationInquiryAsync(CreateDonationInquiryDto dto);
+        Task<List<CreateDonationInquiryDto>> GetDonationInquiriesAsync();
+
+        #endregion
+
+        #region Apply Now
+        Task CreateApplyNowAsync(ApplyNowDto dto);
+        Task<List<ApplyNowDto>> GetApplyNowListAsync();
+        Task<List<ApplyNowDto>> GetApplyNowByTypeAsync(string formType);
+        Task<ApplyNowDto> GetApplyNowDetailAsync(int id); 
+        Task DeleteApplyNowAsync(int id);
+
+        #endregion
+
+        #region Contact Us
+        Task CreateContactMessageAsync(ContactMessageDto dto);
+        Task<List<ContactMessageDto>> GetAllContactMessagesAsync();
+        #endregion
+
+
     }
 }

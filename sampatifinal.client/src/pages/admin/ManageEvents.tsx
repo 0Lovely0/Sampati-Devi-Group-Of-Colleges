@@ -149,8 +149,8 @@ const ManageEvents: React.FC = () => {
             error = "Only JPG, JPEG, PNG and WEBP files are allowed";
           }
 
-          if (value.size > 10 * 1024) {
-            error = "Image size must not exceed 10 KB";
+          if (value.size > 150 * 1024) {
+            error = "Image size must not exceed 150 KB";
           }
         }
         break;
@@ -204,8 +204,8 @@ const ManageEvents: React.FC = () => {
     }
 
     if (formData.imageFile) {
-      if (formData.imageFile.size > 10 * 1024) {
-        newErrors.imageFile = "Image size must not exceed 10 KB";
+      if (formData.imageFile.size > 150 * 1024) {
+        newErrors.imageFile = "Image size must not exceed 150 KB";
         hasError = true;
       }
     }
@@ -356,7 +356,7 @@ const ManageEvents: React.FC = () => {
 
       {/* Grid */}
       <div
-        className={`grid gap-3 ${
+        className={`grid gap-3 items-stretch ${
           isCompact
             ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6"
             : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
@@ -371,11 +371,11 @@ const ManageEvents: React.FC = () => {
           .map((e) => (
             <div
               key={e.eventId}
-              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               {/* IMAGE */}
               <div
-                className="relative cursor-pointer overflow-hidden"
+                className="relative flex-shrink-0 cursor-pointer overflow-hidden"
                 onClick={() => setPreviewFile(`${API_BASE_URL}/${e.imagePath}`)}
               >
                 <img
@@ -395,17 +395,31 @@ const ManageEvents: React.FC = () => {
               </div>
 
               {/* CONTENT */}
-              <div className="p-3">
-                <h3 className="line-clamp-2 text-xs font-semibold text-slate-800">
+              <div className="flex flex-1 flex-col p-3">
+                {/* TITLE */}
+                <h3
+                  className={`font-semibold text-slate-800 ${
+                    isCompact
+                      ? "line-clamp-1 text-xs min-h-[16px]"
+                      : "line-clamp-2 text-xs min-h-[34px]"
+                  }`}
+                >
                   {e.title}
                 </h3>
 
-                <p className="mt-1 line-clamp-2 text-[11px] text-slate-500">
+                {/* DESCRIPTION */}
+                <p
+                  className={`mt-1 text-[11px] text-slate-500 ${
+                    isCompact
+                      ? "line-clamp-2 min-h-[28px]"
+                      : "line-clamp-2 min-h-[34px]"
+                  }`}
+                >
                   {e.description}
                 </p>
 
                 {/* DEPARTMENTS */}
-                <div className="mt-2 flex flex-wrap gap-1">
+                <div className="mt-2 min-h-[28px] flex flex-wrap gap-1">
                   {e.departments?.slice(0, 3).map((dept) => (
                     <span
                       key={dept.departmentId}
@@ -422,8 +436,8 @@ const ManageEvents: React.FC = () => {
                   )}
                 </div>
 
-                {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
-                <div className="mt-3 flex gap-2">
+                {/* ACTIONS */}
+                <div className="mt-auto pt-3 flex gap-2">
                   <button
                     onClick={() => {
                       setEditingEvent(e);
@@ -436,7 +450,7 @@ const ManageEvents: React.FC = () => {
                       });
                       setIsModalOpen(true);
                     }}
-                    className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-200"
                   >
                     <Pencil size={13} />
                     Edit
@@ -449,7 +463,7 @@ const ManageEvents: React.FC = () => {
                         fetchData();
                       }
                     }}
-                    className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-200"
                   >
                     <Trash2 size={13} />
                     Delete
@@ -573,7 +587,7 @@ const ManageEvents: React.FC = () => {
                     <span className="text-sm text-slate-600">
                       {formData.imageFile
                         ? formData.imageFile.name
-                        : "Upload Event Image (Max 10 KB)"}
+                        : "Upload Event Image (Max 150 KB)"}
                     </span>
 
                     <input
@@ -598,7 +612,7 @@ const ManageEvents: React.FC = () => {
                           return;
                         }
 
-                        if (file.size > 10 * 1024) {
+                        if (file.size > 150 * 1024) {
                           return;
                         }
 

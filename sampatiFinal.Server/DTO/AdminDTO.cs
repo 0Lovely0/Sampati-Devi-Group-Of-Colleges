@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using sampatiFinal.Server.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace sampatiFinal.Server.DTO
 {
@@ -6,7 +7,7 @@ namespace sampatiFinal.Server.DTO
     {
         public class CreateBannerDto
         {
-            public List<int> DepartmentIds { get; set; } 
+            public List<int> DepartmentIds { get; set; }
 
             public string BnnrCat { get; set; }
             public string BnnrDes { get; set; }
@@ -444,6 +445,79 @@ namespace sampatiFinal.Server.DTO
             public string ImagePath { get; set; }
 
             public List<DepartmentResponseDto> Departments { get; set; }
+        }
+
+        public class CreateAdmissionEnquiryDto
+        {
+            public string StudentName { get; set; }
+            public string FatherName { get; set; }
+            public string MobileNumber { get; set; }
+            public string Email { get; set; }
+            public StudyMode StudyMode { get; set; }
+
+            public List<int> DepartmentIds { get; set; }
+        }
+        public class UpdateAdmissionEnquiryDto
+        {
+            public int AdmissionEnquiryId { get; set; }
+
+            public string StudentName { get; set; }
+            public string FatherName { get; set; }
+            public string MobileNumber { get; set; }
+            public string Email { get; set; }
+            public StudyMode StudyMode { get; set; }
+
+            public List<int> DepartmentIds { get; set; }
+        }
+        public class AdmissionEnquiryResponseDto
+        {
+            public int AdmissionEnquiryId { get; set; }
+            public string StudentName { get; set; }
+            public string FatherName { get; set; }
+            public string MobileNumber { get; set; }
+            public string Email { get; set; }
+            public string StudyMode { get; set; }
+
+            public List<string> Departments { get; set; }
+        }
+
+
+        public class CreateStudentDto
+        {
+            public string StudentName { get; set; }
+            public string Course { get; set; }
+            public string Description { get; set; }
+
+            public IFormFile? Photo { get; set; }
+        }
+        public class StudentResponseDto
+        {
+            public int StudentId { get; set; }
+            public string StudentName { get; set; }
+            public string Course { get; set; }
+            public string Description { get; set; }
+            public string PhotoUrl { get; set; }
+        }
+        public class ApplyNowDto
+        {
+            public int Id { get; set; }
+            public string FormType { get; set; }
+            public string Name { get; set; }
+            public string FatherName { get; set; }
+            public string MobileNumber { get; set; }
+            public string Email { get; set; }
+            public string? Course { get; set; }
+            public string? EducationLevel { get; set; }
+            public string PreferredMode { get; set; }
+        }
+        public class ContactMessageDto
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
+            public string Subject { get; set; }
+            public string Message { get; set; }
+            public DateTime CreatedDate { get; set; }
         }
 
     }

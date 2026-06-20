@@ -34,6 +34,11 @@ import { ManageToppers } from "../pages/admin/ManageToppers";
 import { ManageFacilities } from "../pages/admin/ManageFacilities";
 import { ManageCommittee } from "../pages/admin/ManageCommittee";
 import ManagePlacement from "../pages/admin/ManagePlacement";
+import ManageAdoption from "../pages/admin/ManageAdoption";
+import ManageAdmissionEnquiry from "../pages/admin/ManageAdmissionEnquiry";
+import ManageScopeAdmission from "../pages/admin/ManageScopeAdmission";
+import ManageFreeCounseling from "../pages/admin/ManageFreeCounseling";
+import ManageAdoptingStudents from "../pages/admin/ManageAdoptingStudents";
 
 import DepartmentHome from "../components/programs/DepartmentHome";
 import DepartmentNotices from "../components/programs/DepartmentNotices";
@@ -147,6 +152,11 @@ export const router = createBrowserRouter([
       { path: "facility", element: <ManageFacilities /> },
       { path: "committee", element: <ManageCommittee /> },
       { path: "placements", element: <ManagePlacement /> },
+      { path: "adoption", element: <ManageAdoption/> },
+      { path: "admissionEnquiry", element: <ManageAdmissionEnquiry/> },
+      { path: "scopeAdmission", element: <ManageScopeAdmission/> },
+      { path: "freeCounseling", element: <ManageFreeCounseling/> },
+      { path: "adoptingStudents", element: <ManageAdoptingStudents/> },
     ],
   },
 ]);

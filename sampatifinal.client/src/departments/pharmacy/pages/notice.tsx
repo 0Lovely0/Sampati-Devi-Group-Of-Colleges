@@ -123,7 +123,7 @@ export const PharmacyNoticeBoardPage: React.FC = () => {
           Pharmacy Notices
         </h1>
 
-        <p className="text-white/80 max-w-2xl mx-auto">
+        <p className="text-white/80 max-w-2xl mx-auto text-lg">
           Stay updated with Pharmacy Department announcements, examinations,
           schedules, circulars, academic activities, seminars, workshops,
           and important notices.
@@ -187,7 +187,7 @@ export const PharmacyNoticeBoardPage: React.FC = () => {
                 >
                   <div className="flex justify-between items-start mb-4">
                     <span
-                      className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
+                      className="text-[12px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
                       style={{
                         backgroundColor: theme.secondary,
                         color: theme.primary,
@@ -196,7 +196,7 @@ export const PharmacyNoticeBoardPage: React.FC = () => {
                       {notice.notification_cat}
                     </span>
 
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                    <div className="flex items-center gap-1.5 text-[12px] text-slate-500">
                       <Calendar size={12} />
                       {formatDate(notice.notification_date)}
                     </div>
@@ -227,8 +227,8 @@ export const PharmacyNoticeBoardPage: React.FC = () => {
               {selectedNotice ? (
                 <>
                   <span
-                    style={{ color: theme.accent }}
-                    className="text-[10px] font-bold uppercase tracking-widest"
+                   
+                    className="text-[12px] text-white font-bold uppercase tracking-widest"
                   >
                     Pharmacy Department
                   </span>
@@ -237,7 +237,7 @@ export const PharmacyNoticeBoardPage: React.FC = () => {
                     {selectedNotice.notification_sub}
                   </h2>
 
-                  <p className="text-white/80 text-sm mt-6">
+                  <p className="text-white/80 text-lg mt-6">
                     {selectedNotice.notification_des}
                   </p>
 

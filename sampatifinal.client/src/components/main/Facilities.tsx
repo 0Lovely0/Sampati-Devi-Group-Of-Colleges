@@ -266,9 +266,151 @@
 // export default FacilitiesPage;
 
 
+// import React, { useEffect, useState } from "react";
+// import Loader from "../../components/common/Loader";
+// // import {Link} from "react-router-dom";
+// import {
+//   getAllFacilities,
+//   type Facility,
+// } from "../../services/facilitiesService";
+
+// const API_BASE_URL =
+//   window.location.hostname === "localhost"
+//     ? "https://localhost:7197"
+//     : "https://sampatigroup.stdruraltech.org";
+
+// const FacilitiesPage: React.FC = () => {
+//   const [facilities, setFacilities] = useState<Facility[]>([]);
+//   const [selected, setSelected] = useState<Facility | null>(null);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchFacilities = async () => {
+//       try {
+//         setLoading(true);
+//         const data = await getAllFacilities();
+//         setFacilities(data || []);
+//       } catch (error) {
+//         console.error("Failed to fetch facilities:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchFacilities();
+//   }, []);
+
+//   const getImageUrl = (url?: string) => {
+//     if (!url) return "/placeholder.jpg";
+//     if (url.startsWith("http")) return url;
+//     return `${API_BASE_URL}/${url.replace(/^\//, "")}`;
+//   };
+
+//   const filteredFacilities = facilities.filter(
+//     (item) =>
+//       item.facilityMaster?.facilityName === "Academic Facilities"
+//   );
+
+//   return (
+//     <div className=" bg-stone-50 pb-12">
+//       {/* HEADER */}
+//       <div className="bg-indigo-950 py-12 px-4 text-center border-b border-slate-800">
+//         <h1 className="text-3xl md:text-4xl font-black text-white mb-3">
+//           Academic Facilities
+//         </h1>
+//         <div className="h-1 w-16 bg-amber-500 mx-auto rounded-full" />
+//         <p className="text-slate-400 mt-4 max-w-xl mx-auto text-xs">
+//           Our modern infrastructure designed to foster excellence and innovation.
+//         </p>
+//       </div>
+
+//       {/* GRID */}
+//       <div className="w-full mx-auto px-4 -mt-10">
+//         {loading ? (
+//           <div className="h-56 flex items-center justify-center">
+//             <Loader text="Loading infrastructure..." />
+//           </div>
+//         ) : (
+//           <>
+//           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+//             {filteredFacilities.map((item) => (
+//               <div
+//                 key={item.facilityId}
+//                 onClick={() => setSelected(item)}
+//                 className="group relative bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg"
+//               >
+//                 <div className="h-32 overflow-hidden">
+//                   <img
+//                     src={getImageUrl(item.imageUrl)}
+//                     alt={item.descriptionHeading}
+//                     className="w-full h-full object-full transition duration-700 group-hover:scale-105"
+//                   />
+//                 </div>
+
+//                 <div className="p-4">
+//                   <h3 className="text-xs font-black text-slate-950 leading-tight">
+//                     {item.descriptionHeading}
+//                   </h3>
+//                   <p className="text-[9px] text-amber-600 font-bold uppercase tracking-widest mt-2">
+//                     View Details
+//                   </p>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//           {/* <div className="mt-12 flex justify-center">
+//               <Link
+//                 to="/"
+//                 className="bg-indigo-950 text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-amber-600 transition shadow-lg hover:shadow-amber-500/20"
+//               >
+//                 View All Facilities &rarr;
+//               </Link>
+//             </div> */}
+//             </>
+//         )}
+//       </div>
+
+//       {/* MODAL */}
+//       {selected && (
+//         <div
+//           className="fixed inset-0 z-[9999] flex items-center justify-center bg-indigo-950/95 p-4 backdrop-blur-sm"
+//           onClick={() => setSelected(null)}
+//         >
+//           <div
+//             className="relative w-full max-w-3xl bg-white rounded-2xl overflow-hidden shadow-2xl"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             <button
+//               onClick={() => setSelected(null)}
+//               className="absolute top-3 right-3 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md px-3 py-1 text-[9px] font-black text-white rounded-full uppercase tracking-widest transition"
+//             >
+//               Close
+//             </button>
+
+//             <img
+//               src={getImageUrl(selected.imageUrl)}
+//               alt={selected.descriptionHeading}
+//               className="w-full max-h-[55vh] object-cover bg-stone-100"
+//             />
+
+//             <div className="p-5">
+//               <h2 className="text-xl font-black text-slate-950">
+//                 {selected.descriptionHeading}
+//               </h2>
+//               <p className="text-xs text-slate-600 mt-3 leading-relaxed">
+//                 {selected.description}
+//               </p>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default FacilitiesPage;
+
 import React, { useEffect, useState } from "react";
 import Loader from "../../components/common/Loader";
-// import {Link} from "react-router-dom";
 import {
   getAllFacilities,
   type Facility,
@@ -296,6 +438,7 @@ const FacilitiesPage: React.FC = () => {
         setLoading(false);
       }
     };
+
     fetchFacilities();
   }, []);
 
@@ -311,61 +454,55 @@ const FacilitiesPage: React.FC = () => {
   );
 
   return (
-    <div className=" bg-stone-50 pb-12">
+    <div className="bg-stone-50 pb-20">
       {/* HEADER */}
-      <div className="bg-indigo-950 py-12 px-4 text-center border-b border-slate-800">
-        <h1 className="text-3xl md:text-4xl font-black text-white mb-3">
+      <div className="bg-indigo-950 py-20 px-4 text-center border-b border-slate-800">
+        <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
           Academic Facilities
         </h1>
-        <div className="h-1 w-16 bg-amber-500 mx-auto rounded-full" />
-        <p className="text-slate-400 mt-4 max-w-xl mx-auto text-xs">
-          Our modern infrastructure designed to foster excellence and innovation.
+
+        <div className="h-1.5 w-24 bg-amber-500 mx-auto rounded-full" />
+
+        <p className="text-slate-400 mt-6 max-w-2xl mx-auto text-lg leading-relaxed">
+          Our modern infrastructure designed to foster excellence,
+          innovation, and an inspiring learning environment for students.
         </p>
       </div>
 
       {/* GRID */}
-      <div className="w-full mx-auto px-4 -mt-10">
+      <div className="w-full mx-auto px-6 -mt-12">
         {loading ? (
-          <div className="h-56 flex items-center justify-center">
+          <div className="h-64 flex items-center justify-center">
             <Loader text="Loading infrastructure..." />
           </div>
         ) : (
-          <>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
             {filteredFacilities.map((item) => (
               <div
                 key={item.facilityId}
                 onClick={() => setSelected(item)}
-                className="group relative bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg"
+                className="group relative bg-white rounded-3xl border border-stone-200 overflow-hidden shadow-sm cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <div className="h-32 overflow-hidden">
+                <div className="h-60 overflow-hidden">
                   <img
                     src={getImageUrl(item.imageUrl)}
                     alt={item.descriptionHeading}
-                    className="w-full h-full object-full transition duration-700 group-hover:scale-105"
+                    className="w-full h-full object-contain transition duration-700 group-hover:scale-110"
                   />
                 </div>
 
-                <div className="p-4">
-                  <h3 className="text-xs font-black text-slate-950 leading-tight">
+                <div className="p-6">
+                  <h3 className="text-lg font-black text-slate-950 leading-tight">
                     {item.descriptionHeading}
                   </h3>
-                  <p className="text-[9px] text-amber-600 font-bold uppercase tracking-widest mt-2">
+
+                  <p className="text-xs text-amber-600 font-bold uppercase tracking-widest mt-3">
                     View Details
                   </p>
                 </div>
               </div>
             ))}
           </div>
-          {/* <div className="mt-12 flex justify-center">
-              <Link
-                to="/"
-                className="bg-indigo-950 text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-amber-600 transition shadow-lg hover:shadow-amber-500/20"
-              >
-                View All Facilities &rarr;
-              </Link>
-            </div> */}
-            </>
         )}
       </div>
 
@@ -376,12 +513,12 @@ const FacilitiesPage: React.FC = () => {
           onClick={() => setSelected(null)}
         >
           <div
-            className="relative w-full max-w-3xl bg-white rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-5xl bg-white rounded-3xl overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelected(null)}
-              className="absolute top-3 right-3 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md px-3 py-1 text-[9px] font-black text-white rounded-full uppercase tracking-widest transition"
+              className="absolute top-4 right-4 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md px-4 py-2 text-[10px] font-black text-white rounded-full uppercase tracking-widest transition"
             >
               Close
             </button>
@@ -389,14 +526,15 @@ const FacilitiesPage: React.FC = () => {
             <img
               src={getImageUrl(selected.imageUrl)}
               alt={selected.descriptionHeading}
-              className="w-full max-h-[55vh] object-cover bg-stone-100"
+              className="w-full max-h-[75vh] object-contain bg-stone-100"
             />
 
-            <div className="p-5">
-              <h2 className="text-xl font-black text-slate-950">
+            <div className="p-8">
+              <h2 className="text-3xl font-black text-slate-950">
                 {selected.descriptionHeading}
               </h2>
-              <p className="text-xs text-slate-600 mt-3 leading-relaxed">
+
+              <p className="text-base text-slate-600 mt-4 leading-relaxed">
                 {selected.description}
               </p>
             </div>
@@ -408,3 +546,4 @@ const FacilitiesPage: React.FC = () => {
 };
 
 export default FacilitiesPage;
+

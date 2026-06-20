@@ -279,9 +279,9 @@ export const VideoGalleryPage: React.FC = () => {
     <div className="min-h-screen bg-stone-50 pb-20">
       {/* HEADER */}
       <div className="bg-indigo-950 py-20 px-4 text-center border-b border-slate-800">
-        <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Video Gallery</h1>
+        <h1 className="text-4xl md:text-6xl font-black text-white mb-4">Video Gallery</h1>
         <div className="h-1 w-20 bg-amber-500 mx-auto rounded-full" />
-        <p className="text-slate-400 mt-6 max-w-xl mx-auto text-sm">A collection of captured campus highlights and student milestones.</p>
+        <p className="text-slate-400 mt-6 max-w-xl mx-auto text-lg">A collection of captured campus highlights and student milestones.</p>
       </div>
 
       {/* CONTENT */}

@@ -74,7 +74,7 @@ const VideoGallery: React.FC = () => {
           background: `linear-gradient(135deg, ${MPHW_THEME.primary} 0%, ${MPHW_THEME.accent} 100%)`,
         }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
           MPHW Videos
         </h2>
 
@@ -83,7 +83,7 @@ const VideoGallery: React.FC = () => {
           style={{ backgroundColor: MPHW_THEME.accent }}
         />
 
-        <p className="text-orange-100 mt-4 max-w-xl mx-auto text-xs md:text-sm">
+        <p className="text-orange-100 mt-4 max-w-2xl mx-auto text-xs md:text-lg">
           Explore field training activities, community health programs,
           awareness campaigns, workshops, seminars, practical demonstrations,
           outreach initiatives, and highlights from the Multipurpose Health

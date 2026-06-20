@@ -37,14 +37,15 @@ export default function ProgramNavbar() {
     { label: "Toppers", path: `/programs/${slug}/toppers`, icon: Handshake },
     {
       label: "Admissions",
-      path: `/programs/${slug}/admissions`,
+      // path: `/programs/${slug}/admissions`,
+      path: `/adoption`,
       icon: GraduationCap,
     },
   ];
 
   return (
     <div className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-      <div className="w-full mx-auto px-4 lg:px-6">
+      <div className="w-full mx-auto px-4">
         {/* HEADER */}
         <div className="h-16 flex items-center justify-between">
           {/* LEFT */}
@@ -62,13 +63,13 @@ export default function ProgramNavbar() {
 
             <div className="min-w-0">
               <h2
-                className="font-bold text-sm md:text-xl truncate"
+                className="font-bold text-sm md:text-2xl truncate"
                 style={{ color: theme.primary }}
               >
                 {department?.name}
               </h2>
 
-              <p className="text-xs text-slate-500 hidden sm:block">
+              <p className="text-[15px] text-slate-500 hidden sm:block">
                 Department Portal
               </p>
             </div>

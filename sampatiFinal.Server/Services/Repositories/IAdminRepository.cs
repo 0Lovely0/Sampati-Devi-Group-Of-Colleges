@@ -134,13 +134,15 @@ namespace sampatiFinal.Server.Services.Repositories
         Task DeleteAsync(Event entity);
 
         #endregion
-        #region toper
+
+        #region Topper
         Task CreateTopperAsync(Topper topper);
         Task UpdateTopperAsync(Topper topper);
         Task DeleteTopperAsync(Topper topper);
         Task<Topper> GetTopperByIdAsync(int id);
         Task<List<Topper>> GetAllToppersAsync();
         #endregion
+
 
         #region committe
 
@@ -164,12 +166,50 @@ namespace sampatiFinal.Server.Services.Repositories
 
         #endregion
 
-        #region IPlacementRepository
+        #region Placement
         Task CreatePlacementAsync(Placement placement);
         Task UpdatePlacementAsync(Placement placement);
         Task DeletePlacementAsync(Placement placement);
         Task<Placement> GetPlacementByIdAsync(int id);
         Task<List<Placement>> GetAllPlacementsAsync();
         #endregion
+
+        #region AdmissionEnquiry
+        Task<List<AdmissionEnquiry>> GetAllAdmissionEnquiriesAsync();
+        Task<AdmissionEnquiry?> GetAdmissionEnquiryByIdAsync(int id);
+        Task AddAdmissionEnquiryAsync(AdmissionEnquiry enquiry);
+        Task UpdateAdmissionEnquiryAsync(AdmissionEnquiry enquiry);
+        Task DeleteAdmissionEnquiryAsync(AdmissionEnquiry enquiry);
+        #endregion
+
+
+
+        #region Student Adoption
+
+        Task CreateStudentAsync(StudentMaster student);
+        Task<List<StudentMaster>> GetAllStudentsAsync();
+        Task<StudentMaster?> GetStudentByIdAsync(int id);
+        Task UpdateStudentAsync(StudentMaster student);
+        Task DeleteStudentAsync(StudentMaster student);
+        Task CreateDonationInquiryAsync(DonationInquiry inquiry);
+        Task<List<DonationInquiry>> GetDonationInquiriesAsync();
+
+        #endregion
+
+        #region Apply Now
+        Task CreateApplyNowAsync(ApplyNow applyNow);
+        Task<List<ApplyNow>> GetApplyNowListAsync();
+        Task<List<ApplyNow>> GetApplyNowByTypeAsync(string formType);
+        Task<ApplyNow?> GetApplyNowByIdAsync(int id);
+        Task DeleteApplyNowAsync(ApplyNow applyNow);
+
+        #endregion
+
+        #region Contact Us
+        Task CreateContactMessageAsync(ContactMessage message);
+        Task<List<ContactMessage>> GetAllContactMessagesAsync();
+
+        #endregion
+
     }
 }

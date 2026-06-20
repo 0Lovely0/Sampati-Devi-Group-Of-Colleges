@@ -81,7 +81,7 @@ export const VideoGalleryPage: React.FC = () => {
           style={{ backgroundColor: theme.accent }}
         />
 
-        <p className="text-white/80 mt-6 max-w-2xl mx-auto text-sm md:text-base">
+        <p className="text-white/80 mt-6 max-w-2xl mx-auto text-sm md:text-lg">
           Explore veterinary seminars, animal health training, clinical
           practices, farm management sessions, and academic activities.
         </p>

@@ -3,7 +3,6 @@ import {
   Plus,
   Pencil,
   Trash2,
-  // Eye,
   CheckCircle2,
   AlertCircle,
   FileText,
@@ -159,8 +158,8 @@ const ManageNotice: React.FC = () => {
             error = "Only PDF, JPG, JPEG, PNG and WEBP files are allowed";
           }
 
-          if (value.size > 10 * 1024 ) {
-            error = "File size must not exceed 10 KB";
+          if (value.size > 150 * 1024) {
+            error = "File size must not exceed 150 KB";
           }
         }
 
@@ -228,8 +227,8 @@ const ManageNotice: React.FC = () => {
         hasError = true;
       }
 
-      if (formData.file.size > 2 * 1024 * 1024) {
-        newErrors.file = "File size must not exceed 10 KB";
+      if (formData.file.size > 150 * 1024) {
+        newErrors.file = "File size must not exceed 150 KB";
         hasError = true;
       }
     }
@@ -371,7 +370,7 @@ const ManageNotice: React.FC = () => {
 
       {/* Grid */}
       <div
-        className={`grid gap-3 ${
+        className={`grid gap-3 items-stretch ${
           isCompact
             ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6"
             : "grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
@@ -391,11 +390,11 @@ const ManageNotice: React.FC = () => {
             return (
               <div
                 key={n.notification_id}
-                className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
                 {/* PREVIEW */}
                 <div
-                  className={`relative cursor-pointer overflow-hidden bg-slate-100 ${
+                  className={`relative flex-shrink-0 cursor-pointer overflow-hidden bg-slate-100 ${
                     isCompact ? "h-24" : "h-32"
                   }`}
                   onClick={() => fileUrl && setPreviewFile(fileUrl)}
@@ -414,28 +413,36 @@ const ManageNotice: React.FC = () => {
                 </div>
 
                 {/* CONTENT */}
-                <div className="p-3">
+                <div className="flex flex-1 flex-col p-3">
                   {/* CATEGORY */}
-                  {n.notification_cat && (
-                    <span className="mb-2 inline-block rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-700">
-                      {n.notification_cat}
-                    </span>
-                  )}
+                  <div className="mb-2 min-h-[20px]">
+                    {n.notification_cat && (
+                      <span className="inline-block rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold text-indigo-700">
+                        {n.notification_cat}
+                      </span>
+                    )}
+                  </div>
 
                   {/* TITLE */}
-                  <h3 className="line-clamp-2 text-xs font-semibold text-slate-900">
+                  <h3
+                    className={`font-semibold text-slate-900 ${
+                      isCompact
+                        ? "line-clamp-1 text-xs min-h-[16px]"
+                        : "line-clamp-2 text-xs min-h-[34px]"
+                    }`}
+                  >
                     {n.notification_sub}
                   </h3>
 
                   {/* DESCRIPTION */}
                   {!isCompact && (
-                    <p className="mt-1 line-clamp-2 text-[11px] text-slate-500">
+                    <p className="mt-1 min-h-[34px] line-clamp-2 text-[11px] text-slate-500">
                       {n.notification_des}
                     </p>
                   )}
 
                   {/* DEPARTMENTS */}
-                  <div className="mt-2 flex flex-wrap gap-1">
+                  <div className="mt-2 min-h-[28px] flex flex-wrap gap-1">
                     {n.departments?.slice(0, 2).map((dept) => (
                       <span
                         key={dept.departmentId}
@@ -452,16 +459,8 @@ const ManageNotice: React.FC = () => {
                     )}
                   </div>
 
-                  {/* ACTIONS (BANNER STYLE - ALWAYS VISIBLE) */}
-                  <div className="mt-3 flex gap-2">
-                    {/* <button
-                      onClick={() => fileUrl && setPreviewFile(fileUrl)}
-                      className="flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-200 transition"
-                    >
-                      <Eye size={13} />
-                      View
-                    </button> */}
-
+                  {/* ACTIONS */}
+                  <div className="mt-auto pt-3 flex gap-2">
                     <button
                       onClick={() => {
                         setEditingNotice(n);
@@ -476,7 +475,7 @@ const ManageNotice: React.FC = () => {
                         });
                         setIsModalOpen(true);
                       }}
-                      className="flex items-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 transition"
+                      className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-200"
                     >
                       <Pencil size={13} />
                       Edit
@@ -484,7 +483,7 @@ const ManageNotice: React.FC = () => {
 
                     <button
                       onClick={() => handleDelete(n.notification_id)}
-                      className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition"
+                      className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-200"
                     >
                       <Trash2 size={13} />
                       Delete
@@ -634,7 +633,7 @@ const ManageNotice: React.FC = () => {
                         return;
                       }
 
-                       if (file && file.size > 10 * 1024) {
+                      if (file && file.size > 150 * 1024) {
                         return;
                       }
 

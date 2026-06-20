@@ -47,9 +47,7 @@ const ImageCarousel = () => {
 
         const data = await getAllBanners();
 
-        /**
-         * 🎯 ONLY Pharmacy department banners
-         */
+       
         const pharmacyBanners = data.filter((banner) =>
           banner.departments?.some((dept) =>
             normalize(dept.departmentName) === normalize(PHARMACY_NAME)
@@ -102,7 +100,7 @@ const ImageCarousel = () => {
           clickable: true,
           bulletActiveClass: "swiper-pagination-bullet-active !bg-[#A855F7]",
         }}
-        className="h-[35vh] md:h-[85vh] w-full"
+        className="h-[35vh] md:h-[55vh] w-full"
       >
         {banners.map((banner) => (
           <SwiperSlide key={banner.bnnrId}>
@@ -110,7 +108,7 @@ const ImageCarousel = () => {
               <img
                 src={`${API_BASE_URL}/${banner.bnnrImage}`}
                 alt={banner.bnnrCat}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-full"
               />
             </div>
           </SwiperSlide>

@@ -90,6 +90,87 @@
 // export default WhyChooseUs;
 
 
+// import React from "react";
+
+// const reasons = [
+//   {
+//     id: 1,
+//     title: "Expert Faculty",
+//     desc: "Learn from experienced professors and healthcare professionals with strong clinical expertise.",
+//     icon: "🎓",
+//   },
+//   {
+//     id: 2,
+//     title: "Modern Infrastructure",
+//     desc: "Advanced laboratories and smart classrooms designed to enhance learning outcomes.",
+//     icon: "🔬",
+//   },
+//   {
+//     id: 3,
+//     title: "Placement Support",
+//     desc: "Dedicated career guidance and placement assistance with reputed healthcare institutions.",
+//     icon: "💼",
+//   },
+//   {
+//     id: 4,
+//     title: "Holistic Growth",
+//     desc: "Academic excellence combined with sports, cultural activities, and personality development.",
+//     icon: "🌟",
+//   },
+// ];
+
+// const WhyChooseUs: React.FC = () => {
+//   return (
+//     <section className="bg-stone-50 pb-14">
+//       {/* HEADER */}
+//       <div className="bg-indigo-950 py-12 px-4 text-center border-b border-slate-800">
+//         <span className="text-[9px] font-black text-amber-500 uppercase tracking-[0.2em] bg-white/10 px-3 py-1 rounded-full">
+//           Why Choose Us
+//         </span>
+
+//         <h2 className="text-3xl md:text-4xl font-black text-white mt-4">
+//           Excellence in Healthcare Education
+//         </h2>
+
+//         <div className="h-1 w-16 bg-amber-500 mt-4 mx-auto rounded-full" />
+
+//         <p className="mt-4 text-slate-400 text-xs max-w-xl mx-auto leading-relaxed">
+//           We are committed to preparing future healthcare professionals through quality
+//           education, hands-on clinical training, and a supportive academic environment.
+//         </p>
+//       </div>
+
+//       {/* GRID */}
+//       <div className="w-full mx-auto px-4 -mt-10">
+//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+//           {reasons.map((item) => (
+//             <div
+//               key={item.id}
+//               className="group bg-white p-6 rounded-2xl border border-stone-200 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-slate-950"
+//             >
+//               <div className="text-3xl mb-4">{item.icon}</div>
+
+//               <h3 className="text-base font-black text-slate-950 mb-2 group-hover:text-amber-600 transition">
+//                 {item.title}
+//               </h3>
+
+//               <p className="text-xs leading-relaxed text-slate-500">
+//                 {item.desc}
+//               </p>
+
+//               <div className="mt-5 w-8 h-1 bg-stone-200 group-hover:bg-amber-500 transition-all rounded-full" />
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default WhyChooseUs;
+
+
+
 import React from "react";
 
 const reasons = [
@@ -121,44 +202,46 @@ const reasons = [
 
 const WhyChooseUs: React.FC = () => {
   return (
-    <section className="bg-stone-50 pb-14">
+    <section className="bg-stone-50 pb-24">
       {/* HEADER */}
-      <div className="bg-indigo-950 py-12 px-4 text-center border-b border-slate-800">
-        <span className="text-[9px] font-black text-amber-500 uppercase tracking-[0.2em] bg-white/10 px-3 py-1 rounded-full">
+      <div className="bg-indigo-950 py-20 px-4 text-center border-b border-slate-800">
+        <span className="inline-block text-xs font-black text-amber-500 uppercase tracking-[0.25em] bg-white/10 px-4 py-2 rounded-full">
           Why Choose Us
         </span>
 
-        <h2 className="text-3xl md:text-4xl font-black text-white mt-4">
+        <h2 className="text-4xl md:text-5xl font-black text-white mt-6">
           Excellence in Healthcare Education
         </h2>
 
-        <div className="h-1 w-16 bg-amber-500 mt-4 mx-auto rounded-full" />
+        <div className="h-1.5 w-24 bg-amber-500 mt-6 mx-auto rounded-full" />
 
-        <p className="mt-4 text-slate-400 text-xs max-w-xl mx-auto leading-relaxed">
-          We are committed to preparing future healthcare professionals through quality
-          education, hands-on clinical training, and a supportive academic environment.
+        <p className="mt-6 text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
+          We are committed to preparing future healthcare professionals
+          through quality education, hands-on clinical training, and a
+          supportive academic environment that nurtures excellence,
+          leadership, and lifelong learning.
         </p>
       </div>
 
-      {/* GRID */}
-      <div className="w-full mx-auto px-4 -mt-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* CARDS */}
+      <div className="w-full mx-auto px-6 -mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
           {reasons.map((item) => (
             <div
               key={item.id}
-              className="group bg-white p-6 rounded-2xl border border-stone-200 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-slate-950"
+              className="group bg-white p-8 rounded-3xl border border-stone-200 shadow-sm min-h-[280px] flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-amber-500"
             >
-              <div className="text-3xl mb-4">{item.icon}</div>
+              <div className="text-5xl mb-6">{item.icon}</div>
 
-              <h3 className="text-base font-black text-slate-950 mb-2 group-hover:text-amber-600 transition">
+              <h3 className="text-2xl font-black text-slate-950 mb-4 transition-colors group-hover:text-amber-600">
                 {item.title}
               </h3>
 
-              <p className="text-xs leading-relaxed text-slate-500">
+              <p className="text-base leading-relaxed text-slate-600 flex-grow">
                 {item.desc}
               </p>
 
-              <div className="mt-5 w-8 h-1 bg-stone-200 group-hover:bg-amber-500 transition-all rounded-full" />
+              <div className="mt-6 w-12 h-1.5 bg-stone-200 rounded-full transition-all duration-300 group-hover:w-20 group-hover:bg-amber-500" />
             </div>
           ))}
         </div>
@@ -168,3 +251,4 @@ const WhyChooseUs: React.FC = () => {
 };
 
 export default WhyChooseUs;
+

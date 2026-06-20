@@ -87,7 +87,7 @@ const EventsSection: React.FC = () => {
           borderColor: MPHW_THEME.accent,
         }}
       >
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
           MPHW Events
         </h2>
 
@@ -96,7 +96,7 @@ const EventsSection: React.FC = () => {
           style={{ backgroundColor: MPHW_THEME.accent }}
         />
 
-        <p className="text-orange-100 mt-4 max-w-xl mx-auto text-xs">
+        <p className="text-orange-100 mt-4 max-w-2xl mx-auto text-lg">
           Workshops, field visits, health awareness programs, community
           outreach activities, practical training sessions, seminars and
           academic events from the Multipurpose Health Worker Department.
@@ -111,8 +111,8 @@ const EventsSection: React.FC = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {events.map((event) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+         {events.slice(0, 4).map((event) => (
                 <div
                   key={event.id}
                   onClick={() => setPreviewImage(event)}

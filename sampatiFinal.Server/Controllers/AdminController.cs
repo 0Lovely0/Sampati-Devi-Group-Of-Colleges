@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using sampatiFinal.Server.Data.Entities;
 using sampatiFinal.Server.Services.Repositories;
 using sampatiFinal.Server.Services.Services;
 using System.Security.Claims;
@@ -610,7 +611,6 @@ namespace sampatiFinal.Server.Controllers
 
         #endregion
 
-
         #region Notification
 
         // ✅ Get All
@@ -729,7 +729,7 @@ namespace sampatiFinal.Server.Controllers
             var data = await _service.GetAllBanner();
             return Ok(new { success = true, data });
         }
-        
+
         [HttpGet("banner/{id}")]
         public async Task<IActionResult> GetBannerById(int id)
         {
@@ -876,158 +876,61 @@ namespace sampatiFinal.Server.Controllers
         #endregion
 
         #region Topper
-        // ================= CREATE =================
+
         [HttpPost("create-topper")]
         public async Task<IActionResult> CreateTopper([FromForm] CreateTopperDto dto)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(new
-                    {
-                        success = false,
-                        message = "Validation failed",
-                        errors = ModelState.Values.SelectMany(v => v.Errors)
-                                                  .Select(e => e.ErrorMessage)
-                    });
-                }
-
-                await _service.CreateTopperAsync(dto);
-
-                return Ok(new
-                {
-                    success = true,
-                    message = "Topper created successfully"
-                });
-            }
-            catch (Exception ex)
-            {
+            if (!ModelState.IsValid)
                 return BadRequest(new
                 {
                     success = false,
-                    message = ex.Message
+                    message = "Validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
                 });
-            }
+
+            await _service.CreateTopperAsync(dto);
+            return Ok(new { success = true, message = "Topper created successfully" });
         }
 
-        // ================= GET ALL =================
         [AllowAnonymous]
-
         [HttpGet("get-all-toppers")]
         public async Task<IActionResult> GetAllToppers()
         {
-            try
-            {
-                var data = await _service.GetAllToppersAsync();
-
-                return Ok(new
-                {
-                    success = true,
-                    count = data.Count,
-                    data
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    success = false,
-                    message = ex.Message
-                });
-            }
+            var data = await _service.GetAllToppersAsync();
+            return Ok(new { success = true, count = data.Count, data });
         }
 
-        // ================= GET BY ID =================
         [HttpGet("get-topper-by-id/{id}")]
         public async Task<IActionResult> GetTopperById(int id)
         {
-            try
-            {
-                var data = await _service.GetTopperByIdAsync(id);
+            var data = await _service.GetTopperByIdAsync(id);
 
-                if (data == null)
-                {
-                    return NotFound(new
-                    {
-                        success = false,
-                        message = "Topper not found"
-                    });
-                }
+            if (data == null)
+                return NotFound(new { success = false, message = "Topper not found" });
 
-                return Ok(new
-                {
-                    success = true,
-                    data
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    success = false,
-                    message = ex.Message
-                });
-            }
+            return Ok(new { success = true, data });
         }
 
-        // ================= UPDATE =================
         [HttpPut("update-topper")]
         public async Task<IActionResult> UpdateTopper([FromForm] UpdateTopperDto dto)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(new
-                    {
-                        success = false,
-                        message = "Validation failed",
-                        errors = ModelState.Values.SelectMany(v => v.Errors)
-                                                  .Select(e => e.ErrorMessage)
-                    });
-                }
-
-                await _service.UpdateTopperAsync(dto);
-
-                return Ok(new
-                {
-                    success = true,
-                    message = "Topper updated successfully"
-                });
-            }
-            catch (Exception ex)
-            {
+            if (!ModelState.IsValid)
                 return BadRequest(new
                 {
                     success = false,
-                    message = ex.Message
+                    message = "Validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
                 });
-            }
+
+            await _service.UpdateTopperAsync(dto);
+            return Ok(new { success = true, message = "Topper updated successfully" });
         }
 
-        // ================= DELETE =================
         [HttpDelete("delete-topper/{id}")]
         public async Task<IActionResult> DeleteTopper(int id)
         {
-            try
-            {
-                await _service.DeleteTopperAsync(id);
-
-                return Ok(new
-                {
-                    success = true,
-                    message = "Topper deleted successfully"
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    success = false,
-                    message = ex.Message
-                });
-            }
+            await _service.DeleteTopperAsync(id);
+            return Ok(new { success = true, message = "Topper deleted successfully" });
         }
         #endregion
 
@@ -1059,6 +962,7 @@ namespace sampatiFinal.Server.Controllers
 
         // GET api/committeemember/5
         [HttpGet("committee-get-by-id/{committeeMemberId:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCommitteeMemberById(int committeeMemberId)
         {
             try
@@ -1203,6 +1107,7 @@ namespace sampatiFinal.Server.Controllers
         }
 
         [HttpGet("committee-dropdown/committees")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCommitteeMasterDropdown()
         {
             try
@@ -1226,6 +1131,8 @@ namespace sampatiFinal.Server.Controllers
         }
 
         [HttpGet("committee-dropdown/positions")]
+      
+
         public async Task<IActionResult> GetPositionMasterDropdown()
         {
             try
@@ -1327,8 +1234,9 @@ namespace sampatiFinal.Server.Controllers
         #region placement
         // ================= CREATE =================
         [HttpPost("create-placement")]
+        
         public async Task<IActionResult> CreatePlacement([FromForm] CreatePlacementDto dto)
-       {
+        {
             try
             {
                 if (!ModelState.IsValid)
@@ -1362,6 +1270,7 @@ namespace sampatiFinal.Server.Controllers
 
         // ================= GET ALL =================
         [HttpGet("get-all-placements")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPlacements()
         {
             try
@@ -1387,6 +1296,7 @@ namespace sampatiFinal.Server.Controllers
 
         // ================= GET BY ID =================
         [HttpGet("get-placement-by-id/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPlacementById(int id)
         {
             try
@@ -1477,5 +1387,193 @@ namespace sampatiFinal.Server.Controllers
             }
         }
         #endregion
+
+        #region AdmissionEnquiry
+        [HttpGet("get-all-admission-enquiries")]
+        public async Task<IActionResult> GetAdmissionEnquiries()
+        {
+            return Ok(await _service.GetAllAdmissionEnquiriesAsync());
+        }
+
+        [HttpGet("get-admission-enquiry/{id:int}")]
+        public async Task<IActionResult> GetAdmissionEnquiryById(int id)
+        {
+            var enquiry =
+                await _service.GetAdmissionEnquiryByIdAsync(id);
+
+            if (enquiry == null)
+                return NotFound(new
+                {
+                    Message = $"Admission enquiry with Id {id} not found."
+                });
+
+            return Ok(enquiry);
+        }
+
+        [HttpPost("create-admission-enquiry")]
+        public async Task<IActionResult> CreateAdmissionEnquiry(CreateAdmissionEnquiryDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _service.CreateAdmissionEnquiryAsync(dto);
+
+            return CreatedAtAction(
+                nameof(GetAdmissionEnquiries),
+                new { },
+                "Created Successfully");
+        }
+
+        [HttpPut("update-admission-enquiry/{id:int}")]
+        public async Task<IActionResult> UpdateAdmissionEnquiry(int id, UpdateAdmissionEnquiryDto dto)
+        {
+            if (id != dto.AdmissionEnquiryId)
+                return BadRequest();
+
+            await _service.UpdateAdmissionEnquiryAsync(dto);
+
+            return Ok("Updated Successfully");
+        }
+
+        [HttpDelete("delete-admission-enquiry/{id:int}")]
+        public async Task<IActionResult> DeleteAdmissionEnquiry(int id)
+        {
+            await _service.DeleteAdmissionEnquiryAsync(id);
+
+            return NoContent();
+        }
+        #endregion
+
+
+        #region Adoption
+
+        [AllowAnonymous]
+        [HttpPost("create-student")]
+        public async Task<IActionResult> CreateStudent([FromForm] CreateStudentDto dto)
+        {
+            await _service.CreateStudentAsync(dto);
+            return Ok(new { success = true, message = "Student Created Successfully" });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("students")]
+        public async Task<IActionResult> GetStudents()
+        {
+            var data = await _service.GetAllStudentsAsync();
+            return Ok(new { success = true, data });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("student/{id}")]
+        public async Task<IActionResult> GetStudentById(int id)
+        {
+            var data = await _service.GetStudentByIdAsync(id);
+            return Ok(new { success = true, data });
+        }
+
+        [AllowAnonymous]
+        [HttpPut("student/{id}")]
+        public async Task<IActionResult> UpdateStudent(int id, [FromForm] CreateStudentDto dto)
+        {
+            await _service.UpdateStudentAsync(id, dto);
+            return Ok(new { success = true, message = "Student Updated Successfully" });
+        }
+
+        [AllowAnonymous]
+        [HttpDelete("student/{id}")]
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            await _service.DeleteStudentAsync(id);
+            return Ok(new { success = true, message = "Student Deleted Successfully" });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("donation-inquiry")]
+        public async Task<IActionResult> CreateDonationInquiry(CreateDonationInquiryDto dto)
+        {
+            await _service.CreateDonationInquiryAsync(dto);
+
+            return Ok(new { success = true, message = "Donation Inquiry Submitted Successfully" });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("donation-inquiries")]
+        public async Task<IActionResult> GetDonationInquiries()
+        {
+            var data = await _service.GetDonationInquiriesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                data
+            });
+        }
+        #endregion
+
+        #region Apply Now
+
+        [AllowAnonymous]
+        [HttpPost("apply-now")]
+        public async Task<IActionResult> CreateApplyNow([FromBody] ApplyNowDto dto)
+        {
+            await _service.CreateApplyNowAsync(dto);
+            return Ok(new { success = true, message = "Application Submitted Successfully" });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("apply-now")]
+        public async Task<IActionResult> GetApplyNowList()
+        {
+            var data = await _service.GetApplyNowListAsync();
+            return Ok(new { success = true, data });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("apply-now/{formType}")]
+        public async Task<IActionResult> GetApplyNowByType(string formType)
+        {
+            var data = await _service.GetApplyNowByTypeAsync(formType);
+            return Ok(new { success = true, data });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("apply-now-detail/{id}")]
+        public async Task<IActionResult> GetApplyNowDetail(int id)
+        {
+            var data = await _service.GetApplyNowDetailAsync(id);
+            return Ok(new { success = true, data });
+        }
+
+        [AllowAnonymous]
+        [HttpDelete("apply-now/{id}")]
+        public async Task<IActionResult> DeleteApplyNow(int id)
+        {
+            await _service.DeleteApplyNowAsync(id);
+            return Ok(new { success = true, message = "Record Deleted Successfully" });
+        }
+
+        #endregion
+
+        #region Contact
+
+        [AllowAnonymous]
+        [HttpPost("contact-message")]
+        public async Task<IActionResult> CreateContactMessage([FromBody] ContactMessageDto dto)
+        {
+            await _service.CreateContactMessageAsync(dto);
+            return Ok(new { success = true, message = "Message Sent Successfully" });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("contact-messages")]
+        public async Task<IActionResult> GetContactMessages()
+        {
+            var data = await _service.GetAllContactMessagesAsync();
+            return Ok(new { success = true, data });
+        }
+
+      #endregion
+
+
     }
 }

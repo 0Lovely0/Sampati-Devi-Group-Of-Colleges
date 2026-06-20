@@ -100,7 +100,7 @@ export const NewsPage: React.FC = () => {
 
         <div className="h-1 w-24 bg-[#22C55E] mt-6 mx-auto rounded-full" />
 
-        <p className="text-white/80 mt-6 text-sm md:text-base max-w-2xl mx-auto">
+        <p className="text-white/80 mt-6 text-sm md:text-lg max-w-2xl mx-auto">
           Stay updated with the latest announcements, academic activities,
           examinations, admissions, workshops, and veterinary updates.
         </p>
@@ -124,7 +124,7 @@ export const NewsPage: React.FC = () => {
                   }`}
                 >
                   <span
-                    className={`text-[10px] font-black uppercase tracking-widest ${
+                    className={`text-[12px] font-black uppercase tracking-widest ${
                       active ? "text-[#DCFCE7]" : "text-[#22C55E]"
                     }`}
                   >
@@ -132,7 +132,7 @@ export const NewsPage: React.FC = () => {
                   </span>
 
                   <h3
-                    className={`font-black mt-2 mb-3 text-sm ${
+                    className={`font-black mt-2 mb-3 text-lg ${
                       active ? "text-white" : "text-slate-900"
                     }`}
                   >
@@ -140,7 +140,7 @@ export const NewsPage: React.FC = () => {
                   </h3>
 
                   <p
-                    className={`text-[10px] font-medium ${
+                    className={`text-[12px] font-medium ${
                       active ? "text-[#DCFCE7]" : "text-slate-500"
                     }`}
                   >
@@ -155,7 +155,7 @@ export const NewsPage: React.FC = () => {
           <div className="lg:col-span-8">
             <div className="bg-white p-8 md:p-12 rounded-3xl border border-[#BBF7D0] shadow-sm sticky top-28">
               <div className="flex items-center gap-4 mb-6 flex-wrap">
-                <span className="bg-[#DCFCE7] text-[#15803D] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
+                <span className="bg-[#DCFCE7] text-[#15803D] px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest">
                   {selectedNews.news_cat}
                 </span>
 
@@ -164,13 +164,13 @@ export const NewsPage: React.FC = () => {
                 </span>
               </div>
 
-              <h2 className="text-3xl font-black text-slate-900 mb-6">
+              <h2 className="text-4xl font-black text-slate-900 mb-6">
                 {selectedNews.news_subject}
               </h2>
 
               <div className="w-20 h-1 bg-[#22C55E] rounded-full mb-8" />
 
-              <p className="text-slate-600 leading-relaxed text-sm md:text-base mb-10">
+              <p className="text-slate-600 leading-relaxed text-sm md:text-lg mb-10">
                 {selectedNews.news_description}
               </p>
 
